@@ -26,5 +26,5 @@ globs = ["RMTlib", "RMTlib.Fermion.Character", "RMTlib.Fermion.Maya", "RMTlib.Fe
 # Checks (`lake test`): the examples and the axiom audit.
 [[lean_lib]]
 name = "RMTlibTests"
-globs = ["RMTlibTests", "RMTlibExamples.+"]
+globs = ["RMTlibTests", "RMTlibExamples.AxiomAudit", "RMTlibExamples.Growth", "RMTlibExamples.GrowthSuper", "RMTlibExamples.HookContent", "RMTlibExamples.Hooks", "RMTlibExamples.Interlaced", "RMTlibExamples.JacobiTrudi", "RMTlibExamples.RSK"]
 leanOptions = { linter.missingDocs = false }
