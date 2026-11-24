@@ -1,4 +1,5 @@
 name = "RMTlib"
+roots = []
 version = "0.1.0"
 description = "Lean 4 library for random matrix theory in an extended sense: RSK, tableaux, symmetric functions, Fock space, fermions, Virasoro, Keating–Snaith"
 keywords = ["random matrix theory", "Keating-Snaith", "RSK", "Young tableaux", "symmetric functions", "Fock space"]
@@ -18,13 +19,16 @@ rev = "0df444a360eaa60ab8c11dca51a86af692955474"
 
 # Globs claim only this library's own name prefixes, and list `RMTlib.Fock` and `RMTlib.Fermion`
 # module by module: packages that require RMTlib (RMTandMeaningLib) have their own modules under
-# `RMTlib.*`, and Lake resolves a module to the first library whose globs match its name.
+# `RMTlib.*`, and Lake resolves a module to the first library whose globs or roots match its name
+# (roots by prefix, hence `roots = []`: a root defaults to the library name).
 [[lean_lib]]
 name = "RMTlib"
+roots = []
 globs = ["RMTlib", "RMTlib.Fermion.Character", "RMTlib.Fermion.Maya", "RMTlib.Fermion.Rows", "RMTlib.Fock.Casimir", "RMTlib.Fock.ChargeKernel", "RMTlib.Fock.ClassFunction", "RMTlib.Fock.Columns", "RMTlib.Fock.DehayeDelta", "RMTlib.Fock.Diagonal", "RMTlib.Fock.Fischer", "RMTlib.Fock.Laplacian", "RMTlib.Fock.MatrixPair", "RMTlib.Fock.Orthogonality", "RMTlib.Fock.Pieri", "RMTlib.Fock.PowerSum", "RMTlib.Fock.Rows", "RMTlib.Fock.Virasoro", "RMTlib.Fock.VirasoroCentral", "RMTlib.Fock.Weil", "RMTlib.Fock.WeilCauchy", "RMTlib.Growth.+", "RMTlib.KeatingSnaith.+", "RMTlib.RSK.+", "RMTlib.Symmetric.+", "RMTlib.Tableaux.+"]
 
 # Checks (`lake test`): the examples and the axiom audit.
 [[lean_lib]]
 name = "RMTlibTests"
+roots = []
 globs = ["RMTlibTests", "RMTlibExamples.AxiomAudit", "RMTlibExamples.Growth", "RMTlibExamples.GrowthSuper", "RMTlibExamples.HookContent", "RMTlibExamples.Hooks", "RMTlibExamples.Interlaced", "RMTlibExamples.JacobiTrudi", "RMTlibExamples.RSK"]
 leanOptions = { linter.missingDocs = false }
