@@ -6,4 +6,5 @@ import RMTlibExamples.Interlaced
 import RMTlibExamples.JacobiTrudi
 import RMTlibExamples.RSK
 import RMTlibExamples.Theorem3UN
+import RMTlibExamples.Frames
 import RMTlibExamples.AxiomAudit

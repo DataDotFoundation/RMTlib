@@ -319,3 +319,8 @@ import RMTlib
 #print axioms RMT.UN.skewDim_single
 #print axioms RMT.UN.theorem3_zero
 #print axioms RMT.UN.theorem3_one
+#print axioms RMT.UN.momentPoly_eq_contentProd
+#print axioms RMT.UN.twinPoly_coeff_eq
+#print axioms RMT.UN.theorem3Twin_le_one
+#print axioms RMT.UN.twinPoly_coeff_two_ne
+#print axioms RMT.UN.not_theorem3_and_twin_two_two

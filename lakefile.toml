@@ -17,6 +17,12 @@ name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
 rev = "0df444a360eaa60ab8c11dca51a86af692955474"
 
+# Frames of understanding (no dependencies of its own): RMTlib reads and improves itself through them.
+[[require]]
+name = "MeaningLib"
+git = "https://github.com/DataDotFoundation/MeaningLib"
+rev = "017c529"
+
 # Globs claim only this library's own name prefixes, and list `RMTlib.Fock` and `RMTlib.Fermion`
 # module by module: packages that require RMTlib (RMTandMeaningLib) have their own modules under
 # `RMTlib.*`, and Lake resolves a module to the first library whose globs or roots match its name
@@ -24,11 +30,11 @@ rev = "0df444a360eaa60ab8c11dca51a86af692955474"
 [[lean_lib]]
 name = "RMTlib"
 roots = []
-globs = ["RMTlib", "RMTlib.Fermion.Character", "RMTlib.Fermion.Maya", "RMTlib.Fermion.Rows", "RMTlib.Fock.Casimir", "RMTlib.Fock.ChargeKernel", "RMTlib.Fock.ClassFunction", "RMTlib.Fock.Columns", "RMTlib.Fock.DehayeDelta", "RMTlib.Fock.Diagonal", "RMTlib.Fock.Fischer", "RMTlib.Fock.Laplacian", "RMTlib.Fock.MatrixPair", "RMTlib.Fock.Orthogonality", "RMTlib.Fock.Pieri", "RMTlib.Fock.PowerSum", "RMTlib.Fock.Rows", "RMTlib.Fock.Virasoro", "RMTlib.Fock.VirasoroCentral", "RMTlib.Fock.Weil", "RMTlib.Fock.WeilCauchy", "RMTlib.Growth.+", "RMTlib.KeatingSnaith.+", "RMTlib.Moments.+", "RMTlib.RSK.+", "RMTlib.Symmetric.+", "RMTlib.Tableaux.+"]
+globs = ["RMTlib", "RMTlib.Fermion.Character", "RMTlib.Fermion.Maya", "RMTlib.Fermion.Rows", "RMTlib.Fock.Casimir", "RMTlib.Fock.ChargeKernel", "RMTlib.Fock.ClassFunction", "RMTlib.Fock.Columns", "RMTlib.Fock.DehayeDelta", "RMTlib.Fock.Diagonal", "RMTlib.Fock.Fischer", "RMTlib.Fock.Laplacian", "RMTlib.Fock.MatrixPair", "RMTlib.Fock.Orthogonality", "RMTlib.Fock.Pieri", "RMTlib.Fock.PowerSum", "RMTlib.Fock.Rows", "RMTlib.Fock.Virasoro", "RMTlib.Fock.VirasoroCentral", "RMTlib.Fock.Weil", "RMTlib.Fock.WeilCauchy", "RMTlib.Growth.+", "RMTlib.Frames.+", "RMTlib.KeatingSnaith.+", "RMTlib.Moments.+", "RMTlib.RSK.+", "RMTlib.Symmetric.+", "RMTlib.Tableaux.+"]
 
 # Checks (`lake test`): the examples and the axiom audit.
 [[lean_lib]]
 name = "RMTlibTests"
 roots = []
-globs = ["RMTlibTests", "RMTlibExamples.AxiomAudit", "RMTlibExamples.Growth", "RMTlibExamples.GrowthSuper", "RMTlibExamples.HookContent", "RMTlibExamples.Hooks", "RMTlibExamples.Interlaced", "RMTlibExamples.JacobiTrudi", "RMTlibExamples.RSK", "RMTlibExamples.Theorem3UN"]
+globs = ["RMTlibTests", "RMTlibExamples.AxiomAudit", "RMTlibExamples.Frames", "RMTlibExamples.Growth", "RMTlibExamples.GrowthSuper", "RMTlibExamples.HookContent", "RMTlibExamples.Hooks", "RMTlibExamples.Interlaced", "RMTlibExamples.JacobiTrudi", "RMTlibExamples.RSK", "RMTlibExamples.Theorem3UN"]
 leanOptions = { linter.missingDocs = false }
