@@ -13,11 +13,20 @@ that random matrix computations reduce to. Everything is proved; there is no `so
 | Fock space: Fischer pairing, power sums, Casimir, Virasoro | `RMTlib.Fock` |
 | Fermions: Maya diagrams, charge | `RMTlib.Fermion` |
 | The Keating–Snaith constant | `RMTlib.KeatingSnaith` |
+| Moments: Dehaye's combinatorial form of the CFKRS recipe for `U(N)` (Theorem 3), proved for `M ≤ 1`, checked exactly beyond | `RMTlib.Moments` |
 
 `ω` (transposition `λ ↦ λ′`, `h ↔ e`, `N ↦ −N`) is tracked as data:
 `RMT.Symmetric.OmegaCovariant` records how a statistic of a shape changes under transposition
 (`RMTlib/Symmetric/OmegaCovariant.lean`). A finder for `ω` laws by statement shape is specified
 in `docs/omega-twin-finder.md`.
+
+## Direction: moments seen through frames, tested by gaps
+
+`RMTlib.Moments` is meant to read itself through a frame of understanding: in the places frame, the
+`U(N)` moment computation is the archimedean side (rank `N`) of a local identity whose finite-place
+side has parameter `T = p^{−s}`. It is meant to be tested by its consequences for gaps between
+zeros (Hall's method turns moment coefficients into gap bounds). The frame tools come from
+[MeaningLib](https://github.com/DataDotFoundation/MeaningLib); both parts are planned, not built.
 
 ## Build
 

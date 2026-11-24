@@ -5,4 +5,5 @@ import RMTlibExamples.Hooks
 import RMTlibExamples.Interlaced
 import RMTlibExamples.JacobiTrudi
 import RMTlibExamples.RSK
+import RMTlibExamples.Theorem3UN
 import RMTlibExamples.AxiomAudit

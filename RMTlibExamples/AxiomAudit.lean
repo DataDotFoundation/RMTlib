@@ -311,3 +311,11 @@ import RMTlib
 #print axioms RMT.MultisetHook.lemma13_iff_macdonaldSpec
 #print axioms RMT.MultisetHook.exists_hook_eq_of_not_core
 #print axioms RMT.MultisetHook.IsExp.unique
+#print axioms RMT.UN.momentPoly_coeff
+#print axioms RMT.UN.memo_eq
+#print axioms RMT.UN.thm3CoeffFast_eq
+#print axioms RMT.UN.complementary_S
+#print axioms RMT.UN.dCoef_firstRow
+#print axioms RMT.UN.skewDim_single
+#print axioms RMT.UN.theorem3_zero
+#print axioms RMT.UN.theorem3_one
