@@ -1,0 +1,27 @@
+name = "RMTlib"
+version = "0.1.0"
+description = "Lean 4 library for random matrix theory in an extended sense: RSK, tableaux, symmetric functions, Fock space, fermions, Virasoro, Keating–Snaith"
+keywords = ["random matrix theory", "Keating-Snaith", "RSK", "Young tableaux", "symmetric functions", "Fock space"]
+defaultTargets = ["RMTlib"]
+testDriver = "RMTlibTests"
+
+[leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+pp.unicode.fun = true
+linter.missingDocs = true
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "0df444a360eaa60ab8c11dca51a86af692955474"
+
+[[lean_lib]]
+name = "RMTlib"
+globs = ["RMTlib", "RMTlib.+"]
+
+# Checks (`lake test`): the examples and the axiom audit.
+[[lean_lib]]
+name = "RMTlibTests"
+globs = ["RMTlibTests", "RMTlibExamples.+"]
+leanOptions = { linter.missingDocs = false }
