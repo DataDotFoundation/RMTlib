@@ -35,8 +35,8 @@ interpretation of a statement, never a rung.
 | F4 | String-insertion **law** along theta lifts (slack = one-body + two-body increments, telescoping, exact squares). | **checked**: exceptionless on all admissible parameter sets in two windows (RH-Dual #48: 23,744 and 1,268,736 cases); exact split `Δ log H = T + S + V` (translation, string self-energy, Vandermonde): the one-body translation share `T/Δ` **overshoots 1 and decays with `t`** (1.117, 1.081, 1.062, 1.046 at `t` = 3, 7, 11, 17), the Vandermonde share `|V|/Δ` decays roughly like `1/√t` (inferred from four points), and `Δ log H > 0` on every step; no family cancellation. The worked example (`t = 17`, `T/Δ` = 1.045) matches the family mean at its `t` (RH-Dual #54) | `docs/string-insertion.md`; `RMT.Claims.stringInsertionLaw` |
 | F5 | The moment measure puts its mass at the wall (`N·P(λ₁ = N) → k²`); the wall is a hard edge. | **checked on examples** (Loop 3); "hard edge / Bessel" a **reading** | `scripts/wall_moments.py` |
 | F6 | Hook products at every place: `H(λ) ∣ |λ|!`, `v_p H + v_p f^λ = v_p |λ|!`. | proved; tagged as transfers | `hookProd_dvd_factorial`, `padicValNat_hookProd_add_fSYT` |
-
 | F7 | Rankin–Selberg by rows: the one-row series (the unfolding's Mellin step) and the full Cauchy kernel differ exactly by the second-row factor `1 − x y x′ y′ c² X²` (the Eisenstein `ζ(2s)`). Both occur in the proof, in different nodes (RH-Dual #66). | proved | `oneRow_cauchy_two`, `cauchy_powerSeries` |
+| F8 | One wall breaks ω, two walls restore it. Over an ω-closed family with an ω-even weight: no wall, an ω-odd statistic (`λ₁ − ℓ`, odd content moments) sums to zero; behind the boson's wall `ℓ ≤ N` its sum is carried exactly by the shapes with `λ₁ > N`; on the `N × N` box it is zero again. | proved | `sum_bosonWall_odd`, `sum_box_odd_eq_zero`, `sum_bosonWall_transpose` |
 
 ## What may not be said
 

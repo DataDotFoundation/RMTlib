@@ -6,6 +6,7 @@ import RMTlib.Fermion.Transport
 import RMTlib.Places.StringInsertion
 import RMTlib.Places.HookValuation
 import RMTlib.Symmetric.Specialise
+import RMTlib.Edges.WallBreaking
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -131,5 +132,17 @@ def rankinSelbergRows : Claim where
   statements := [``RMT.Symmetric.oneRow_cauchy_two, ``RMT.Symmetric.cauchy_powerSeries]
   supports := [``places]
   source := "RH-Dual #66 (both forms in the proof, in different nodes)"
+
+/-- **F8**: one wall breaks `ω`, two walls restore it. Behind the boson's wall an `ω`-odd statistic
+(`λ₁ − ℓ(λ)`, odd content moments) is biased, and the bias is carried exactly by the shapes that
+cross the fermion's wall; on the box it vanishes again. -/
+def wallBreaksOmega : Claim where
+  text := "behind one wall (ℓ(λ) ≤ N) an ω-odd statistic is carried exactly by the shapes with \
+    λ₁ > N; with no wall, or two walls (the N × N box), its weighted sum is zero"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.Edges.sum_bosonWall_odd, ``RMT.Edges.sum_box_odd_eq_zero,
+    ``RMT.Edges.sum_bosonWall_transpose, ``RMT.Edges.sum_odd_eq_zero]
+  supports := [``bosonFermion]
 
 end RMT.Claims
