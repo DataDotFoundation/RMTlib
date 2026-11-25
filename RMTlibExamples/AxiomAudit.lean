@@ -344,3 +344,4 @@ import RMTlib
 #print axioms RMT.Fock.Virasoro.ptEval_sP
 #print axioms RMT.Fock.Virasoro.L1_eP
 #print axioms RMT.Fock.Virasoro.L1_eDetP
+#print axioms RMT.BDTW.det_mul_diagonal_mul_transpose

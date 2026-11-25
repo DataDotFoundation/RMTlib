@@ -25,7 +25,8 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 19 patterns: [RMT.hook_content_formula,
+info: 20 patterns: [RMT.hook_content_formula,
+ RMT.BDTW.det_mul_diagonal_mul_transpose,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
  RMT.Fock.fischer_hX_eq_neg_eX,
@@ -56,7 +57,8 @@ to `theta` only. -/
 
 open Lean Elab Command in
 /--
-info: 20 patterns: [RMT.hook_content_formula,
+info: 21 patterns: [RMT.hook_content_formula,
+ RMT.BDTW.det_mul_diagonal_mul_transpose,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
  RMT.Fock.fischer_hX_eq_neg_eX,
