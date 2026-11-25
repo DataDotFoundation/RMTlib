@@ -98,9 +98,9 @@ def stringInsertionIdentity : Claim where
 
 /-- **F4**: the string-insertion law along theta lifts. Checked exhaustively on all admissible
 Harish-Chandra parameter sets in two small windows (RH-Dual #48: 23,744 and 1,268,736 cases), with no
-exception and no family cancellation. The one-body share of `Δ log H` is ≈ 1.12 on average, i.e. the
-two-body term is always negative (≈ −12 % of the total; the shares sum to 1). Not in Lean, so it stays
-`checked`. -/
+exception and no family cancellation. In the exact split `Δ log H = T + S + V`, the one-body share
+`T/Δ` overshoots 1 and decays with `t` (1.117 at `t = 3`, 1.046 at `t = 17`, matching the worked
+example), and the Vandermonde share decays (RH-Dual #54). Not in Lean, so it stays `checked`. -/
 def stringInsertionLaw : Claim where
   text := "along the theta lifts, the slack changes by one-body plus two-body increments of \
     inserted strings, telescopes, and has commuting squares"
