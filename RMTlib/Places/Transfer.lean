@@ -1,6 +1,7 @@
 import RMTlib.Places.HookValuation
 import Mathlib.Data.Nat.Factorization.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import MeaningLib.Frame.Pattern
 
 /-!
 # Transfers between places, stated once
@@ -21,7 +22,7 @@ cofactor `S`, a statistic in its own right. Instance: `H(λ) · f^λ = |λ|!` (`
 * `Transfer.log_eq_sum`: `log Q = Σ_{p ∣ Q} v_p(Q) · log p` (the product formula), so a statement
   about the size of `Q` at `∞` and its `p`-profile are one statement.
 
-All are `@[frame_pattern]`. Transfers 3 (potential) and 5 (`ω`) are frame rules (MeaningLib); 4
+These carry no frame attribute for now: their conclusions (`Q ∣ G`, `Q ≤ G`) are fully generic, and as `@[frame_pattern]` or `@[frame_transfer]` they made `#frame_report … in RMT` exceed its heartbeats (reported on RMTlib#42). They will be tagged `@[frame_transfer value_bound]` / `inf_p` once matching is bounded. Transfers 3 (potential) and 5 (`ω`) are frame rules (MeaningLib); 4
 (Fock ↔ Haar) and 6 (exact value replacing a bound) are planned on RMTlib#42.
 -/
 
@@ -30,11 +31,9 @@ namespace RMT.Transfer
 open Finset
 
 /-- **Transfer 1, divisibility**: `Q · S = G ⇒ Q ∣ G`. -/
-@[frame_pattern]
 theorem dvd {Q S G : ℕ} (h : Q * S = G) : Q ∣ G := Dvd.intro S h
 
 /-- **Transfer 1, valuations at every prime**: `Q · S = G ≠ 0 ⇒ v_p Q + v_p S = v_p G`. -/
-@[frame_pattern]
 theorem padicValNat_add (p : ℕ) [Fact p.Prime] {Q S G : ℕ} (h : Q * S = G) (hG : G ≠ 0) :
     padicValNat p Q + padicValNat p S = padicValNat p G := by
   have hQ : Q ≠ 0 := fun h0 => hG (by rw [← h, h0, zero_mul])
@@ -42,7 +41,6 @@ theorem padicValNat_add (p : ℕ) [Fact p.Prime] {Q S G : ℕ} (h : Q * S = G) (
   rw [← h, padicValNat.mul hQ hS]
 
 /-- **Transfer 1, size at `∞`**: `Q · S = G ≠ 0 ⇒ Q ≤ G`. -/
-@[frame_pattern]
 theorem le {Q S G : ℕ} (h : Q * S = G) (hG : G ≠ 0) : Q ≤ G := by
   have hS : S ≠ 0 := fun h0 => hG (by rw [← h, h0, mul_zero])
   calc Q = Q * 1 := (mul_one Q).symm
@@ -50,7 +48,6 @@ theorem le {Q S G : ℕ} (h : Q * S = G) (hG : G ≠ 0) : Q ≤ G := by
     _ = G := h
 
 /-- **Transfer 2, the product formula**: `log Q = Σ_{p ∣ Q} v_p(Q) · log p` for `Q ≠ 0`. -/
-@[frame_pattern]
 theorem log_eq_sum {Q : ℕ} (hQ : Q ≠ 0) :
     Real.log Q = ∑ p ∈ Q.primeFactors, (padicValNat p Q : ℝ) * Real.log p := by
   conv_lhs => rw [← Nat.prod_factorization_pow_eq_self hQ]

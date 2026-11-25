@@ -25,7 +25,7 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 31 patterns: [RMT.hookProd_dvd_factorial,
+info: 27 patterns: [RMT.hookProd_dvd_factorial,
  RMT.hook_content_formula,
  RMT.padicValNat_hookProd,
  RMT.padicValNat_hookProd_add_fSYT,
@@ -51,11 +51,7 @@ info: 31 patterns: [RMT.hookProd_dvd_factorial,
  RMT.Symmetric.oneRow_cauchy_two,
  RMT.Symmetric.schurV_conjV_eq_eDet,
  RMT.Symmetric.schurV_eq_det,
- RMT.Symmetric.schurV_eq_eDet_conjV,
- RMT.Transfer.dvd,
- RMT.Transfer.le,
- RMT.Transfer.log_eq_sum,
- RMT.Transfer.padicValNat_add]
+ RMT.Symmetric.schurV_eq_eDet_conjV]
 -/
 #guard_msgs (whitespace := lax) in
 run_cmd do
@@ -68,7 +64,7 @@ to `theta` only. -/
 
 open Lean Elab Command in
 /--
-info: 32 patterns: [RMT.hookProd_dvd_factorial,
+info: 28 patterns: [RMT.hookProd_dvd_factorial,
  RMT.hook_content_formula,
  RMT.padicValNat_hookProd,
  RMT.padicValNat_hookProd_add_fSYT,
@@ -95,10 +91,6 @@ info: 32 patterns: [RMT.hookProd_dvd_factorial,
  RMT.Symmetric.schurV_conjV_eq_eDet,
  RMT.Symmetric.schurV_eq_det,
  RMT.Symmetric.schurV_eq_eDet_conjV,
- RMT.Transfer.dvd,
- RMT.Transfer.le,
- RMT.Transfer.log_eq_sum,
- RMT.Transfer.padicValNat_add,
  RMT.Fock.ThetaKernel.ker_intertwine]
 -/
 #guard_msgs (whitespace := lax) in
@@ -142,3 +134,8 @@ RMT.BDTW.bdtw_inf: reads [archPotential]
 -/
 #guard_msgs (whitespace := lax) in
 #frame_report RMT.Frames.placesBinding in RMT.BDTW.bdtw_inf
+
+-- The whole library through the places frame must stay within the default heartbeats
+-- (RMTlib#42: generic transfer conclusions once made this time out), with its read count pinned.
+#guard_msgs (drop info) in
+#frame_report RMT.Frames.placesBinding in RMT expect (read := 29) (problems := 0)
