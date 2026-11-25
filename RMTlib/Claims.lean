@@ -96,13 +96,16 @@ def stringInsertionIdentity : Claim where
   declared := .proved
   statements := [``RMT.StringInsertion.vd_union, ``RMT.StringInsertion.fac_union]
 
-/-- **F4**: the string-insertion law along theta lifts: one worked example only (RH-Dual #39). -/
+/-- **F4**: the string-insertion law along theta lifts. Checked exhaustively on all admissible
+Harish-Chandra parameter sets in two small windows (RH-Dual #48: 23,744 and 1,268,736 cases), with no
+exception and no family cancellation. Not in Lean, so it stays `checked`. -/
 def stringInsertionLaw : Claim where
   text := "along the theta lifts, the slack changes by one-body plus two-body increments of \
     inserted strings, telescopes, and has commuting squares"
   scope := .fox
   declared := .checked
-  source := "RH-Dual #39 (one worked example); docs/string-insertion.md"
+  source := "RH-Dual #48, bridge/scripts/slack_family.py (exhaustive on (k,m,t) = (3,2,3), (4,3,3)); \
+    RH-Dual #39 (worked example); docs/string-insertion.md"
 
 /-- **F6**: hook products at every place. -/
 def hookEveryPlace : Claim where
