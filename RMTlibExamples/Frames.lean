@@ -46,3 +46,32 @@ info: 16 patterns: [RMT.hook_content_formula,
 run_cmd do
   let ps := MeaningLib.Frame.framePatterns (← getEnv) "places"
   logInfo m!"{ps.size} patterns: {ps.toList}"
+
+/-! The theta checker (RMTlib#7 item 1). Unnamed patterns belong to every frame; `ker_intertwine` (a
+change of model that intertwines the actions and matches the read-outs gives equal kernels) belongs
+to `theta` only. -/
+
+open Lean Elab Command in
+/--
+info: 17 patterns: [RMT.hook_content_formula,
+ RMT.Fock.fischer_eX_contentProd,
+ RMT.Fock.fischer_hX_contentProd,
+ RMT.Fock.fischer_hX_eq_neg_eX,
+ RMT.Symmetric.cauchy_hasSum,
+ RMT.Symmetric.cauchy_inf,
+ RMT.Symmetric.cauchy_powerSeries,
+ RMT.Symmetric.cauchy_prod,
+ RMT.Symmetric.cauchy_weighted,
+ RMT.Symmetric.dual_cauchy,
+ RMT.Symmetric.dual_cauchy_one,
+ RMT.Symmetric.hE_eq_sum_sym,
+ RMT.Symmetric.oneRow_cauchy_two,
+ RMT.Symmetric.schurV_conjV_eq_eDet,
+ RMT.Symmetric.schurV_eq_det,
+ RMT.Symmetric.schurV_eq_eDet_conjV,
+ RMT.Fock.ThetaKernel.ker_intertwine]
+-/
+#guard_msgs (whitespace := lax) in
+run_cmd do
+  let ps := MeaningLib.Frame.framePatterns (← getEnv) "theta"
+  logInfo m!"{ps.size} patterns: {ps.toList}"

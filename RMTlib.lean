@@ -11,6 +11,7 @@ import RMTlib.Tableaux.HookContent
 import RMTlib.Tableaux.JacobiTrudi
 import RMTlib.Tableaux.Pieri
 import RMTlib.Fock.Fischer
+import RMTlib.Fock.ThetaKernel
 import RMTlib.Fock.ClassFunction
 import RMTlib.Fock.Columns
 import RMTlib.Fock.Rows
