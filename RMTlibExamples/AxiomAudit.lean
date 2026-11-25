@@ -351,3 +351,6 @@ import RMTlib
 #print axioms RMT.Positivity.det_mul_transpose_eq_sum_sq
 #print axioms RMT.Fock.fischer_pderiv_le
 #print axioms RMT.Fock.fischer_X_mul_le
+#print axioms RMT.hookProd_dvd_factorial
+#print axioms RMT.padicValNat_hookProd_add_fSYT
+#print axioms RMT.padicValNat_hookProd
