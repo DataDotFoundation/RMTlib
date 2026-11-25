@@ -180,3 +180,57 @@ theorem hset_drain {L : Finset ℕ} {Δ ℓ : ℕ} (hΔ : 1 ≤ Δ) (hℓ : ∀ 
         gcongr
 
 end RMT.StringInsertion
+
+/-! ### Two crossings at once (move M6) -/
+
+namespace RMT.StringInsertion
+
+open Finset
+
+theorem shift_shift (L : Finset ℕ) (a b : ℕ) : shift (shift L a) b = shift L (a + b) := by
+  ext y
+  simp only [mem_shift]
+  constructor
+  · rintro ⟨_, ⟨x, hx, rfl⟩, rfl⟩; exact ⟨x, hx, by ring⟩
+  · rintro ⟨x, hx, rfl⟩; exact ⟨x + a, ⟨x, hx, rfl⟩, by ring⟩
+
+theorem not_mem_shift_add {L : Finset ℕ} {Δ b ℓ : ℕ} (h : ℓ ∉ shift L Δ) :
+    ℓ + b ∉ shift L (Δ + b) := by
+  rw [mem_shift]; rintro ⟨x, hx, hxe⟩
+  exact h (mem_shift.mpr ⟨x, hx, by omega⟩)
+
+/-- **Inserting one charge, in logarithms.** -/
+theorem log_hset_insert {M : Finset ℕ} {ℓ : ℕ} (hℓ : ℓ ∉ M) :
+    Real.log (hset (insert ℓ M)) =
+      Real.log (hset M) + Real.log ℓ.factorial - ∑ y ∈ M, Real.log (Nat.dist y ℓ : ℝ) := by
+  have hd : ∀ y ∈ M, (Nat.dist y ℓ : ℝ) ≠ 0 := by
+    intro y hy h
+    have h0 : Nat.dist y ℓ = 0 := by exact_mod_cast h
+    exact hℓ (Nat.eq_of_dist_eq_zero h0 ▸ hy)
+  have hH : (hset M : ℝ) ≠ 0 := by exact_mod_cast (hset_pos M).ne'
+  have hS : (ℓ.factorial : ℝ) ≠ 0 := by exact_mod_cast (Nat.factorial_pos ℓ).ne'
+  rw [hset_insert hℓ]
+  push_cast
+  rw [Real.log_div (mul_ne_zero hH hS) (prod_ne_zero_iff.mpr hd), Real.log_mul hH hS,
+    Real.log_prod hd]
+
+/-- **The merged step** (M6): translate by `Δ`, then insert two charges `ℓ₁`, `ℓ₂`. The two-body
+part gains exactly one cross term `−log |ℓ₁ − ℓ₂|` between the two newcomers; everything else is the
+sum of the single steps' terms (RH-Dual #102 computed this; here it is an identity). -/
+theorem log_hset_two_step {L : Finset ℕ} {Δ ℓ₁ ℓ₂ : ℕ} (h₁ : ℓ₁ ∉ shift L Δ)
+    (h₂ : ℓ₂ ∉ insert ℓ₁ (shift L Δ)) :
+    Real.log (hset (insert ℓ₂ (insert ℓ₁ (shift L Δ)))) - Real.log (hset L) =
+      (∑ x ∈ L, Real.log (((x + Δ).factorial : ℝ) / x.factorial)) +
+      Real.log ℓ₁.factorial + Real.log ℓ₂.factorial -
+      (∑ x ∈ L, Real.log (Nat.dist (x + Δ) ℓ₁ : ℝ)) -
+      (∑ x ∈ L, Real.log (Nat.dist (x + Δ) ℓ₂ : ℝ)) -
+      Real.log (Nat.dist ℓ₁ ℓ₂ : ℝ) := by
+  have step := log_hset_step h₁
+  rw [log_hset_insert h₂, sum_insert h₁]
+  have hmap : ∑ y ∈ shift L Δ, Real.log (Nat.dist y ℓ₂ : ℝ) =
+      ∑ x ∈ L, Real.log (Nat.dist (x + Δ) ℓ₂ : ℝ) := by
+    simp [shift, sum_map]
+  rw [hmap]
+  linarith
+
+end RMT.StringInsertion

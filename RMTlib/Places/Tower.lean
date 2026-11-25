@@ -339,3 +339,42 @@ theorem hset_above_le_succ (T : RMT.Tower) {i : ℕ} {z : ℤ} (h : T.StepOK i z
   exact hset_drain h1 (crossing_lt_particles h.hc h.hd h.one)
 
 end RMT.Tower
+
+/-! ## Two lifts at once (move M6) -/
+
+namespace RMT.Tower
+
+open Finset RMT.StringInsertion
+
+/-- **M6 on the tower**: two successive lifts are one step that translates `a⁺_i` by `Δᵢ + Δᵢ₊₁`
+and inserts the two crossing points, the first one translated by the second gap. -/
+theorem cut_succ_succ_fst (T : RMT.Tower) {i : ℕ} {z₁ z₂ : ℤ} (h₁ : T.StepOK i z₁)
+    (h₂ : T.StepOK (i + 1) z₂) :
+    (T.cut (i + 2)).1 = insert (z₂ + T.gap (i + 1) - T.c).toNat
+      (insert ((z₁ + T.gap i - T.c).toNat + (T.gap (i + 1)).toNat)
+        (shift (T.cut i).1 ((T.gap i).toNat + (T.gap (i + 1)).toNat))) := by
+  rw [T.cut_succ_fst h₂, T.cut_succ_fst h₁, shift_insert, shift_shift]
+
+/-- **The merged step law along the tower**: two lifts at once change `log H(a⁺)` by the two
+translations, the two self-energies, the two mutual energies with the old particles, and one cross
+term between the two newcomers. -/
+theorem log_hset_above_succ_succ (T : RMT.Tower) {i : ℕ} {z₁ z₂ : ℤ} (h₁ : T.StepOK i z₁)
+    (h₂ : T.StepOK (i + 1) z₂) :
+    let Δ := (T.gap i).toNat + (T.gap (i + 1)).toNat
+    let ℓ₁ := (z₁ + T.gap i - T.c).toNat + (T.gap (i + 1)).toNat
+    let ℓ₂ := (z₂ + T.gap (i + 1) - T.c).toNat
+    Real.log (hset (T.cut (i + 2)).1) - Real.log (hset (T.cut i).1) =
+      (∑ x ∈ (T.cut i).1, Real.log (((x + Δ).factorial : ℝ) / x.factorial)) +
+      Real.log ℓ₁.factorial + Real.log ℓ₂.factorial -
+      (∑ x ∈ (T.cut i).1, Real.log (Nat.dist (x + Δ) ℓ₁ : ℝ)) -
+      (∑ x ∈ (T.cut i).1, Real.log (Nat.dist (x + Δ) ℓ₂ : ℝ)) -
+      Real.log (Nat.dist ℓ₁ ℓ₂ : ℝ) := by
+  intro Δ ℓ₁ ℓ₂
+  rw [T.cut_succ_succ_fst h₁ h₂]
+  refine log_hset_two_step (not_mem_shift_add (crossing_not_mem_shift_above h₁.hc h₁.hd h₁.one)) ?_
+  have h : (z₂ + T.gap (i + 1) - T.c).toNat ∉ shift (T.cut (i + 1)).1 (T.gap (i + 1)).toNat :=
+    crossing_not_mem_shift_above h₂.hc h₂.hd h₂.one
+  rw [T.cut_succ_fst h₁, shift_insert, shift_shift] at h
+  exact h
+
+end RMT.Tower
