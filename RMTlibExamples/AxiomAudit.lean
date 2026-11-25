@@ -354,3 +354,5 @@ import RMTlib
 #print axioms RMT.hookProd_dvd_factorial
 #print axioms RMT.padicValNat_hookProd_add_fSYT
 #print axioms RMT.padicValNat_hookProd
+#print axioms RMT.Transfer.padicValNat_add
+#print axioms RMT.Transfer.log_eq_sum
