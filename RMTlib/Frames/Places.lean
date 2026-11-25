@@ -38,12 +38,17 @@ theorem archContent_fold_int (N : ℤ) : archContent N = fun z : ℤ => N + z :=
   funext z
   simp [archContent]
 
+/-- Folding lemma for the finite place: a constant content function `fun _ => T`. It matches every
+constant function `ℤ → R`; on RMTlib this adds 4 reads, all statements about constant content
+(RMTlib#7). -/
+theorem finContent_fold (T : R) : finContent T = fun _ : ℤ => T := rfl
+
 /-- RMTlib's binding of the places frame. The folding lemmas let the report read statements that
 never name `archContent` (MeaningLib#2). -/
 def placesBinding : MeaningLib.Frame.Binding where
   frame := MeaningLib.Frame.places
   assign := [("archContent", ``archContent), ("finContent", ``finContent)]
-  folds := [``archContent_fold, ``archContent_fold_int]
+  folds := [``archContent_fold, ``archContent_fold_int, ``finContent_fold]
 
 /-- At a finite place the content product counts boxes. -/
 theorem contentProd_finContent (T : R) (μ : YoungDiagram) :

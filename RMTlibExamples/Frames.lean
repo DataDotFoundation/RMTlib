@@ -25,19 +25,14 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 21 patterns: [RMT.hook_content_formula,
+info: 16 patterns: [RMT.hook_content_formula,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
  RMT.Fock.fischer_hX_eq_neg_eX,
- RMT.Symmetric.cauchy,
- RMT.Symmetric.cauchy_content,
- RMT.Symmetric.cauchy_graded,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,
  RMT.Symmetric.cauchy_prod,
- RMT.Symmetric.cauchy_prod_ssyt,
- RMT.Symmetric.cauchy_ssyt,
  RMT.Symmetric.cauchy_weighted,
  RMT.Symmetric.dual_cauchy,
  RMT.Symmetric.dual_cauchy_one,

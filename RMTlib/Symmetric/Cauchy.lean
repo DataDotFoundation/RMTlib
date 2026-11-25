@@ -368,7 +368,6 @@ total weights in `MvPowerSeries ι R` with the product topology:
 
 the sum on the right over all `ℕ`-matrices with `n` rows and `m` columns. Shapes are padded to
 `N ≥ m` rows. Proved by transporting weights along `rskEquiv`. -/
-@[frame_pattern]
 theorem cauchy (x y : ℕ → ι) (hm : m ≤ N) :
     ∑' lam : Part, schur R x N m lam * schur R y N n lam
       = ∑' A : Fin n → Fin m → ℕ, (mono (matWt x y A) : MvPowerSeries ι R) := by
