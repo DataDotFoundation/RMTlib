@@ -374,4 +374,5 @@ import RMTlib
 #print axioms RMT.Tower.log_hset_above_succ_succ
 #print axioms RMT.Tower.hset_cut_narrow
 #print axioms RMT.Places.deg_principal
+#print axioms RMT.StringInsertion.log_hset_step_gap_mono
 #print axioms RMT.Transfer.sum_log_mul_padicValInt_le

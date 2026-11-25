@@ -234,3 +234,48 @@ theorem log_hset_two_step {L : Finset ℕ} {Δ ℓ₁ ℓ₂ : ℕ} (h₁ : ℓ�
   linarith
 
 end RMT.StringInsertion
+
+/-! ### The step as a function of the gap (move M4) -/
+
+namespace RMT.StringInsertion
+
+open Finset
+
+/-- **The step in tower coordinates.** On the tower the crossing charge lands at `ℓ = Δ − g`, where
+`g = c − z ≥ 1` is fixed by the crossing point `z` and the band, so the distance from each old
+particle `x + Δ` to it is `x + g`, **independent of `Δ`**. Hence only the one-body terms depend on
+the spacing: `Δ log H = Σ log((x+Δ)!/x!) + log (Δ − g)! − Σ log (x + g)`. -/
+theorem log_hset_step_gap {L : Finset ℕ} {g Δ : ℕ} (hg : 1 ≤ g) (hgΔ : g ≤ Δ) :
+    Real.log (hset (insert (Δ - g) (shift L Δ))) - Real.log (hset L) =
+      (∑ x ∈ L, Real.log (((x + Δ).factorial : ℝ) / x.factorial)) +
+      Real.log (Δ - g).factorial -
+      ∑ x ∈ L, Real.log ((x + g : ℕ) : ℝ) := by
+  have hℓ : Δ - g ∉ shift L Δ := by
+    rw [mem_shift]; rintro ⟨x, _, hx⟩; omega
+  have hdist : ∀ x : ℕ, Nat.dist (x + Δ) (Δ - g) = x + g := by
+    intro x; unfold Nat.dist; omega
+  rw [log_hset_step hℓ]
+  simp only [hdist]
+
+/-- **The step grows with the spacing** (M4): for a fixed configuration and crossing offset `g`,
+`Δ log H` is monotone in the gap `Δ`. The two-body part does not move; the translation and the
+self-energy both grow. -/
+theorem log_hset_step_gap_mono {L : Finset ℕ} {g Δ Δ' : ℕ} (hg : 1 ≤ g) (hgΔ : g ≤ Δ)
+    (hΔ : Δ ≤ Δ') :
+    Real.log (hset (insert (Δ - g) (shift L Δ))) - Real.log (hset L) ≤
+      Real.log (hset (insert (Δ' - g) (shift L Δ'))) - Real.log (hset L) := by
+  rw [log_hset_step_gap hg hgΔ, log_hset_step_gap hg (hgΔ.trans hΔ)]
+  have hT : ∑ x ∈ L, Real.log (((x + Δ).factorial : ℝ) / x.factorial) ≤
+      ∑ x ∈ L, Real.log (((x + Δ').factorial : ℝ) / x.factorial) := by
+    refine sum_le_sum fun x _ => ?_
+    have h0 : (0 : ℝ) < x.factorial := by exact_mod_cast Nat.factorial_pos x
+    have h1 : (0 : ℝ) < (x + Δ).factorial := by exact_mod_cast Nat.factorial_pos _
+    refine Real.log_le_log (by positivity) ?_
+    refine div_le_div_of_nonneg_right ?_ h0.le
+    exact_mod_cast Nat.factorial_le (by omega)
+  have hS : Real.log (Δ - g).factorial ≤ Real.log (Δ' - g).factorial := by
+    refine Real.log_le_log (by exact_mod_cast Nat.factorial_pos _) ?_
+    exact_mod_cast Nat.factorial_le (by omega)
+  linarith
+
+end RMT.StringInsertion
