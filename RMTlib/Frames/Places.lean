@@ -1,11 +1,12 @@
 import MeaningLib.Frame
+import RMTlib.Frames.PlacesFrame
 import RMTlib.Symmetric.WeightedCauchy
 import RMTlib.BDTW.PatternA
 
 /-!
 # RMTlib's binding of the places frame
 
-The places frame (`MeaningLib.Frame.places`, our reading of Scholze's programme, not his claim)
+The places frame (`RMT.Frames.places`, hosted in RMTlib since RMTlib#56; our reading of Scholze's programme, not his claim)
 has two roles in content form: the content function at `∞` and at a finite place. RMTlib plays
 them with
 
@@ -70,7 +71,7 @@ theorem contentProd_finContent_ne_zero_iff {N : ℕ} (hN : N ≠ 0) (μ : YoungD
 /-- RMTlib's binding of the places frame. The folding lemmas let the report read statements that
 never name `archContent` (MeaningLib#2). -/
 def placesBinding : MeaningLib.Frame.Binding where
-  frame := MeaningLib.Frame.places
+  frame := RMT.Frames.places
   assign := [("archContent", ``archContent), ("finContent", ``finContent),
     ("archSupport", ``archSupport), ("finSupport", ``finSupport),
     ("archPotential", ``RMT.BDTW.rhoInf), ("finPotential", ``RMT.BDTW.rhoFin)]

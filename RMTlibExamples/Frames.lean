@@ -1,7 +1,7 @@
 import RMTlib
 
 /-!
-# RMTlib read through the places frame (`MeaningLib.Frame.places`)
+# RMTlib read through the places frame (`RMT.Frames.places`)
 
 Loop 1 (`docs/loops/`). Pins the report on the restated moment polynomial and Theorem 3: each is
 read (it mentions `archContent`), and the frame proposes its finite-place twin, with no witness.
