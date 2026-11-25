@@ -8,6 +8,7 @@ import RMTlib.Places.HookValuation
 import RMTlib.Symmetric.Specialise
 import RMTlib.Edges.WallBreaking
 import RMTlib.Places.BandStep
+import RMTlib.Places.Tower
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -158,5 +159,20 @@ def bandStep : Claim where
   statements := [``RMT.StringInsertion.log_hset_step, ``RMT.StringInsertion.hset_step,
     ``RMT.StringInsertion.vd_shift, ``RMT.StringInsertion.hset_drain]
   supports := [``places]
+
+/-- **F10**: the theta tower at one place is one object (RMTlib#79). Read through the band, each
+level is the cut `(a⁺_i, a⁻_i)` of one configuration; with the band empty and one crossing per lift,
+the particle side obeys F9's step law, the hole side drains, the charge is conserved, and the
+reflection `X ↦ −X` swaps the sides and keeps the factor at `∞`. -/
+def towerOneObject : Claim where
+  text := "the theta tower at a place is one configuration read through a band: per lift, \
+    a⁺ gains the crossing point (Δ log H = T + S + V), a⁻ loses it and H(a⁻) drains, \
+    |a⁺| + |a⁻| = |X|, and X ↦ −X swaps a⁺ and a⁻"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.Tower.cut_succ_fst, ``RMT.Tower.cut_fst_snd,
+    ``RMT.Tower.log_hset_above_succ, ``RMT.Tower.hset_below_succ_le, ``RMT.Tower.card_cut,
+    ``RMT.Tower.cut_reflectTower, ``RMT.Tower.factorInf_reflectTower]
+  supports := [``places, ``bosonFermion]
 
 end RMT.Claims
