@@ -1,5 +1,6 @@
 import RMTlib.Fock.Virasoro
 import Mathlib.RingTheory.MvPolynomial.Symmetric.NewtonIdentities
+import RMTlib.Symmetric.DualJacobiTrudi
 
 /-!
 # Elementary symmetric functions in the power-sum model
@@ -73,5 +74,45 @@ theorem ev_eP (N : ℕ) (k : ℕ) : ev N (eP k) = esymm (Fin N) ℚ k := by
           ring
       _ = esymm (Fin N) ℚ (k + 1) := by
           rw [h1, ← map_mul, inv_mul_cancel₀ hk, map_one, one_mul, one_mul]
+
+/-! ## Schur functions in the power-sum model, by dual Jacobi–Trudi -/
+
+/-- `e_k` in `Λ` with an integer index (`0` for `k < 0`). -/
+noncomputable def eZP (k : ℤ) : Λ := if 0 ≤ k then eP k.toNat else 0
+
+/-- `det (e_{x_i − i + j})_{i, j < N}` in `Λ`. -/
+noncomputable def eDetP {N : ℕ} (x : Fin N → ℤ) : Λ :=
+  Matrix.det (Matrix.of fun i j : Fin N => eZP (x i - i + j))
+
+/-- **The Schur function `s_μ` in the power-sum model**, by dual Jacobi–Trudi with `N` columns
+(`N` any bound on the parts of `μ`; see `ptEval_sP`). -/
+noncomputable def sP {K : ℕ} (N : ℕ) (mu : Fin K → ℕ) : Λ :=
+  eDetP (fun i : Fin N => (RMT.Symmetric.conjV N mu i : ℤ))
+
+/-- Evaluation of `Λ` at the point `(a_0, …, a_{m−1})`: `p_k ↦ Σ_{j < m} a_j^k`. -/
+noncomputable def ptEval (a : ℕ → ℚ) (m : ℕ) : Λ →ₐ[ℚ] ℚ :=
+  (aeval fun j : Fin m => a j).comp (ev m)
+
+theorem ptEval_eP (a : ℕ → ℚ) (m k : ℕ) : ptEval a m (eP k) = RMT.Symmetric.eV a m k := by
+  simp only [ptEval, AlgHom.comp_apply, ev_eP, esymm, map_sum, map_prod, aeval_X,
+    RMT.Symmetric.eV]
+
+theorem ptEval_eZP (a : ℕ → ℚ) (m : ℕ) (k : ℤ) :
+    ptEval a m (eZP k) = RMT.Symmetric.eZ a m k := by
+  unfold eZP RMT.Symmetric.eZ
+  split_ifs <;> simp [ptEval_eP]
+
+theorem ptEval_eDetP (a : ℕ → ℚ) (m : ℕ) {N : ℕ} (x : Fin N → ℤ) :
+    ptEval a m (eDetP x) = RMT.Symmetric.eDet a m x := by
+  rw [eDetP, AlgHom.map_det, RMT.Symmetric.eDet]
+  congr 1
+  ext i j
+  simp [ptEval_eZP]
+
+/-- **`sP` is the Schur function**: at any point with `m` variables it evaluates to RMTlib's
+tableau Schur polynomial `schurV`, for every bound `N` on the parts. -/
+theorem ptEval_sP (a : ℕ → ℚ) (m : ℕ) {K N : ℕ} {mu : Fin K → ℕ} (hm : Antitone mu)
+    (hN : ∀ j, mu j ≤ N) : ptEval a m (sP N mu) = RMT.Symmetric.schurV a K m mu := by
+  rw [sP, ptEval_eDetP, RMT.Symmetric.schurV_eq_eDet_conjV a m hm hN]
 
 end RMT.Fock.Virasoro
