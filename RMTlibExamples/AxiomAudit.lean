@@ -340,3 +340,4 @@ import RMTlib
 #print axioms RMT.Plethysm.sum_sq_eq
 #print axioms RMT.Plethysm.sum_sq_eq_hTwo_sub
 #print axioms RMT.BDTW.not_isExpLinear_factorial
+#print axioms RMT.Fock.Virasoro.ev_eP

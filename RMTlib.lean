@@ -19,6 +19,7 @@ import RMTlib.Fock.Orthogonality
 import RMTlib.Fock.Laplacian
 import RMTlib.Fock.PowerSum
 import RMTlib.Fock.Virasoro
+import RMTlib.Fock.SchurPowerSum
 import RMTlib.Fock.DehayeDelta
 import RMTlib.Fock.Weil
 import RMTlib.Fock.WeilCauchy
