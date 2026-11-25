@@ -90,6 +90,8 @@ import RMTlib.RSK.JeuDeTaquin
 import RMTlib.Fermion.Maya
 import RMTlib.Fermion.Rows
 import RMTlib.Fermion.Character
+import RMTlib.Frames.InvolutionLaws
+import RMTlib.Frames.Omega
 import RMTlib.Frames.Places
 import RMTlib.Moments.Theorem3UN
 import RMTlib.Moments.Theorem3UNLow
