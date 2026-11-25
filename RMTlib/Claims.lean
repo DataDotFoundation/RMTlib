@@ -176,7 +176,8 @@ def towerOneObject : Claim where
     ``RMT.Tower.log_hset_above_succ, ``RMT.Tower.hset_below_succ_le, ``RMT.Tower.hset_above_le_succ, ``RMT.Tower.card_cut,
     ``RMT.Tower.cut_reflectTower, ``RMT.Tower.factorInf_reflectTower,
     ``RMT.Tower.padicValRat_above_succ, ``RMT.Tower.log_factorInf_eq_sum, ``RMT.Tower.vdZ_level, ``RMT.Tower.log_hset_above_succ_succ, ``RMT.Tower.hset_cut_narrow,
-    ``RMT.StringInsertion.log_hset_step_gap, ``RMT.StringInsertion.log_hset_step_gap_mono]
+    ``RMT.StringInsertion.log_hset_step_gap, ``RMT.StringInsertion.log_hset_step_gap_mono,
+    ``RMT.StringInsertion.log_hset_step_gap_V_le, ``RMT.StringInsertion.translation_le_step]
   supports := [``places, ``bosonFermion]
 
 /-- **F11**: Alpöge's proof uses `ω` (`λ ↦ λ′`) as a duality at **no** place. No Aubert /
