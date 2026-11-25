@@ -279,3 +279,74 @@ theorem log_hset_step_gap_mono {L : Finset ℕ} {g Δ Δ' : ℕ} (hg : 1 ≤ g) 
   linarith
 
 end RMT.StringInsertion
+
+/-! ### The two-body part is small against the translation (RMTlib#79, RH-Dual #128) -/
+
+namespace RMT.StringInsertion
+
+open Finset
+
+/-- **Pairing the rising factorial**: `(x + Δ)^Δ ≤ ((x+1)(x+2)⋯(x+Δ))²`. Pair the factor `x + u + 1`
+with `x + Δ − u`: each pair is at least `x + Δ`. -/
+theorem pow_le_ascFactorial_sq (x Δ : ℕ) : (x + Δ) ^ Δ ≤ ((x + 1).ascFactorial Δ) ^ 2 := by
+  rw [Nat.ascFactorial_eq_prod_range, sq]
+  nth_rewrite 2 [← prod_range_reflect]
+  rw [← prod_mul_distrib]
+  calc (x + Δ) ^ Δ = ∏ _u ∈ range Δ, (x + Δ) := by rw [prod_const, card_range]
+    _ ≤ ∏ u ∈ range Δ, ((x + 1 + u) * (x + 1 + (Δ - 1 - u))) := by
+        refine prod_le_prod' fun u hu => ?_
+        have hu := mem_range.mp hu
+        have h1 : x + 1 + (Δ - 1 - u) = x + Δ - u := by omega
+        rw [h1]
+        nlinarith [Nat.sub_add_cancel (show u ≤ x + Δ by omega)]
+
+/-- `(x + Δ)! / x!` is the rising factorial `(x+1)⋯(x+Δ)`. -/
+theorem factorial_div_factorial_eq_ascFactorial (x Δ : ℕ) :
+    ((x + Δ).factorial : ℝ) / x.factorial = ((x + 1).ascFactorial Δ : ℕ) := by
+  rw [← Nat.factorial_mul_ascFactorial x Δ]
+  have : (x.factorial : ℝ) ≠ 0 := by exact_mod_cast (Nat.factorial_pos x).ne'
+  push_cast
+  field_simp
+
+/-- **Per particle**: `log (x + g) ≤ (2/Δ) · log ((x+Δ)!/x!)` for `1 ≤ g ≤ Δ`, every `x`. -/
+theorem log_add_le_two_div_mul {x g Δ : ℕ} (hg : 1 ≤ g) (hgΔ : g ≤ Δ) :
+    Real.log ((x + g : ℕ) : ℝ) ≤
+      2 / Δ * Real.log (((x + Δ).factorial : ℝ) / x.factorial) := by
+  have hΔ : (0 : ℝ) < Δ := by exact_mod_cast (show 0 < Δ by omega)
+  rw [factorial_div_factorial_eq_ascFactorial]
+  have hpos : (0 : ℝ) < ((x + 1).ascFactorial Δ : ℕ) := by
+    exact_mod_cast Nat.ascFactorial_pos x Δ
+  have h1 : Real.log ((x + g : ℕ) : ℝ) ≤ Real.log ((x + Δ : ℕ) : ℝ) :=
+    Real.log_le_log (by exact_mod_cast (show 0 < x + g by omega)) (by exact_mod_cast (by omega))
+  have h2 : (Δ : ℝ) * Real.log ((x + Δ : ℕ) : ℝ) ≤ 2 * Real.log ((x + 1).ascFactorial Δ : ℕ) := by
+    have e2 := Real.log_pow (((x + 1).ascFactorial Δ : ℕ) : ℝ) 2
+    push_cast at e2
+    rw [← Real.log_pow, ← e2]
+    have hxΔ : (0 : ℝ) < ((x + Δ : ℕ) : ℝ) := by exact_mod_cast (show 0 < x + Δ by omega)
+    refine Real.log_le_log (by positivity) ?_
+    exact_mod_cast pow_le_ascFactorial_sq x Δ
+  rw [div_mul_eq_mul_div, le_div_iff₀ hΔ]
+  nlinarith
+
+/-- **The two-body part is at most `2/Δ` of the translation**, for every finite Maya set: with the
+step in tower coordinates (`log_hset_step_gap`), `|V| = Σ log (x + g) ≤ (2/Δ) · T`. -/
+theorem log_hset_step_gap_V_le {L : Finset ℕ} {g Δ : ℕ} (hg : 1 ≤ g) (hgΔ : g ≤ Δ) :
+    ∑ x ∈ L, Real.log ((x + g : ℕ) : ℝ) ≤
+      2 / Δ * ∑ x ∈ L, Real.log (((x + Δ).factorial : ℝ) / x.factorial) := by
+  rw [mul_sum]
+  exact sum_le_sum fun x _ => log_add_le_two_div_mul hg hgΔ
+
+/-- **The overshoot is `O(1/Δ)`** (RMTlib#79; RH-Dual #128). The step is at least `(1 − 2/Δ)` times its
+translation part: `(1 − 2/Δ) · T ≤ Δ log H`. With `Δ ≥ t + 3` on the proof's tower (RH-Dual's
+identification), the translation overshoots the step by at most a factor `1/(1 − 2/(t+3))`,
+uniformly in the ranks, the level and the positions. -/
+theorem translation_le_step {L : Finset ℕ} {g Δ : ℕ} (hg : 1 ≤ g) (hgΔ : g ≤ Δ) :
+    (1 - 2 / (Δ : ℝ)) * ∑ x ∈ L, Real.log (((x + Δ).factorial : ℝ) / x.factorial) ≤
+      Real.log (hset (insert (Δ - g) (shift L Δ))) - Real.log (hset L) := by
+  rw [log_hset_step_gap hg hgΔ]
+  have hS : 0 ≤ Real.log ((Δ - g).factorial : ℝ) := Real.log_natCast_nonneg _
+  have hV := log_hset_step_gap_V_le (L := L) hg hgΔ
+  nlinarith
+
+end RMT.StringInsertion
+
