@@ -77,3 +77,43 @@ theorem padicValNat_hookProd (p : ℕ) [Fact p.Prime] {ν : Fin N → ℕ} (hν 
   exact padicValNat_finset_prod p _ _ fun c hc => (prod_ne_zero_iff.mp (hrow i hi)) c hc
 
 end RMT
+
+namespace RMT
+
+open Finset
+open scoped Nat
+
+variable {N : ℕ}
+
+/-- `(n + k)! ≤ n! · M^k` when `n + k ≤ M`. -/
+theorem factorial_add_le_mul_pow {n k M : ℕ} (h : n + k ≤ M) : (n + k)! ≤ n ! * M ^ k := by
+  have h1 := Nat.factorial_mul_descFactorial (show k ≤ n + k by omega)
+  rw [Nat.add_sub_cancel] at h1
+  rw [← h1]
+  exact Nat.mul_le_mul_left _ ((Nat.descFactorial_le_pow _ _).trans (Nat.pow_le_pow_left h _))
+
+/-- **The one-body part loses at most a polynomial factor** (RMTlib#41, RH-Dual#51):
+`H(λ) ≤ ∏_i λ_i! · (λ₀ + N − 1)^{Σ_i (N − 1 − i)}`, with `Σ_i (N − 1 − i) = C(N, 2)`. Together with
+`prod_factorial_le_hookProd` this brackets `log H(λ)` between its one-body (row factorial) part and
+that part plus `C(N, 2) log (λ₀ + N − 1)`. From Frobenius: `H · Δ = ∏ ℓ_i!`, `Δ ≥ 1`. -/
+theorem hookProd_le_prod_factorial_mul_pow (ν : Fin N → ℕ) (hν : Antitone ν) (h0 : 0 < N) :
+    hookProd ν ≤ (∏ i, (ν i)!) * (ν ⟨0, h0⟩ + (N - 1)) ^ (∑ i : Fin N, (N - 1 - i)) := by
+  have hF := frobenius ν hν
+  have hΔ : 1 ≤ ∏ i, ∏ j ∈ Ioi i, (ν i - ν j + (j - i)) := by
+    refine Nat.one_le_iff_ne_zero.mpr (prod_ne_zero_iff.mpr fun i _ => prod_ne_zero_iff.mpr ?_)
+    intro j hj
+    have := mem_Ioi.mp hj
+    have : (i : ℕ) < j := this
+    omega
+  have hle : hookProd ν ≤ ∏ i, (ν i + (N - 1 - i))! :=
+    calc hookProd ν ≤ hookProd ν * ∏ i, ∏ j ∈ Ioi i, (ν i - ν j + (j - i)) :=
+          Nat.le_mul_of_pos_right _ hΔ
+      _ = _ := hF
+  refine hle.trans ?_
+  rw [← prod_pow_eq_pow_sum, ← prod_mul_distrib]
+  refine prod_le_prod' fun i _ => factorial_add_le_mul_pow ?_
+  have := hν (show (⟨0, h0⟩ : Fin N) ≤ i from Fin.mk_le_mk.mpr (Nat.zero_le _))
+  have := i.isLt
+  omega
+
+end RMT
