@@ -27,6 +27,9 @@ weight `w` (Plancherel `(f^λ)²` is one). Then:
 * **where the breaking lives**: the weighted sum of an `ω`-odd statistic over the walled family is
   carried exactly by the shapes that cross the other wall, `numRows ≤ N < firstRow`
   (`sum_bosonWall_odd`). The shapes inside the `N × N` box contribute nothing.
+* **families that are not `ω`-closed**: over any `ω`-closed `T` (the box) and any weight `m`,
+  `2 Σ m f = Σ (m − m ∘ ω) f` (`two_mul_sum_odd_eq_sum_defect`): the bias of an `ω`-odd statistic is
+  carried by the `ω`-defect of the weight.
 * **two walls restore `ω`**: on the box `numRows ≤ N ∧ firstRow ≤ N` the total is zero again
   (`sum_box_odd_eq_zero`). This is the symmetry behind `BoxComplementSymmetry` in
   `RMT.Edges` (there the box is `k × N`, and the mirror is box complement rather than `ω`).
@@ -148,6 +151,24 @@ theorem sum_corner_odd (S : Finset YoungDiagram) (hS : ∀ μ ∈ S, μ.transpos
   rw [← this, ← sum_neg_distrib]
   refine sum_congr rfl fun μ _ => ?_
   rw [hw, hf, mul_neg]
+
+/-- **The ω-defect.** Over an `ω`-closed family `T` (such as the box) with an *arbitrary* weight `m`
+(for instance the multiplicities of a family that is not `ω`-closed), twice the weighted sum of an
+`ω`-odd statistic is its sum against the defect `m − m ∘ ω`. So only the shapes whose transpose
+carries a different weight contribute; when `m` is `ω`-even on `T` the sum vanishes
+(`sum_odd_eq_zero`). Checked on the theta-lift shapes by RH-Dual (RMTlib#70): the whole box
+asymmetry comes from the box shapes whose transpose does not occur. -/
+theorem two_mul_sum_odd_eq_sum_defect (T : Finset YoungDiagram) (hT : ∀ μ ∈ T, μ.transpose ∈ T)
+    (m f : YoungDiagram → R) (hf : OmegaOdd f) :
+    2 * ∑ μ ∈ T, m μ * f μ = ∑ μ ∈ T, (m μ - m μ.transpose) * f μ := by
+  have h' : ∑ μ ∈ T, m μ.transpose * f μ = -∑ μ ∈ T, m μ * f μ := by
+    have h := sum_filter_transpose T hT (fun _ => True) (fun μ => m μ * f μ.transpose)
+    simp only [Finset.filter_true_of_mem (fun _ _ => trivial),
+      YoungDiagram.transpose_transpose] at h
+    rw [h, ← sum_neg_distrib]
+    refine sum_congr rfl fun μ _ => ?_
+    rw [hf, mul_neg]
+  simp only [sub_mul, sum_sub_distrib, h', two_mul, sub_neg_eq_add]
 
 section CharZero
 

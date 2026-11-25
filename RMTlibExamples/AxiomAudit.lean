@@ -362,3 +362,4 @@ import RMTlib
 #print axioms RMT.Edges.contentMoment_transpose
 #print axioms RMT.Edges.sum_bosonWall_odd
 #print axioms RMT.Edges.sum_box_odd_eq_zero
+#print axioms RMT.Edges.two_mul_sum_odd_eq_sum_defect

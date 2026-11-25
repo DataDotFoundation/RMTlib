@@ -142,7 +142,8 @@ def wallBreaksOmega : Claim where
   scope := .fox
   declared := .proved
   statements := [``RMT.Edges.sum_bosonWall_odd, ``RMT.Edges.sum_box_odd_eq_zero,
-    ``RMT.Edges.sum_bosonWall_transpose, ``RMT.Edges.sum_odd_eq_zero]
+    ``RMT.Edges.sum_bosonWall_transpose, ``RMT.Edges.sum_odd_eq_zero,
+    ``RMT.Edges.two_mul_sum_odd_eq_sum_defect]
   supports := [``bosonFermion]
 
 end RMT.Claims
