@@ -79,6 +79,7 @@ import RMTlib.BDTW.PatternA
 import RMTlib.Positivity.Welch
 import RMTlib.Positivity.FockBounds
 import RMTlib.Places.HookValuation
+import RMTlib.Edges.Statements
 import RMTlib.Places.Transfer
 import RMTlib.Places.StringInsertion
 import RMTlib.Claims
