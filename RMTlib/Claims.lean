@@ -151,11 +151,12 @@ def wallBreaksOmega : Claim where
 `ℓ` changes `log H` by exactly `T + S + V` (RMTlib#72): the exact split RH-Dual computed (F4). -/
 def bandStep : Claim where
   text := "Δ log H = T + S + V for translate-then-insert on any finite Maya set: T the translation, \
-    S = log ℓ! the self-energy, V = −Σ log|x + Δ − ℓ| the Vandermonde"
+    S = log ℓ! the self-energy, V = −Σ log|x + Δ − ℓ| the Vandermonde; on the hole side \
+    (remove the lowest hole, translate down by Δ ≥ 1) H never increases"
   scope := .fox
   declared := .proved
   statements := [``RMT.StringInsertion.log_hset_step, ``RMT.StringInsertion.hset_step,
-    ``RMT.StringInsertion.vd_shift]
+    ``RMT.StringInsertion.vd_shift, ``RMT.StringInsertion.hset_drain]
   supports := [``places]
 
 end RMT.Claims
