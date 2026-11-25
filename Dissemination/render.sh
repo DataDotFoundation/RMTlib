@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # Render one Dissemination video and stitch its scenes into <folder>/<folder>.mp4.
-#   ./render.sh 01_string_insertion          720p30 (default)
-#   ./render.sh 01_string_insertion -ql      480p15 preview
-#   ./render.sh 01_string_insertion -qh      1080p60
+#   ./render.sh 01_some_video          720p30 (default)
+#   ./render.sh 01_some_video -ql      480p15 preview
+#   ./render.sh 01_some_video -qh      1080p60
+# MEDIA_DIR=/elsewhere ./render.sh …  renders outside the tree.
+# Canonical copy: DataDotFoundation/MeaningLib, Dissemination/render.sh (byte-identical copies
+# downstream, checked by scripts/check_pins.py).
 # The scene list is the SCENES list at the end of the folder's single .py file.
 # Needs manim (pip install manim mpmath), LaTeX (texlive-latex-extra, dvisvgm) and ffmpeg.
 set -euo pipefail
