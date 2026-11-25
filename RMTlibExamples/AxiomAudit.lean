@@ -372,3 +372,4 @@ import RMTlib
 #print axioms RMT.Tower.vdZ_level
 #print axioms RMT.Tower.hset_above_le_succ
 #print axioms RMT.Tower.log_hset_above_succ_succ
+#print axioms RMT.Tower.hset_cut_narrow
