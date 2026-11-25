@@ -113,3 +113,18 @@ RMT.BDTW.isExpLinear_rhoFin: reads [finPotential]
 -/
 #guard_msgs (whitespace := lax) in
 #frame_report RMT.Frames.placesBinding in RMT.BDTW.isExpLinear_rhoFin
+
+-- Pattern A at `∞` is an instance of pattern A, and its finite-place twin is `bdtw_fin`.
+/--
+info: frame places, binding RMT.Frames.placesBinding, on RMT.BDTW.bdtw_inf: 1 theorems, 1 read, 0 unread
+RMT.BDTW.bdtw_inf: reads [archPotential]
+  instance of RMT.BDTW.det_mul_diagonal_mul_transpose [R := R,
+ N := N,
+ W := Fin K,
+ ρ := fun l ↦ RMT.BDTW.rhoInf ↑l,
+ A := A,
+ B := B]
+  twin archPotential ↦ finPotential: witness RMT.BDTW.bdtw_fin
+-/
+#guard_msgs (whitespace := lax) in
+#frame_report RMT.Frames.placesBinding in RMT.BDTW.bdtw_inf
