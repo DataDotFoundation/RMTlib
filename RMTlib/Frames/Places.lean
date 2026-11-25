@@ -43,11 +43,35 @@ constant function `ℤ → R`; on RMTlib this adds 4 reads, all statements about
 (RMTlib#7). -/
 theorem finContent_fold (T : R) : finContent T = fun _ : ℤ => T := rfl
 
+/-- **The shapes seen at `∞`** (`archSupport`, the wall): at most `N` rows, i.e. `(N, 0) ∉ μ`. -/
+def archSupport (N : ℕ) : Set YoungDiagram := {μ | (N, 0) ∉ μ}
+
+/-- **The shapes seen at a finite place** (`finSupport`): all of them, no wall. The rank is not
+used; it is kept so that `finSupport` has the type of `archSupport` and the support moves of both
+rules (`∞ ↦ finite`, `finite ↦ ∞`) are well typed without an adapter. -/
+@[nolint unusedArguments]
+def finSupport (_N : ℕ) : Set YoungDiagram := Set.univ
+
+/-- **The wall, in role vocabulary**: the archimedean content product is non-zero exactly on the
+archimedean support. Its `∞ ↦ finite` twin (`finContent`, `finSupport`) holds for `N ≠ 0`
+(`contentProd_finContent_ne_zero_iff`); at `N = 0` the twin fails off the empty shape. -/
+theorem contentProd_archContent_ne_zero_iff (N : ℕ) (μ : YoungDiagram) :
+    RMT.Symmetric.contentProd (archContent (N : ℤ)) μ ≠ 0 ↔ μ ∈ archSupport N := by
+  rw [archContent_fold_int, Ne, RMT.Symmetric.contentProd_nat_add_eq_zero_iff]
+  rfl
+
+/-- At a finite place there is no wall: for `T ≠ 0` the content product never vanishes. -/
+theorem contentProd_finContent_ne_zero_iff {N : ℕ} (hN : N ≠ 0) (μ : YoungDiagram) :
+    RMT.Symmetric.contentProd (finContent (N : ℤ)) μ ≠ 0 ↔ μ ∈ finSupport N := by
+  rw [show finContent (N : ℤ) = fun _ : ℤ => (N : ℤ) from rfl, RMT.Symmetric.contentProd_const]
+  simp [finSupport, hN]
+
 /-- RMTlib's binding of the places frame. The folding lemmas let the report read statements that
 never name `archContent` (MeaningLib#2). -/
 def placesBinding : MeaningLib.Frame.Binding where
   frame := MeaningLib.Frame.places
-  assign := [("archContent", ``archContent), ("finContent", ``finContent)]
+  assign := [("archContent", ``archContent), ("finContent", ``finContent),
+    ("archSupport", ``archSupport), ("finSupport", ``finSupport)]
   folds := [``archContent_fold, ``archContent_fold_int, ``finContent_fold]
 
 /-- At a finite place the content product counts boxes. -/
