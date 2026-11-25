@@ -25,10 +25,13 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 16 patterns: [RMT.hook_content_formula,
+info: 19 patterns: [RMT.hook_content_formula,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
  RMT.Fock.fischer_hX_eq_neg_eX,
+ RMT.Plethysm.sum_sq_eq,
+ RMT.Plethysm.sum_sq_eq_hTwo_add,
+ RMT.Plethysm.sum_sq_eq_hTwo_sub,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,
@@ -53,10 +56,13 @@ to `theta` only. -/
 
 open Lean Elab Command in
 /--
-info: 17 patterns: [RMT.hook_content_formula,
+info: 20 patterns: [RMT.hook_content_formula,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
  RMT.Fock.fischer_hX_eq_neg_eX,
+ RMT.Plethysm.sum_sq_eq,
+ RMT.Plethysm.sum_sq_eq_hTwo_add,
+ RMT.Plethysm.sum_sq_eq_hTwo_sub,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,
