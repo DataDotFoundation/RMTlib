@@ -330,3 +330,4 @@ import RMTlib
 #print axioms RMT.Fermion.Maya.weight_conj
 #print axioms RMT.Fermion.occ_ofRows_rowLen
 #print axioms RMT.Fermion.ofRows_transpose
+#print axioms RMT.Symmetric.schurV_eq_zero_of_length
