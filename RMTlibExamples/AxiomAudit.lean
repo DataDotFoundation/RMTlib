@@ -370,3 +370,4 @@ import RMTlib
 #print axioms RMT.Tower.padicValRat_above_succ
 #print axioms RMT.Tower.log_factorInf_eq_sum
 #print axioms RMT.Tower.vdZ_level
+#print axioms RMT.Tower.hset_above_le_succ
