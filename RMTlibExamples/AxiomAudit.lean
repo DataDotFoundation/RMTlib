@@ -337,3 +337,5 @@ import RMTlib
 #print axioms RMT.Fock.ThetaKernel.ker_ofEnd_mul
 #print axioms RMT.Frames.contentProd_archContent_ne_zero_iff
 #print axioms RMT.Frames.contentProd_finContent_ne_zero_iff
+#print axioms RMT.Plethysm.sum_sq_eq
+#print axioms RMT.Plethysm.sum_sq_eq_hTwo_sub
