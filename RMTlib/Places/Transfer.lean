@@ -63,6 +63,7 @@ theorem log_eq_sum {Q : ℕ} (hQ : Q ≠ 0) :
     positivity
 
 /-- Over any set of primes, `Σ log ℓ · v_ℓ(Q) ≤ log Q` for `Q ≠ 0` (the product formula, truncated). -/
+@[frame_transfer inf_p]
 theorem sum_log_mul_padicValNat_le {Q : ℕ} (hQ : Q ≠ 0) (Ls : Finset Nat.Primes) :
     ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * (padicValNat ℓ Q : ℝ) ≤ Real.log Q := by
   classical
@@ -127,6 +128,18 @@ theorem sum_log_le_of_two_aux {a : ℕ → ℝ} {c : ℝ} (hc : 0 ≤ c) {p p' :
         · exact sum_log_mul_padicValNat_le (Int.natAbs_ne_zero.mpr hn') Ls
     _ = c * (Real.log |(n : ℝ)| + Real.log |(n' : ℝ)|) := by
         simp [Nat.cast_natAbs]
+
+/-- **Folding `padicValInt`** (MeaningLib#68 R3): `v_p` of an integer is `v_p` of its absolute value. -/
+theorem padicValInt_eq_padicValNat_natAbs (p : ℕ) (n : ℤ) :
+    padicValInt p n = padicValNat p n.natAbs := rfl
+
+/-- **The truncated product formula over `ℤ`** (MeaningLib#68 R3), in the form the proof states it:
+over any set of primes, `Σ log ℓ · v_ℓ(n) ≤ log |n|` for `n ≠ 0`. -/
+@[frame_transfer inf_p]
+theorem sum_log_mul_padicValInt_le {n : ℤ} (hn : n ≠ 0) (Ls : Finset Nat.Primes) :
+    ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * (padicValInt ℓ n : ℝ) ≤ Real.log |(n : ℝ)| := by
+  have h := sum_log_mul_padicValNat_le (Int.natAbs_ne_zero.mpr hn) Ls
+  simpa [padicValInt_eq_padicValNat_natAbs, Nat.cast_natAbs] using h
 
 /-- **Instance of transfer 1**: the hook-length formula `H(λ) · f^λ = |λ|!`. -/
 theorem hook_transfer {N : ℕ} {ν : Fin N → ℕ} (hν : Antitone ν) :

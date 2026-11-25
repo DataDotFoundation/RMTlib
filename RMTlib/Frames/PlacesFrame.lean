@@ -65,6 +65,11 @@ datum gets a twin at that level. Names as proposed on MeaningLib#4, adopted by R
 These roles are not yet bound by `RMT.Frames.placesBinding`; RH-Dual binds them when it splits
 `LocalDatum` (RH-Dual#11).
 
+**Degree** (MeaningLib#68 R4). `degree` is not an `∞`/finite pair but the sum over *all* places,
+each weighted by `log N(v)`: the cone tying the place-indexed readings together (RMTlib's answer on
+MeaningLib#62). Its pattern is the product formula as a degree, `RMT.Places.deg_principal`, with the
+truncated inequality form `degOn_principal_le`. No rule moves it.
+
 **Home.** By the programme owner's decision (RMTlib#56, MeaningLib#45) this frame encodes a claim RMTlib
 owns, so its definition lives here; MeaningLib keeps the machinery (`Frame`, `Binding`, the report) and
 a toy copy for its self-tests. Changes to the roles or rules are RMTlib's to make, with the evidence.
@@ -97,7 +102,10 @@ def places : Frame where
     { name := "archTopology", doc := "the topology at ∞: connected; specialisation is not continuous \
         (liquid), each sum needs its own convergence argument" },
     { name := "finTopology", doc := "the topology at a finite place: totally disconnected; \
-        specialisation is continuous (solid), summable iff the terms tend to 0" }]
+        specialisation is continuous (solid), summable iff the terms tend to 0" },
+    { name := "degree", doc := "the Arakelov degree Σ_v D_v log N(v), the sum over all places with \
+        ∞ included; the product formula says principal divisors have degree 0 \
+        (RMT.Places.deg_principal)" }]
   twins := []
   rules := [
     { name := "∞ ↦ finite", moves := [("archContent", "finContent"), ("archSupport", "finSupport")] },
