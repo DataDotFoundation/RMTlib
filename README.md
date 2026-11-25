@@ -39,7 +39,8 @@ lake test             # examples and the axiom audit
 ```
 
 `scripts/` holds exact checks (stdlib Python, run as `python3 -I scripts/<name>.py`) that
-accompany some modules; `docs/` holds design notes.
+accompany some modules; `docs/` holds design notes. `scripts/check_pins.py` checks the Lake pins
+(canonical copy in MeaningLib; keep it byte-identical, `check_pins.py bump MeaningLib` refreshes it).
 
 ## Origin
 
