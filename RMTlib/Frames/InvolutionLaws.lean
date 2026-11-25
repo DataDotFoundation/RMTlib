@@ -21,7 +21,7 @@ and `μ′` an application `ι … μ` of one of the spec's involutions to it.
 | `id` | `F a μ′ = F b μ` | `a ↦ b` | `id` |
 | `¬` | `P a μ′ ↔ ¬ P b μ` | `a ↦ b` | `Not` |
 | `out g` | `F a μ′ = g (F b μ)`, `g` free of `μ` | `a ↦ b` | `g` |
-| `out(μ)` | `F a μ′ = g μ (F b μ)` (e.g. `c μ * ·`) | `a ↦ b` | `g μ` |
+| `out(μ)` | `F a μ′ = g μ (F b μ)` (e.g. `c μ * ·`, `· + c μ`) | `a ↦ b` | `g μ` |
 | `invariant` | `F a μ′ = F a μ` | none | `id` |
 | `preserved` | `P μ → P μ′` (a hypothesis is the conclusion at `μ`) | none | — |
 | `operator` | no shape involution, an operator involution occurs | — | — |
@@ -167,7 +167,14 @@ def classifySides (shapes : List Name) (μ lμ r : Expr) (isIff : Bool) :
     let g := r.appFn!
     if g.containsFVar μ.fvarId! then (.outMu, twinOf lμ r.appArg!, m!"{g}")
     else (.outG, twinOf lμ r.appArg!, m!"{g}")
-  else (.unknown, .nil, m!"{r}")
+  else
+    -- the family in another argument of the correction, e.g. `F μ′ = F μ + c μ`
+    match r.getAppArgs.find? (fun x => x == lμ || sameFamily μ lμ x) with
+    | some x =>
+      let sh := if (r.replace fun t => if t == x then some (.bvar 0) else none).containsFVar
+          μ.fvarId! then Shape.outMu else Shape.outG
+      (sh, twinOf lμ x, m!"{r}, as a function of {x}")
+    | none => (.unknown, .nil, m!"{r}")
 
 /-- Classify one theorem statement (`none`: no involution of the spec occurs in it). -/
 def classify (spec : Spec) (ty : Expr) : MetaM (Option (Shape × MessageData × MessageData)) := do

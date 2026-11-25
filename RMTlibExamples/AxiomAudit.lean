@@ -324,3 +324,7 @@ import RMTlib
 #print axioms RMT.UN.theorem3Twin_le_one
 #print axioms RMT.UN.twinPoly_coeff_two_ne
 #print axioms RMT.UN.not_theorem3_and_twin_two_two
+#print axioms RMT.Fermion.Maya.occ_conj
+#print axioms RMT.Fermion.Maya.charge_conj
+#print axioms RMT.Fermion.Maya.energy_conj
+#print axioms RMT.Fermion.Maya.weight_conj
