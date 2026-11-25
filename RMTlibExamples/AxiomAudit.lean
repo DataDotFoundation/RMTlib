@@ -342,3 +342,4 @@ import RMTlib
 #print axioms RMT.BDTW.not_isExpLinear_factorial
 #print axioms RMT.Fock.Virasoro.ev_eP
 #print axioms RMT.Fock.Virasoro.ptEval_sP
+#print axioms RMT.Fock.Virasoro.L1_eP
