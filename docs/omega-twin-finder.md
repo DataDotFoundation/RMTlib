@@ -3,7 +3,10 @@
 **Question.** Which theorems of the library are `ω` laws (`F p μ′ = out μ (F (twin p) μ)`), whether
 or not anyone has recorded them as an `OmegaCovariant` instance?
 
-**Status:** not started. This note is the specification. The structure it feeds is
+**Status:** built (Loop 2, `docs/loops/20261125T0215Z-omega-finder-verdicts.md`): `#involution_laws` in
+`RMTlib/Frames/InvolutionLaws.lean`, RMTlib's spec `RMT.Frames.omegaSpec`, pinned in
+`RMTlibExamples/Omega.lean`. It runs inside the build (no `.olean` reader yet; MeaningLib#7). This
+note is the specification. The structure it feeds is
 `RMT.Symmetric.OmegaCovariant` (`RMTlib/Symmetric/OmegaCovariant.lean`), with four
 instances in `OmegaCovariantInstances.lean`.
 
