@@ -21,7 +21,7 @@ rev = "0df444a360eaa60ab8c11dca51a86af692955474"
 [[require]]
 name = "MeaningLib"
 git = "https://github.com/DataDotFoundation/MeaningLib"
-rev = "e1fac008705e723f8c4076ae36f86fffba418e7a"
+rev = "2e731c05a462f2aa2230872e110dcc0adb28f8d8"
 
 # `roots = []`: a root defaults to the library name and Lake matches roots by prefix. Projects that
 # require RMTlib must not name their own modules `RMTlib*` (RH-Dual's `check_layout.py` enforces it).
