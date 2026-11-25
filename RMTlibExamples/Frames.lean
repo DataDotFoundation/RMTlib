@@ -25,46 +25,7 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 27 patterns: [RMT.hookProd_dvd_factorial,
- RMT.hook_content_formula,
- RMT.padicValNat_hookProd,
- RMT.padicValNat_hookProd_add_fSYT,
- RMT.BDTW.det_mul_diagonal_mul_transpose,
- RMT.Fock.fischer_X_mul_le,
- RMT.Fock.fischer_eX_contentProd,
- RMT.Fock.fischer_hX_contentProd,
- RMT.Fock.fischer_hX_eq_neg_eX,
- RMT.Fock.fischer_pderiv_le,
- RMT.Plethysm.sum_sq_eq,
- RMT.Plethysm.sum_sq_eq_hTwo_add,
- RMT.Plethysm.sum_sq_eq_hTwo_sub,
- RMT.Positivity.det_mul_transpose_eq_sum_sq,
- RMT.Positivity.trace_sq_le_card_mul_trace_mul_self,
- RMT.Symmetric.cauchy_hasSum,
- RMT.Symmetric.cauchy_inf,
- RMT.Symmetric.cauchy_powerSeries,
- RMT.Symmetric.cauchy_prod,
- RMT.Symmetric.cauchy_weighted,
- RMT.Symmetric.dual_cauchy,
- RMT.Symmetric.dual_cauchy_one,
- RMT.Symmetric.hE_eq_sum_sym,
- RMT.Symmetric.oneRow_cauchy_two,
- RMT.Symmetric.schurV_conjV_eq_eDet,
- RMT.Symmetric.schurV_eq_det,
- RMT.Symmetric.schurV_eq_eDet_conjV]
--/
-#guard_msgs (whitespace := lax) in
-run_cmd do
-  let ps := MeaningLib.Frame.framePatterns (← getEnv) "places"
-  logInfo m!"{ps.size} patterns: {ps.toList}"
-
-/-! The theta checker (RMTlib#7 item 1). Unnamed patterns belong to every frame; `ker_intertwine` (a
-change of model that intertwines the actions and matches the read-outs gives equal kernels) belongs
-to `theta` only. -/
-
-open Lean Elab Command in
-/--
-info: 28 patterns: [RMT.hookProd_dvd_factorial,
+info: 31 patterns: [RMT.hookProd_dvd_factorial,
  RMT.hook_content_formula,
  RMT.padicValNat_hookProd,
  RMT.padicValNat_hookProd_add_fSYT,
@@ -91,6 +52,53 @@ info: 28 patterns: [RMT.hookProd_dvd_factorial,
  RMT.Symmetric.schurV_conjV_eq_eDet,
  RMT.Symmetric.schurV_eq_det,
  RMT.Symmetric.schurV_eq_eDet_conjV,
+ RMT.Transfer.dvd,
+ RMT.Transfer.le,
+ RMT.Transfer.log_eq_sum,
+ RMT.Transfer.padicValNat_add]
+-/
+#guard_msgs (whitespace := lax) in
+run_cmd do
+  let ps := MeaningLib.Frame.framePatterns (← getEnv) "places"
+  logInfo m!"{ps.size} patterns: {ps.toList}"
+
+/-! The theta checker (RMTlib#7 item 1). Unnamed patterns belong to every frame; `ker_intertwine` (a
+change of model that intertwines the actions and matches the read-outs gives equal kernels) belongs
+to `theta` only. -/
+
+open Lean Elab Command in
+/--
+info: 32 patterns: [RMT.hookProd_dvd_factorial,
+ RMT.hook_content_formula,
+ RMT.padicValNat_hookProd,
+ RMT.padicValNat_hookProd_add_fSYT,
+ RMT.BDTW.det_mul_diagonal_mul_transpose,
+ RMT.Fock.fischer_X_mul_le,
+ RMT.Fock.fischer_eX_contentProd,
+ RMT.Fock.fischer_hX_contentProd,
+ RMT.Fock.fischer_hX_eq_neg_eX,
+ RMT.Fock.fischer_pderiv_le,
+ RMT.Plethysm.sum_sq_eq,
+ RMT.Plethysm.sum_sq_eq_hTwo_add,
+ RMT.Plethysm.sum_sq_eq_hTwo_sub,
+ RMT.Positivity.det_mul_transpose_eq_sum_sq,
+ RMT.Positivity.trace_sq_le_card_mul_trace_mul_self,
+ RMT.Symmetric.cauchy_hasSum,
+ RMT.Symmetric.cauchy_inf,
+ RMT.Symmetric.cauchy_powerSeries,
+ RMT.Symmetric.cauchy_prod,
+ RMT.Symmetric.cauchy_weighted,
+ RMT.Symmetric.dual_cauchy,
+ RMT.Symmetric.dual_cauchy_one,
+ RMT.Symmetric.hE_eq_sum_sym,
+ RMT.Symmetric.oneRow_cauchy_two,
+ RMT.Symmetric.schurV_conjV_eq_eDet,
+ RMT.Symmetric.schurV_eq_det,
+ RMT.Symmetric.schurV_eq_eDet_conjV,
+ RMT.Transfer.dvd,
+ RMT.Transfer.le,
+ RMT.Transfer.log_eq_sum,
+ RMT.Transfer.padicValNat_add,
  RMT.Fock.ThetaKernel.ker_intertwine]
 -/
 #guard_msgs (whitespace := lax) in
