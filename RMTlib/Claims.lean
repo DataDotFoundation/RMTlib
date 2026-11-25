@@ -9,6 +9,7 @@ import RMTlib.Symmetric.Specialise
 import RMTlib.Edges.WallBreaking
 import RMTlib.Places.BandStep
 import RMTlib.Places.Tower
+import RMTlib.Places.TowerPlaces
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -167,12 +168,14 @@ reflection `X ↦ −X` swaps the sides and keeps the factor at `∞`. -/
 def towerOneObject : Claim where
   text := "the theta tower at a place is one configuration read through a band: per lift, \
     a⁺ gains the crossing point (Δ log H = T + S + V), a⁻ loses it and H(a⁻) drains, \
-    |a⁺| + |a⁻| = |X|, and X ↦ −X swaps a⁺ and a⁻"
+    |a⁺| + |a⁻| = |X|, and X ↦ −X swaps a⁺ and a⁻; at every prime the step has the same split, \
+    and log H is the sum of its p-adic readings"
   scope := .fox
   declared := .proved
   statements := [``RMT.Tower.cut_succ_fst, ``RMT.Tower.cut_fst_snd,
     ``RMT.Tower.log_hset_above_succ, ``RMT.Tower.hset_below_succ_le, ``RMT.Tower.card_cut,
-    ``RMT.Tower.cut_reflectTower, ``RMT.Tower.factorInf_reflectTower]
+    ``RMT.Tower.cut_reflectTower, ``RMT.Tower.factorInf_reflectTower,
+    ``RMT.Tower.padicValRat_above_succ, ``RMT.Tower.log_factorInf_eq_sum]
   supports := [``places, ``bosonFermion]
 
 end RMT.Claims

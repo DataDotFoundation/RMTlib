@@ -367,3 +367,5 @@ import RMTlib
 #print axioms RMT.StringInsertion.hset_drain
 #print axioms RMT.Tower.hset_below_succ_le
 #print axioms RMT.Tower.log_hset_above_succ
+#print axioms RMT.Tower.padicValRat_above_succ
+#print axioms RMT.Tower.log_factorInf_eq_sum
