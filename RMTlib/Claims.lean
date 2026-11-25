@@ -210,4 +210,19 @@ def bosonicProof : Claim where
     bridge/scripts/wall_positivity_census.py (twins checked exactly)"
   supports := [``bosonFermion]
 
+/-- **F13**: the proof's vacuum character splits as **point ⊗ charge** (RMTlib#83's roles). The
+character `mu = χV(x)` (`x` a Hilbert-90 root of `det g`) is one global character, the same at
+every place (point). At `∞` the proof's `muInf = mu_∞ · j` carries an extra frame factor
+`j = ∏ det(k₊)^m det(k₋)^{−m}`, `m = rk V / 2`, fixed by the signature and rank (charge); at the
+finite places the charge is absent. `ω` (`m ↦ −m`) inverts `j` and fixes `mu`: its asymmetry is
+purely in the archimedean charge. -/
+def vacuumPointCharge : Claim where
+  text := "the vacuum character is a place-uniform point (mu) times an archimedean charge factor \
+    (j, from the signature); ω inverts the charge and fixes the point"
+  scope := .fox
+  declared := .checked
+  source := "RH-Dual #7, #122, #125: bridge/links/vacuum-character-places.md (read; the \
+    factorisation muInf = mu_∞ · j inferred from the closed form)"
+  supports := [``places, ``bosonFermion]
+
 end RMT.Claims
