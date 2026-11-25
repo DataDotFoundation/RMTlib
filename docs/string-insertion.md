@@ -38,21 +38,31 @@ refute it. Tags: **proved** (in RMTlib), **exact** (elementary, to be formalised
 ## The hypothesis
 
 **String-insertion law (conjecture).** Along the theta lifts of a proof (RH-Dual's tower grid and
-lower-bound lifts), each step acts on the relevant Maya sets as **insertion of a string**, up to a
-global shift, i.e. a gauge that cancels in `Hset` quotients. In consequence:
+lower-bound lifts), each step acts on the relevant Maya sets as **insertion of a string**, possibly
+combined with a **translation** `L ↦ L + Δ`. Two different things are easily confused here:
+- **re-padding** (`N ↦ N + 1`: add a particle at `0` and shift the rest by `1`) is a **gauge**: it leaves
+  `Hset` unchanged (exact; e.g. `Hset{0,2,5} = Hset{0,1,3,6} = 8`);
+- a plain **translation is not a gauge**: it changes every `ℓ!` (`Hset{1,3,6} = 144`). Its effect is the
+  one-body factor `Hset(L + Δ)/Hset(L) = ∏_{ℓ ∈ L} (ℓ + 1)_Δ` (rising Pochhammer; the Vandermonde is
+  translation-invariant), i.e. the `log Γ` potential of item 4 transported by `Δ`. RH-Dual's first data
+  on the proof's lower-bound lifts (#49) show exactly this: one charge migrating plus a translation,
+  with about 95 % of `Δ log H` one-body.
+
+In consequence:
 - (a) the **slack** (RH-Dual's gauge-free statistic, for example `Σ log H(a⁻)` at node 18 or `log f^λ` at
   node 4) changes at each step by the exact increment of item 1;
 - (b) it **telescopes** along any path (item 2);
 - (c) the grid of lifts is a **growth diagram** whose squares commute exactly (item 3). A measured
   defect therefore locates a step that is **not** a disjoint string insertion, e.g. a collision
-  (`S ∩ L ≠ ∅`, a Pauli obstruction) or a shift that does not cancel;
+  (`S ∩ L ≠ ∅`, a Pauli obstruction) or a translation not accounted for by its Pochhammer factor;
 - (d) asymptotically, the total slack is a **log-gas energy**: one-body `Σ log ℓ!` minus two-body
   `Σ log |ℓ − ℓ′|`. This is consistent with the `k² log k` growth at the square (RMTlib's Keating–Snaith
   constant, `ksConst_eq_inv_mutual`, is already a mutual energy of two adjacent strings).
 
 ## What would refute it
 
-- A lift step whose shapes are not related by a disjoint string insertion, up to shift. The
+- A lift step whose shapes are not related by a disjoint string insertion, up to re-padding and a
+  translation (with its Pochhammer factor). The
   hypothesis is falsified there, and the defect of (c) should be nonzero exactly at such steps.
 - A gauge-free slack increment that differs from `log Hset(S) − log Mut(L, S)` at a step that *is* a
   string insertion.
