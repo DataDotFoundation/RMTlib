@@ -275,3 +275,39 @@ theorem factorInf_reflectTower (i : ℕ) : T.reflectTower.factorInf i = T.factor
   simp [factorInf, cut_reflectTower, mul_comm]
 
 end RMT.Tower
+
+/-! ## The formal degree along the tower (RH-Dual #88) -/
+
+namespace RMT.Tower
+
+open Finset
+
+/-- The Vandermonde of a configuration, `∏_{x < y ∈ Y} (y − x)`. The proof's formal degree of
+`U(N)` at the Harish-Chandra parameter `λ` is `∏_{a<b} |λ_a − λ_b| / ∏_{a<b} (b − a)` (RH-Dual #88,
+`FormalDegreeCompactDual`); its numerator is `vdZ` of the parameter's points. -/
+def vdZ (Y : Finset ℤ) : ℤ := ∏ q ∈ (Y ×ˢ Y).filter (fun q => q.1 < q.2), (q.2 - q.1)
+
+/-- **A translation does not change the Vandermonde.** -/
+theorem vdZ_translate (Y : Finset ℤ) (d : ℤ) : vdZ (translate Y d) = vdZ Y := by
+  unfold vdZ
+  refine prod_nbij' (fun q => (q.1 - d, q.2 - d)) (fun q => (q.1 + d, q.2 + d)) ?_ ?_ ?_ ?_ ?_
+  · intro q hq
+    simp only [mem_filter, mem_product, mem_translate] at hq ⊢
+    obtain ⟨⟨⟨a, ha, h1⟩, ⟨b, hb, h2⟩⟩, hlt⟩ := hq
+    refine ⟨⟨?_, ?_⟩, by omega⟩
+    · rw [← h1]; simpa using ha
+    · rw [← h2]; simpa using hb
+  · intro q hq
+    simp only [mem_filter, mem_product, mem_translate] at hq ⊢
+    exact ⟨⟨⟨q.1, hq.1.1, rfl⟩, ⟨q.2, hq.1.2, rfl⟩⟩, by omega⟩
+  · intro q _; simp
+  · intro q _; simp
+  · intro q _; ring
+
+/-- **The formal degree's numerator is constant along the tower**: every level `X + e i` has the
+Vandermonde of `X`. So is its denominator (it depends on `|X|` only), and so is `|a⁺| + |a⁻|`
+(`card_cut`), the only datum node 18's bound reads. -/
+theorem vdZ_level (T : RMT.Tower) (i : ℕ) : vdZ (T.level i) = vdZ T.X :=
+  vdZ_translate _ _
+
+end RMT.Tower

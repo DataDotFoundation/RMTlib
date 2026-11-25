@@ -175,7 +175,21 @@ def towerOneObject : Claim where
   statements := [``RMT.Tower.cut_succ_fst, ``RMT.Tower.cut_fst_snd,
     ``RMT.Tower.log_hset_above_succ, ``RMT.Tower.hset_below_succ_le, ``RMT.Tower.card_cut,
     ``RMT.Tower.cut_reflectTower, ``RMT.Tower.factorInf_reflectTower,
-    ``RMT.Tower.padicValRat_above_succ, ``RMT.Tower.log_factorInf_eq_sum]
+    ``RMT.Tower.padicValRat_above_succ, ``RMT.Tower.log_factorInf_eq_sum, ``RMT.Tower.vdZ_level]
   supports := [``places, ``bosonFermion]
+
+/-- **F11**: in Alpöge's proof, `ω` (`λ ↦ λ′`) occurs only at `∞`. No Aubert / Zelevinsky
+involution, no Alvis–Curtis, no Iwahori–Matsumoto anywhere in the proof's closure; the only
+finite-place duality is the contragredient `ν ↦ ν⁻¹`, which is the reflection (particle ↔ hole,
+`RMT.Tower.reflectTower`), not transposition. A sharp form of the programme thesis that the place
+at `∞` is where `ω` lives and breaks. -/
+def omegaOnlyAtInfinity : Claim where
+  text := "in the proof, ω (λ ↦ λ′) is used at ∞ only; the finite places see only the \
+    contragredient, which is the particle–hole reflection, not ω"
+  scope := .fox
+  declared := .checked
+  source := "RH-Dual #89, #95: bridge/links/omega-finite-places.md, bridge/scripts/closure_names.py \
+    (name census over riemannHypothesis's closure)"
+  supports := [``bosonFermion, ``places]
 
 end RMT.Claims
