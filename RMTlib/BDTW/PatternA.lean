@@ -69,4 +69,19 @@ theorem det_mul_diagonal_mul_transpose {N : ℕ} {W : Type*} [Fintype W] [Linear
   simp only [Function.comp_apply]
   ring
 
+/-- **Pattern A at `∞`**: the one-body weight `l!`. -/
+theorem bdtw_inf {N K : ℕ} (A B : Matrix (Fin N) (Fin K) R) :
+    det (A * Matrix.diagonal (fun l : Fin K => (rhoInf (l : ℕ) : R)) * Matrix.transpose B) =
+      ∑ f : {f : Fin N → Fin K // StrictAnti f},
+        (∏ i, (rhoInf ((f.1 i : ℕ)) : R)) * det (A.submatrix id f.1) * det (B.submatrix id f.1) :=
+  det_mul_diagonal_mul_transpose _ A B
+
+/-- **Pattern A at a finite place**: the one-body weight `T^l` (`T` last, so that it is the twin of
+`bdtw_inf` under the potential move, whose fresh `∀ T` comes after the statement's binders). -/
+theorem bdtw_fin {N K : ℕ} (A B : Matrix (Fin N) (Fin K) R) (T : R) :
+    det (A * Matrix.diagonal (fun l : Fin K => rhoFin T (l : ℕ)) * Matrix.transpose B) =
+      ∑ f : {f : Fin N → Fin K // StrictAnti f},
+        (∏ i, rhoFin T ((f.1 i : ℕ))) * det (A.submatrix id f.1) * det (B.submatrix id f.1) :=
+  det_mul_diagonal_mul_transpose _ A B
+
 end RMT.BDTW
