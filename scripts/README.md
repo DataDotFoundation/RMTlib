@@ -89,3 +89,25 @@ Not checked: Remmel's papers on (k,l)-hook Schur functions; Berele–Remmel 1985
 rule already cross-checked in the script; any treatment of super RSK by growth diagrams. My arXiv
 searches ("super RSK", "Berele-Regev", "growth diagram" with "super") found none.
 
+
+## `super_schensted_omega.py`: Schensted's ω for the super-RSK (RMTlib#74)
+
+Schensted: reversing a permutation transposes its insertion tableau. For the super-RSK of
+`growth_rules.py` (Hage 2022), the exact statement found here is
+
+> reverse the biword **and** flip every parity (rows and letters): P transposes.
+
+This is checked exhaustively on fillings up to 3 × 3 with entries ≤ 2 and sum ≤ 4: 35,130 of 35,130
+cases. Each partial version fails:
+
+| variant | P(reversed) = Pᵀ |
+|---|---|
+| reverse only | 5,272 / 35,130 |
+| reverse, flip rows only | 8,320 / 20,320 |
+| reverse, flip letters only | 11,212 / 20,320 |
+
+The local rule is **not** ω-equivariant square by square in a fixed orientation (`conj ∘ fwd_flip ∘
+conj ≠ fwd` on most squares of every type, already at `ρ = ∅`, `μ = ν = (1)`). So the ω-symmetry of
+super-RSK is a reflection of the whole grid (reversal) combined with the parity flip, not a
+property of one square. A Lean proof should therefore go through the grid reflection, as for
+Schensted's theorem, not through a local equivariance lemma.
