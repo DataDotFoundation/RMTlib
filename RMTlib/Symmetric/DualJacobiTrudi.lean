@@ -1,4 +1,5 @@
 import RMTlib.Symmetric.Bialternant
+import MeaningLib.Frame.Pattern
 
 /-!
 # Dual Jacobi–Trudi
@@ -424,6 +425,7 @@ over any commutative ring. Both sides branch in the last variable: the tableaux 
 horizontal strips of `λ'` (`schurV_succ`), the determinant over vertical strips of `λ`
 (`eDet_succ`, `eDet_eq_zero_of_not_isVStrip`), and the two are the same strips
 (`sum_interl_conjV`). -/
+@[frame_pattern]
 theorem schurV_conjV_eq_eDet (a : ℕ → R) : ∀ (m : ℕ) (lam : Fin N → ℕ), Antitone lam →
     (∀ i, lam i ≤ K) → schurV a K m (conjV K lam) = eDet a m (fun i => (lam i : ℤ))
   | 0, lam, hl, hK => by
@@ -447,6 +449,7 @@ theorem schurV_conjV_eq_eDet (a : ℕ → R) : ∀ (m : ℕ) (lam : Fin N → �
 
 /-- **Dual Jacobi–Trudi, column form**: for a partition `μ : Fin K → ℕ` with `μ_0 ≤ N`,
 `s_μ = det (e_{μ'_i − i + j})_{i, j < N}`. -/
+@[frame_pattern]
 theorem schurV_eq_eDet_conjV (a : ℕ → R) (m : ℕ) {mu : Fin K → ℕ} (hm : Antitone mu)
     (hN : ∀ j, mu j ≤ N) :
     schurV a K m mu = eDet a m (fun i => (conjV N mu i : ℤ)) := by

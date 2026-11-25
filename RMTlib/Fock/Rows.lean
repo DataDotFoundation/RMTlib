@@ -2,6 +2,7 @@ import RMTlib.Fock.Columns
 import Mathlib.Data.Nat.Choose.Multinomial
 import Mathlib.Algebra.Order.Antidiag.FinsuppEquiv
 import Mathlib.Data.Nat.Factorial.BigOperators
+import MeaningLib.Frame.Pattern
 
 /-!
 # The Fock norm of a one-row Schur function
@@ -164,6 +165,7 @@ theorem fischer_hX (k : ℕ) : fischer (hX N k) (hX N k) = (N.ascFactorial k : �
 
 /-- **The Fock norm of `h_k(X)` is the content product `∏ (N + c)` of the row `(k)`**, whose
 cells `(0, j)` have contents `j`. -/
+@[frame_pattern]
 theorem fischer_hX_contentProd (k : ℕ) :
     fischer (hX N k) (hX N k)
       = ((RMT.Symmetric.contentProdP (fun z : ℤ => (N : ℤ) + z) [k] : ℤ) : ℚ) := by
@@ -173,6 +175,7 @@ theorem fischer_hX_contentProd (k : ℕ) :
 /-- **Rows and columns are exchanged by `N ↦ −N`**: the content product `∏ (N + c)` of the row
 `(k)`, which is `‖h_k(X)‖²_Fock`, is `(−1)^k` times that of the column `(1^k)`, which is
 `‖e_k(X)‖²_Fock`, with `N` replaced by `−N`. Transposing negates contents. -/
+@[frame_pattern]
 theorem fischer_hX_eq_neg_eX (k : ℕ) :
     RMT.Symmetric.contentProdP (fun z : ℤ => (N : ℤ) + z) [k]
       = (-1) ^ k * RMT.Symmetric.contentProdP (fun z : ℤ => -(N : ℤ) + z) (List.replicate k 1) := by

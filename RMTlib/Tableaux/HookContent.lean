@@ -1,6 +1,7 @@
 import RMTlib.Tableaux.HookLengthFormula
 import Mathlib.LinearAlgebra.Vandermonde
 import Mathlib.LinearAlgebra.Matrix.Block
+import MeaningLib.Frame.Pattern
 
 /-!
 # The hook-content formula
@@ -239,6 +240,7 @@ theorem factorial_add_eq_mul_prod (a k : ℕ) : (a + k)! = a ! * ∏ c ∈ range
 /-- **The hook-content formula**: the number of semistandard Young tableaux of shape `ν` with
 entries `≤ n` (Gelfand–Tsetlin patterns with top row `ν`) satisfies
 `#SSYT(ν, n) · H(ν) = ∏_{(i,c) ∈ ν} (n + c − i)`. -/
+@[frame_pattern]
 theorem hook_content_formula (n : ℕ) (ν : Fin n → ℕ) (hν : Antitone ν) :
     gtCount n ν * hookProd ν = ∏ i : Fin n, ∏ c ∈ range (ν i), (n - i + c) := by
   obtain ⟨cn, hc, hB⟩ := binDet_eq_mul_vand (n := n)

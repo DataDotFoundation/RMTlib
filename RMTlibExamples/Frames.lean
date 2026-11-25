@@ -20,3 +20,34 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 -/
 #guard_msgs (whitespace := lax) in
 #frame_report RMT.Frames.placesBinding in RMT.UN.momentPoly_eq_contentProd
+
+/-! RMTlib as a checker (RMTlib#7, MeaningLib#11): the statements tagged `@[frame_pattern]`. -/
+
+open Lean Elab Command in
+/--
+info: 21 patterns: [RMT.hook_content_formula,
+ RMT.Fock.fischer_eX_contentProd,
+ RMT.Fock.fischer_hX_contentProd,
+ RMT.Fock.fischer_hX_eq_neg_eX,
+ RMT.Symmetric.cauchy,
+ RMT.Symmetric.cauchy_content,
+ RMT.Symmetric.cauchy_graded,
+ RMT.Symmetric.cauchy_hasSum,
+ RMT.Symmetric.cauchy_inf,
+ RMT.Symmetric.cauchy_powerSeries,
+ RMT.Symmetric.cauchy_prod,
+ RMT.Symmetric.cauchy_prod_ssyt,
+ RMT.Symmetric.cauchy_ssyt,
+ RMT.Symmetric.cauchy_weighted,
+ RMT.Symmetric.dual_cauchy,
+ RMT.Symmetric.dual_cauchy_one,
+ RMT.Symmetric.hE_eq_sum_sym,
+ RMT.Symmetric.oneRow_cauchy_two,
+ RMT.Symmetric.schurV_conjV_eq_eDet,
+ RMT.Symmetric.schurV_eq_det,
+ RMT.Symmetric.schurV_eq_eDet_conjV]
+-/
+#guard_msgs (whitespace := lax) in
+run_cmd do
+  let ps := MeaningLib.Frame.framePatterns (← getEnv) "places"
+  logInfo m!"{ps.size} patterns: {ps.toList}"

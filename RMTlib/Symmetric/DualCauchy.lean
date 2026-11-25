@@ -1,4 +1,5 @@
 import RMTlib.Symmetric.DualJacobiTrudi
+import MeaningLib.Frame.Pattern
 
 /-!
 # The dual Cauchy identity
@@ -241,6 +242,7 @@ theorem dual_cauchy_eDet (α β : ℕ → R) (T : R) (m : ℕ) : ∀ n B : ℕ, 
 
 the sum over the partitions `λ` with at most `m` rows and at most `n` columns, `λ'` their
 conjugates (`conjV`, with `K` rows). -/
+@[frame_pattern]
 theorem dual_cauchy (α β : ℕ → R) (T : R) (m n K : ℕ) (hK : n ≤ K) :
     ∑ lam ∈ boxParts m n,
         T ^ (∑ i, lam i) * (schurV α m m lam * schurV β K n (conjV K lam)) =
@@ -253,6 +255,7 @@ theorem dual_cauchy (α β : ℕ → R) (T : R) (m n K : ℕ) (hK : n ≤ K) :
   simp only [mul_assoc]
 
 /-- **The dual Cauchy identity at `T = 1`**: `Σ_{λ ⊆ m × n} s_λ(α) s_{λ'}(β) = ∏ (1 + α_j β_i)`. -/
+@[frame_pattern]
 theorem dual_cauchy_one (α β : ℕ → R) (m n : ℕ) :
     ∑ lam ∈ boxParts m n, schurV α m m lam * schurV β n n (conjV n lam) =
       ∏ i : Fin n, ∏ j : Fin m, (1 + α j * β i) := by
