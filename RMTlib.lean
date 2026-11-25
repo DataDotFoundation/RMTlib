@@ -86,6 +86,7 @@ import RMTlib.Places.StringInsertion
 import RMTlib.Places.BandStep
 import RMTlib.Places.Tower
 import RMTlib.Places.TowerPlaces
+import RMTlib.Places.Degree
 import RMTlib.Claims
 import RMTlib.Plethysm.AdamsTwo
 import RMTlib.Symmetric.DesnanotJacobi
