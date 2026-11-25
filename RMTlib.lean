@@ -81,6 +81,7 @@ import RMTlib.Positivity.FockBounds
 import RMTlib.Places.HookValuation
 import RMTlib.Places.Transfer
 import RMTlib.Places.StringInsertion
+import RMTlib.Claims
 import RMTlib.Plethysm.AdamsTwo
 import RMTlib.Symmetric.DesnanotJacobi
 import RMTlib.Symmetric.SquareToda
