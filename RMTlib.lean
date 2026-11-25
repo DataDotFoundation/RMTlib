@@ -83,6 +83,7 @@ import RMTlib.Edges.Statements
 import RMTlib.Edges.WallBreaking
 import RMTlib.Places.Transfer
 import RMTlib.Places.StringInsertion
+import RMTlib.Places.BandStep
 import RMTlib.Claims
 import RMTlib.Plethysm.AdamsTwo
 import RMTlib.Symmetric.DesnanotJacobi
