@@ -5,7 +5,7 @@ import RMTlib.Frames.Places
 # Theorem 3 for `U(N)` read through the places frame
 
 Loop 1 of `docs/loops/`: `RMTlib.Moments` read through the places frame
-(`MeaningLib.Frame.places`, our reading of Scholze's programme, not his claim), with RMTlib's
+(`RMT.Frames.places`, our reading of Scholze's programme, not his claim), with RMTlib's
 binding `RMT.Frames.placesBinding`.
 
 As first written, the moment polynomial `∏_{i,j<k} (N + i + j + 1)/(i + j + 1)` is not stated in the
