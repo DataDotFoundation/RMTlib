@@ -32,12 +32,12 @@ interpretation of a statement, never a rung.
 | F1 | The boson's wall is the ω-image of the fermion's: `s_λ(m vars) = 0` for `ℓ(λ) > m`, via `e_k = 0` for `k > m`. | proved | `schurV_eq_zero_of_length` |
 | F2 | `L₁^{(a)}` removes one box from `s_μ` with weight `a + c` (in `Λ`, every charge). | proved | `L1_eDetP`, `L1_eP` |
 | F3 | String insertion: `Hset(L ⊔ S)·Mut(L,S) = Hset(L)·Hset(S)`; a translation by `Δ` contributes `∏(ℓ+1)_Δ`. | identity **proved** (Vandermonde form); translation factor **exact on paper** | `vd_union`, `fac_union`; `docs/string-insertion.md` |
-| F4 | String-insertion **law** along theta lifts (slack = one-body + two-body increments, telescoping, exact squares). | **checked on one example** (RH-Dual #39); otherwise a conjecture | `docs/string-insertion.md` |
+| F4 | String-insertion **law** along theta lifts (slack = one-body + two-body increments, telescoping, exact squares). | **checked**: exceptionless on all admissible parameter sets in two windows (RH-Dual #48: 23,744 and 1,268,736 cases); one-body share ≈ 1.12, two-body ≈ −12%, no family cancellation | `docs/string-insertion.md`; `RMT.Claims.stringInsertionLaw` |
 | F5 | The moment measure puts its mass at the wall (`N·P(λ₁ = N) → k²`); the wall is a hard edge. | **checked on examples** (Loop 3); "hard edge / Bessel" a **reading** | `scripts/wall_moments.py` |
 | F6 | Hook products at every place: `H(λ) ∣ |λ|!`, `v_p H + v_p f^λ = v_p |λ|!`. | proved; tagged as transfers | `hookProd_dvd_factorial`, `padicValNat_hookProd_add_fSYT` |
 
 ## What may not be said
 
 - That the places programme **is** boson–fermion: J1 is proved for one pattern, not as an equivalence.
-- That the string-insertion law **holds along the lifts**: one worked example (F4).
+- That the string-insertion law **holds along the lifts in general**: it is exceptionless on two small windows (F4), not proved.
 - That the wall's fluctuations **are** Bessel: a reading of computed data (F5).
