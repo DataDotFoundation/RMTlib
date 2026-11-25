@@ -35,6 +35,14 @@ def rhoInf (l : ℕ) : R := (l.factorial : R)
 /-- The one-body weight at a finite place: `ρ_p(l) = T^l`. -/
 def rhoFin (T : R) (l : ℕ) : R := T ^ l
 
+/-- Adapter for the potential move `∞ ↦ finite` (MeaningLib#4): its extra explicit binder `T`
+becomes a fresh `∀ T` in the twin statement. -/
+def infToFin (T : R) : ℕ → R := rhoFin T
+
+/-- Adapter for the potential move `finite ↦ ∞`: the finite weight's `T` is dropped. -/
+@[nolint unusedArguments]
+def finToInf (_T : R) : ℕ → R := rhoInf
+
 theorem isExpLinear_rhoFin (T : R) : IsExpLinear (rhoFin T) := isExpLinear_pow T
 
 theorem not_isExpLinear_rhoInf [Nontrivial R] : ¬ IsExpLinear (rhoInf (R := R)) :=
