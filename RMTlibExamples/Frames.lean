@@ -87,3 +87,25 @@ info: 23 patterns: [RMT.hook_content_formula,
 run_cmd do
   let ps := MeaningLib.Frame.framePatterns (← getEnv) "theta"
   logInfo m!"{ps.size} patterns: {ps.toList}"
+
+/-! The potential roles (MeaningLib#4, RMTlib#19 B7): `IsExpLinear` is the located reason. The
+twin of the refutation at `∞` is refuted at a finite place; the twin of the finite fact at `∞` is
+only proposed (it is true over the trivial ring, so no unconditional refutation exists). -/
+
+/--
+info: frame places, binding RMT.Frames.placesBinding, on RMT.BDTW.not_isExpLinear_rhoInf: 1 theorems, 1 read, 0 unread
+RMT.BDTW.not_isExpLinear_rhoInf: reads [archPotential]
+  twin archPotential ↦ finPotential: REFUTED by RMT.BDTW.isExpLinear_rhoFin
+  ∀ {R : Type u_1} [inst : CommRing R] [Nontrivial R] (T : R), ¬RMT.BDTW.IsExpLinear (RMT.BDTW.rhoFin T)
+-/
+#guard_msgs (whitespace := lax) in
+#frame_report RMT.Frames.placesBinding in RMT.BDTW.not_isExpLinear_rhoInf
+
+/--
+info: frame places, binding RMT.Frames.placesBinding, on RMT.BDTW.isExpLinear_rhoFin: 1 theorems, 1 read, 0 unread
+RMT.BDTW.isExpLinear_rhoFin: reads [finPotential]
+  twin finPotential ↦ archPotential: proposed
+  ∀ {R : Type u_1} [inst : CommRing R] (T : R), RMT.BDTW.IsExpLinear RMT.BDTW.rhoInf
+-/
+#guard_msgs (whitespace := lax) in
+#frame_report RMT.Frames.placesBinding in RMT.BDTW.isExpLinear_rhoFin
