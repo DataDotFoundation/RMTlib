@@ -115,4 +115,86 @@ theorem ptEval_sP (a : ℕ → ℚ) (m : ℕ) {K N : ℕ} {mu : Fin K → ℕ} (
     (hN : ∀ j, mu j ≤ N) : ptEval a m (sP N mu) = RMT.Symmetric.schurV a K m mu := by
   rw [sP, ptEval_eDetP, RMT.Symmetric.schurV_eq_eDet_conjV a m hm hN]
 
+/-! ## `L_1` on the `e_k` -/
+
+theorem neg_one_pow_mul_neg_one_pow (k i : ℕ) (hi : i ≤ k) :
+    ((-1 : ℚ) ^ (k + 2)) * (-1) ^ i = (-1) ^ (k - i) := by
+  rw [← pow_add, show k + 2 + i = (k - i) + 2 * (i + 1) by omega, pow_add, pow_mul]
+  simp
+
+/-- **Newton's recursion**, as a sum over `range`:
+`(k + 1) e_{k+1} = Σ_{i ≤ k} (−1)^{k − i} e_i p_{k+1−i}`. -/
+theorem eP_rec (k : ℕ) : (((k + 1 : ℕ) : ℚ)) • eP (k + 1) =
+    ∑ i ∈ range (k + 1), ((-1 : ℚ) ^ (k - i)) • (eP i * X (k + 1 - i)) := by
+  rw [eP, smul_smul, ← mul_assoc, mul_inv_cancel₀ (by positivity), one_mul, Finset.smul_sum,
+    Fin.sum_univ_eq_sum_range
+      (fun i => ((-1 : ℚ) ^ (k + 2)) • ((-1 : ℚ) ^ i) • (eP i * X (k + 1 - i))) (k + 1)]
+  refine Finset.sum_congr rfl fun i hi => ?_
+  rw [smul_smul, neg_one_pow_mul_neg_one_pow k i (by simpa [Nat.lt_succ_iff] using hi)]
+
+theorem L1_eP_zero (a : ℚ) : L1 a (eP 0) = 0 := by rw [eP_zero, Derivation.map_one_eq_zero]
+
+/-- **`L_1` lowers `e_k` with weight `a − k + 1`**: `L_1^{(a)} e_{k+1} = (a − k) e_k`. At charge
+`a = N` this is `Σ_i ∂_{x_i} e_{k+1} = (N − k) e_k` (`ev_L1`). -/
+theorem L1_eP (a : ℚ) (k : ℕ) : L1 a (eP (k + 1)) = (a - k) • eP k := by
+  induction k using Nat.strong_induction_on with
+  | _ k ih =>
+    have hk1 : (((k + 1 : ℕ) : ℚ)) ≠ 0 := by positivity
+    refine smul_right_injective Λ hk1 ?_
+    simp only
+    rw [← (L1 a).map_smul, eP_rec, map_sum]
+    have hterm : ∀ i ∈ range (k + 1), L1 a (((-1 : ℚ) ^ (k - i)) • (eP i * X (k + 1 - i))) =
+        ((-1 : ℚ) ^ (k - i)) • (L1 a (eP i) * X (k + 1 - i)) +
+          ((-1 : ℚ) ^ (k - i)) • (eP i * L1 a (X (k + 1 - i))) := by
+      intro i _
+      rw [(L1 a).map_smul, Derivation.leibniz, smul_eq_mul, smul_eq_mul, smul_add, add_comm,
+        mul_comm (X _)]
+    rw [Finset.sum_congr rfl hterm, Finset.sum_add_distrib]
+    rw [Finset.sum_range_succ' (fun i => ((-1 : ℚ) ^ (k - i)) • (L1 a (eP i) * X (k + 1 - i))),
+      L1_eP_zero, zero_mul, smul_zero, add_zero]
+    have hA : ∑ j ∈ range k, ((-1 : ℚ) ^ (k - (j + 1))) • (L1 a (eP (j + 1)) * X (k + 1 - (j + 1))) =
+        ∑ j ∈ range k, ((-1 : ℚ) ^ (k - 1 - j) * (a - j)) • (eP j * X (k - j)) := by
+      refine Finset.sum_congr rfl fun j hj => ?_
+      have hjk := Finset.mem_range.mp hj
+      rw [ih j hjk, smul_mul_assoc, smul_smul, show k - (j + 1) = k - 1 - j by omega,
+        show k + 1 - (j + 1) = k - j by omega]
+    rw [Finset.sum_range_succ (fun i => ((-1 : ℚ) ^ (k - i)) • (eP i * L1 a (X (k + 1 - i)))),
+      Nat.sub_self, pow_zero, one_smul, show k + 1 - k = 1 by omega, L1_X_one]
+    have hB : ∑ i ∈ range k, ((-1 : ℚ) ^ (k - i)) • (eP i * L1 a (X (k + 1 - i))) =
+        ∑ j ∈ range k, (-(-1 : ℚ) ^ (k - 1 - j) * ((k : ℚ) + 1 - j)) • (eP j * X (k - j)) := by
+      refine Finset.sum_congr rfl fun j hj => ?_
+      have hjk := Finset.mem_range.mp hj
+      rw [show k + 1 - j = (k - j - 1) + 2 by omega, L1_X]
+      simp only [show k - j - 1 + 2 ≠ 0 by omega, if_false, pc,
+        show k - j - 1 + 2 - 1 = k - j by omega, show k - j ≠ 0 by omega]
+      rw [mul_smul_comm, smul_smul, show k - j = (k - 1 - j) + 1 by omega, pow_succ]
+      congr 1
+      have hc : (((k - 1 - j + 1 - 1 + 2 : ℕ)) : ℚ) = (k : ℚ) + 1 - j := by
+        rw [show k - 1 - j + 1 - 1 + 2 = (k + 1) - j by omega, Nat.cast_sub (by omega)]
+        push_cast; ring
+      rw [hc]
+      ring
+    rw [hA, hB, ← add_assoc, ← Finset.sum_add_distrib]
+    have hC : ∑ j ∈ range k, (((-1 : ℚ) ^ (k - 1 - j) * (a - j)) • (eP j * X (k - j)) +
+        (-(-1 : ℚ) ^ (k - 1 - j) * ((k : ℚ) + 1 - j)) • (eP j * X (k - j))) =
+        (a - k - 1) • ∑ j ∈ range k, ((-1 : ℚ) ^ (k - 1 - j)) • (eP j * X (k - j)) := by
+      rw [Finset.smul_sum]
+      refine Finset.sum_congr rfl fun j _ => ?_
+      rw [← add_smul, smul_smul]
+      congr 1
+      ring
+    rw [hC, mul_comm (eP k), ← smul_eq_C_mul]
+    rcases k with _ | k
+    · simp
+    · have hrec := eP_rec k
+      have hsum : ∑ j ∈ range (k + 1), ((-1 : ℚ) ^ (k + 1 - 1 - j)) • (eP j * X (k + 1 - j)) =
+          (((k + 1 : ℕ) : ℚ)) • eP (k + 1) := by
+        rw [hrec]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        rw [show k + 1 - 1 - j = k - j by omega]
+      rw [hsum, smul_smul, smul_smul, ← add_smul]
+      congr 1
+      push_cast
+      ring
+
 end RMT.Fock.Virasoro
