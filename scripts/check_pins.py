@@ -21,7 +21,9 @@ remember them. For every Lake package in the repository (every tracked `lakefile
   clean       every checked-out package under `.lake/packages/` is at its locked commit and has no
               local edits (fix the dependency upstream, never in `.lake/packages/`);
   copy        this script is byte-identical to the copy each owned dependency carries at its
-              pinned commit (canonical copy: DataDotFoundation/MeaningLib, scripts/check_pins.py).
+              pinned commit (canonical copy: DataDotFoundation/MeaningLib, scripts/check_pins.py),
+              and so is every shared file (`SHARED_FILES`: the Dissemination helpers) that both
+              this repository and the dependency carry.
 
 Every check is a rule applied to files and git objects; nothing is judged. Dependencies are read
 from `.lake/packages/` when present, otherwise fetched (blob-less) into `.lake/pin-check.git`.
@@ -31,7 +33,8 @@ usage:
   python3 -I <path>/check_pins.py bump NAME [REV] [--pkg PKGDIR] [--allow-off-main]
 
 `bump` sets the pin of NAME (default: the head of its default branch) in PKGDIR/lakefile.toml,
-refreshes this script from the dependency if it carries a different copy, and prints the `lake
+refreshes this script and the shared files this repository carries from the dependency if it
+carries different copies, and prints the `lake
 update` to run next. It never edits `lake-manifest.json`: Lake does that.
 
 Exit codes: 0 no FAIL; 1 some FAIL; 2 a check could not run (network, git), unless --offline,
@@ -49,6 +52,18 @@ import tomllib
 SCRIPT = os.path.abspath(__file__)
 SCRIPT_NAME = "check_pins.py"
 COPY_PATHS = ("scripts/" + SCRIPT_NAME, "tools/scripts/" + SCRIPT_NAME)
+# Files kept byte-identical down the chain, canonical in MeaningLib (MeaningLib#44). A repository
+# that does not carry one is not checked for it.
+SHARED_FILES = ("Dissemination/render.sh", "Dissemination/common/style.py",
+                "Dissemination/common/storyboard.py")
+
+
+def local_bytes(root, rel):
+    path = os.path.join(root, rel)
+    if not os.path.isfile(path):
+        return None
+    with open(path, "rb") as f:
+        return f.read()
 DEFAULT_OWNED = ("https://github.com/DataDotFoundation/",)
 HEX = re.compile(r"^[0-9a-f]{7,40}$")
 FULL = re.compile(r"^[0-9a-f]{40}$")
@@ -316,6 +331,18 @@ def check_package(pkg, root, up, rep, owned, fresh):
                     else:
                         rep.fail("copy", name, f"{p} at {target[:12]} differs from this copy; "
                                                f"refresh it with: {bump_hint(name, rel, target)}")
+                for f in SHARED_FILES:
+                    mine_f = local_bytes(root, f)
+                    if mine_f is None:
+                        continue
+                    theirs = up.show(url, target, f, dep_pkg)
+                    if theirs is None:
+                        rep.info("copy", name, f"{f}: not carried at {target[:12]}")
+                    elif theirs == mine_f:
+                        rep.ok("copy", name, f"{f} at {target[:12]} is identical")
+                    else:
+                        rep.fail("copy", name, f"{f} differs from {name} at {target[:12]}; "
+                                               f"refresh it with: {bump_hint(name, rel, target)}")
         except GitError as e:
             rep.unavailable("shared", name, e)
 
@@ -418,6 +445,7 @@ def cmd_bump(a):
             dep_script = up.show(url, new, p)
             if dep_script is not None:
                 break
+        dep_shared = {f: up.show(url, new, f) for f in SHARED_FILES}
     except GitError as e:
         print(f"{e.args[0]}: {e.args[1]}", file=sys.stderr)
         return 2
@@ -443,8 +471,14 @@ def cmd_bump(a):
         with open(SCRIPT, "wb") as f:
             f.write(dep_script)
         print(f"{os.path.relpath(SCRIPT, root)}: refreshed from {a.name} at {new[:12]}")
+    for f, theirs in dep_shared.items():
+        mine_f = local_bytes(root, f)
+        if theirs is not None and mine_f is not None and theirs != mine_f:
+            with open(os.path.join(root, f), "wb") as out:
+                out.write(theirs)
+            print(f"{f}: refreshed from {a.name} at {new[:12]}")
     print(f"next: {lake_update(rel, a.name)}, then rerun this script without arguments;")
-    print("commit the lakefile, the manifest (and the refreshed script) together, nothing else.")
+    print("commit the lakefile, the manifest (and the refreshed files) together, nothing else.")
     return 0
 
 
