@@ -1,6 +1,7 @@
 import RMTlib.Fock.Fischer
 import RMTlib.Symmetric.WeightedCauchy
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import MeaningLib.Frame.Pattern
 
 /-!
 # The Fock norm of a one-column Schur function
@@ -180,6 +181,7 @@ theorem fischer_eX (k : ℕ) : fischer (eX N k) (eX N k) = (N.descFactorial k : 
 
 /-- **The Fock norm of `e_k(X)` is the content product `∏ (N + c)` of the column `(1^k)`**,
 whose cells `(i, 0)` have contents `−i`. -/
+@[frame_pattern]
 theorem fischer_eX_contentProd (k : ℕ) :
     fischer (eX N k) (eX N k)
       = ((RMT.Symmetric.contentProdP (fun z : ℤ => (N : ℤ) + z) (List.replicate k 1) : ℤ) : ℚ) := by

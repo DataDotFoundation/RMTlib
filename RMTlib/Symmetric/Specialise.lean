@@ -1,4 +1,5 @@
 import RMTlib.Symmetric.JacobiTrudi
+import MeaningLib.Frame.Pattern
 
 /-!
 # Specialising the Cauchy identity at a point
@@ -217,6 +218,7 @@ theorem mk_pow_mul_one_sub {R : Type*} [CommRing R] (γ : R) :
 
 in `R⟦X⟧`. This is the specialisation of the formal Cauchy identity at `x_j ↦ α_j`,
 `y_i ↦ β_i X`, computed degree by degree on the RSK bijection (`sum_antiParts_schurV`). -/
+@[frame_pattern]
 theorem cauchy_powerSeries {R : Type*} [CommRing R] (α β : ℕ → R) (hm : m ≤ N) :
     mk (fun d => ∑ l ∈ antiParts N d, schurV α N m l * schurV β N n l)
       * ∏ i : Fin n, ∏ j : Fin m, (1 - C (α j * β i) * X) = 1 := by
@@ -282,6 +284,7 @@ and no factor vanishes. Here `s_λ` is the total weight of the semistandard tabl
 (`schurV`), equal to the Jacobi–Trudi determinant (`schurV_eq_det`). The formal identity is
 specialised degree by degree (`cauchy_powerSeries`); the only analysis is the evaluation of a
 power series at `T`. -/
+@[frame_pattern]
 theorem cauchy_hasSum (α β : ℕ → ℂ) (hm : m ≤ N) (T : ℂ)
     (hs : Summable fun l : {l : Fin N → ℕ // Antitone l} =>
       ‖schurV α N m l.1 * schurV β N n l.1‖ * ‖T‖ ^ (∑ i, l.1 i)) :
@@ -520,6 +523,7 @@ theorem oneRow_cauchy_two_of
 in `R⟦X⟧`. The one-row part of the Cauchy kernel is the whole kernel divided by
 `Σ_j (x y x' y' c²)^j X^{2j}`, because `s_{(p+j, j)}(x, y) = (x y)^j h_p(x, y)`
 (`schurV_two_two`); the whole kernel is `cauchy_powerSeries` with `N = m = n = 2`. -/
+@[frame_pattern]
 theorem oneRow_cauchy_two (x y x' y' c : R) :
     PowerSeries.mk (fun k => c ^ k * (∑ i ∈ range (k + 1), x ^ i * y ^ (k - i))
         * (∑ i ∈ range (k + 1), x' ^ i * y' ^ (k - i)))

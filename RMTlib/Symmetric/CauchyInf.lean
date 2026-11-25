@@ -1,4 +1,5 @@
 import RMTlib.Symmetric.SSYT
+import MeaningLib.Frame.Pattern
 
 /-!
 # The Cauchy identity in infinitely many variables
@@ -527,6 +528,7 @@ the sum on the left over all Young diagrams, `s_μ` the total weight of all semi
 tableaux of shape `μ` (Mathlib's `SemistandardYoungTableau`), the sum on the right over all
 finitely supported `A : ℕ × ℕ →₀ ℕ`. Both families are summable (`summable_schurInf_mul`,
 `finiteFibres_matWtInf`). -/
+@[frame_pattern]
 theorem cauchy_inf {x y : ℕ → ι} (hx : Function.Injective x) (hy : Function.Injective y)
     (hxy : Disjoint (Set.range x) (Set.range y)) :
     ∑' μ : YoungDiagram, schurInf R x μ * schurInf R y μ

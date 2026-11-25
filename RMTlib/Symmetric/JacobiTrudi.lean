@@ -1,5 +1,6 @@
 import RMTlib.Symmetric.SSYT
 import RMTlib.Tableaux.JacobiTrudi
+import MeaningLib.Frame.Pattern
 
 /-!
 # Jacobi–Trudi for semistandard tableaux, evaluated
@@ -599,6 +600,7 @@ theorem det_jtMat_zero (a : ℕ → R) (lam : Fin N → ℕ) (hl : Antitone lam)
 the evaluated Schur polynomial `s_λ(a₀, …, a_{m−1})` (total weight of the semistandard tableaux
 of shape `λ` with entries `< m`) is `det (h_{λ_i − i + j}(a₀, …, a_{m−1}))_{i, j < N}`.
 Both sides satisfy the branching rule in the last variable (`schurV_succ`, `det_jtMat_succ`). -/
+@[frame_pattern]
 theorem schurV_eq_det (a : ℕ → R) : ∀ (m : ℕ) (lam : Fin N → ℕ), Antitone lam →
     schurV a N m lam = det (jtMat a m lam)
   | 0, lam, hl => by rw [schurV_zero, det_jtMat_zero a lam hl]
@@ -643,6 +645,7 @@ theorem hE_eq_sum_antidiagonalTuple (a : ℕ → R) : ∀ (m k : ℕ),
 
 /-- **`h_k` is Mathlib's complete homogeneous symmetric polynomial**, evaluated:
 `hE a m k = Σ_{s ∈ Sym (Fin m) k} ∏_{i ∈ s} a_i` (the evaluation of `MvPolynomial.hsymm`). -/
+@[frame_pattern]
 theorem hE_eq_sum_sym (a : ℕ → R) (m k : ℕ) :
     hE a m k = ∑ s : Sym (Fin m) k, (s.1.map fun i : Fin m => a i.1).prod := by
   classical

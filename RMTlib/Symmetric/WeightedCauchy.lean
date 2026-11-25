@@ -1,5 +1,6 @@
 import RMTlib.Symmetric.SSYT
 import RMTlib.Tableaux.HookContent
+import MeaningLib.Frame.Pattern
 
 /-!
 # The Cauchy identity weighted by shape, and content products
@@ -98,6 +99,7 @@ variable {ι R : Type*} [CommSemiring R] [TopologicalSpace R] [IsTopologicalSemi
 
 in `MvPowerSeries ι R` with the product topology, for shapes padded to `N ≥ m` rows. RSK preserves
 the shape, so the weight is carried along `rskEquiv` exactly as the monomials are in `cauchy`. -/
+@[frame_pattern]
 theorem cauchy_weighted (x y : ℕ → ι) (hm : m ≤ N) (w : Part → R) :
     ∑' lam : Part, w lam • (schur R x N m lam * schur R y N n lam)
       = ∑' A : Fin n → Fin m → ℕ,
@@ -169,6 +171,7 @@ theorem size_rskShape (hm : m ≤ N) (A : Fin n → Fin m → ℕ) :
   `∑' λ, T^{|λ|} s_λ(x) s_λ(y) = ∑' A, T^{Σ A} ∏_{i,j} (x_j y_i) ^ (A i j)`.
 
 This is the form specialised at the finite places, `T = q^{−s}`. -/
+@[frame_pattern]
 theorem cauchy_graded {ι R : Type*} [CommSemiring R] [TopologicalSpace R]
     [IsTopologicalSemiring R] [T3Space R] (x y : ℕ → ι) (hm : m ≤ N) (T : R) :
     ∑' lam : Part, T ^ size lam • (schur R x N m lam * schur R y N n lam)
@@ -314,6 +317,7 @@ end Padded
 
   `∑' λ, (∏_{(i,j) ∈ λ} f (j − i)) s_λ(x) s_λ(y)
      = ∑' A, (∏_{(i,j) ∈ shape (RSK A)} f (j − i)) ∏ (x_j y_i) ^ (A i j)`. -/
+@[frame_pattern]
 theorem cauchy_content {ι R : Type*} [CommSemiring R] [TopologicalSpace R]
     [IsTopologicalSemiring R] [T3Space R] (x y : ℕ → ι) (hm : m ≤ N) (f : ℤ → R) :
     ∑' lam : Part, contentProdP f lam • (schur R x N m lam * schur R y N n lam)
