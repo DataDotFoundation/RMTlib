@@ -378,3 +378,49 @@ theorem log_hset_above_succ_succ (T : RMT.Tower) {i : ℕ} {z₁ z₂ : ℤ} (h�
   exact h
 
 end RMT.Tower
+
+/-! ## Changing the band (move M5) -/
+
+namespace RMT.Tower
+
+open Finset RMT.StringInsertion
+
+/-- **Narrowing the band translates the particle side**: if the wider band `(−(c+b), c+b)` is empty,
+the particle side at width `c` is the one at width `c + b`, translated by `b`. -/
+theorem above_narrow {Y : Finset ℤ} {c : ℤ} {b : ℕ} (hc : 0 < c) (hY : BandEmpty Y (c + b)) :
+    above Y c = shift (above Y (c + b)) b := by
+  ext n
+  simp only [mem_above, mem_shift]
+  constructor
+  · rintro ⟨y, hy, hcy, rfl⟩
+    rcases hY y hy with h | h
+    · exfalso
+      have : (0 : ℤ) ≤ b := by positivity
+      omega
+    · exact ⟨(y - (c + b)).toNat, ⟨y, hy, h, rfl⟩, by omega⟩
+  · rintro ⟨_, ⟨y, hy, hcy, rfl⟩, rfl⟩
+    exact ⟨y, hy, by omega, by omega⟩
+
+/-- **Narrowing the band translates the hole side** the same way. -/
+theorem below_narrow {Y : Finset ℤ} {c : ℤ} {b : ℕ} (hc : 0 < c) (hY : BandEmpty Y (c + b)) :
+    below Y c = shift (below Y (c + b)) b := by
+  ext n
+  simp only [mem_below, mem_shift]
+  constructor
+  · rintro ⟨y, hy, hcy, rfl⟩
+    rcases hY y hy with h | h
+    · exact ⟨(-y - (c + b)).toNat, ⟨y, hy, h, rfl⟩, by omega⟩
+    · exfalso; omega
+  · rintro ⟨_, ⟨y, hy, hcy, rfl⟩, rfl⟩
+    exact ⟨y, hy, by omega, by omega⟩
+
+/-- **M5 on the factor at `∞`**: if the band of half-width `c + b` is empty, the factor read through
+the narrower band `c` is the wider band's, times one translation factor `∏ (x + b)!/x!` per side. The
+band width enters `H(a⁺)H(a⁻)` only through one-body terms. -/
+theorem hset_cut_narrow {Y : Finset ℤ} {c : ℤ} {b : ℕ} (hc : 0 < c) (hY : BandEmpty Y (c + b)) :
+    hset (above Y c) * hset (below Y c) =
+      hset (above Y (c + b)) * (∏ x ∈ above Y (c + b), ((x + b).factorial : ℚ) / x.factorial) *
+      (hset (below Y (c + b)) * ∏ x ∈ below Y (c + b), ((x + b).factorial : ℚ) / x.factorial) := by
+  rw [above_narrow hc hY, below_narrow hc hY, hset_shift, hset_shift]
+
+end RMT.Tower
