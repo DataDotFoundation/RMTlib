@@ -331,3 +331,7 @@ import RMTlib
 #print axioms RMT.Fermion.occ_ofRows_rowLen
 #print axioms RMT.Fermion.ofRows_transpose
 #print axioms RMT.Symmetric.schurV_eq_zero_of_length
+#print axioms RMT.Fock.ThetaKernel.ker_intertwine
+#print axioms RMT.Fock.ThetaKernel.ker_automorphic
+#print axioms RMT.Fock.ThetaKernel.lift_automorphic
+#print axioms RMT.Fock.ThetaKernel.ker_ofEnd_mul
