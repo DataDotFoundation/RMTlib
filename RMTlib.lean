@@ -78,6 +78,7 @@ import RMTlib.BDTW.Potential
 import RMTlib.BDTW.PatternA
 import RMTlib.Positivity.Welch
 import RMTlib.Positivity.FockBounds
+import RMTlib.Places.HookValuation
 import RMTlib.Plethysm.AdamsTwo
 import RMTlib.Symmetric.DesnanotJacobi
 import RMTlib.Symmetric.SquareToda
