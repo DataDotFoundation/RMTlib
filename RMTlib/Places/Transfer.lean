@@ -62,6 +62,72 @@ theorem log_eq_sum {Q : ℕ} (hQ : Q ≠ 0) :
     have := (Nat.prime_of_mem_primeFactors hp).pos
     positivity
 
+/-- Over any set of primes, `Σ log ℓ · v_ℓ(Q) ≤ log Q` for `Q ≠ 0` (the product formula, truncated). -/
+theorem sum_log_mul_padicValNat_le {Q : ℕ} (hQ : Q ≠ 0) (Ls : Finset Nat.Primes) :
+    ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * (padicValNat ℓ Q : ℝ) ≤ Real.log Q := by
+  classical
+  rw [log_eq_sum hQ]
+  let e : Nat.Primes ↪ ℕ := ⟨Subtype.val, Subtype.val_injective⟩
+  have hmap : ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * (padicValNat ℓ Q : ℝ) =
+      ∑ x ∈ Ls.map e, Real.log x * (padicValNat x Q : ℝ) :=
+    (Finset.sum_map Ls e (fun x : ℕ => Real.log x * (padicValNat x Q : ℝ))).symm
+  rw [hmap, ← sum_filter_add_sum_filter_not _ (· ∈ Q.primeFactors)]
+  have hzero : ∑ x ∈ (Ls.map e).filter (· ∉ Q.primeFactors),
+      Real.log x * (padicValNat x Q : ℝ) = 0 := by
+    refine sum_eq_zero fun x hx => ?_
+    obtain ⟨hxL, hxQ⟩ := mem_filter.mp hx
+    obtain ⟨ℓ, -, rfl⟩ := mem_map.mp hxL
+    have : ¬ (ℓ : ℕ) ∣ Q := fun hd => hxQ (Nat.mem_primeFactors.mpr ⟨ℓ.2, hd, hQ⟩)
+    have h0 : padicValNat (e ℓ) Q = 0 := padicValNat.eq_zero_of_not_dvd this
+    rw [h0, Nat.cast_zero, mul_zero]
+  rw [hzero, add_zero]
+  calc _ ≤ ∑ p ∈ Q.primeFactors, Real.log p * (padicValNat p Q : ℝ) := by
+        refine sum_le_sum_of_subset_of_nonneg (fun x hx => (mem_filter.mp hx).2) ?_
+        intro p hp _
+        have := (Nat.prime_of_mem_primeFactors hp).one_lt
+        exact mul_nonneg (Real.log_nonneg (by exact_mod_cast this.le)) (Nat.cast_nonneg _)
+    _ = _ := sum_congr rfl fun p _ => mul_comm _ _
+
+/-- **Two auxiliary primes cover every prime** (RH-Dual on MeaningLib#51; the content of the proof's
+`corGK` without Ш). If `a_ℓ ≤ c · v_ℓ(n)` for every prime `ℓ ≠ p` and `a_ℓ ≤ c · v_ℓ(n′)` for every
+prime `ℓ ≠ p′`, with `p ≠ p′`, then over any set of primes
+`Σ log ℓ · a_ℓ ≤ c · (log |n| + log |n′|)`. The choice of `p`, `p′` (size or bad-set conditions) stays a
+hypothesis of the pattern, not a transfer. -/
+@[frame_transfer inf_p]
+theorem sum_log_le_of_two_aux {a : ℕ → ℝ} {c : ℝ} (hc : 0 ≤ c) {p p' : ℕ} (hne : p ≠ p')
+    {n n' : ℤ} (hn : n ≠ 0) (hn' : n' ≠ 0)
+    (h : ∀ ℓ : ℕ, ℓ.Prime → ℓ ≠ p → a ℓ ≤ c * padicValInt ℓ n)
+    (h' : ∀ ℓ : ℕ, ℓ.Prime → ℓ ≠ p' → a ℓ ≤ c * padicValInt ℓ n')
+    (Ls : Finset Nat.Primes) :
+    ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * a ℓ ≤ c * (Real.log |(n : ℝ)| + Real.log |(n' : ℝ)|) := by
+  have hcover : ∀ ℓ ∈ Ls, Real.log (ℓ : ℕ) * a ℓ ≤
+      c * (Real.log (ℓ : ℕ) * padicValNat ℓ n.natAbs + Real.log (ℓ : ℕ) * padicValNat ℓ n'.natAbs) := by
+    intro ℓ _
+    have hlog : 0 ≤ Real.log (ℓ : ℕ) := Real.log_nonneg (by exact_mod_cast ℓ.2.one_lt.le)
+    have hv : 0 ≤ (padicValNat ℓ n.natAbs : ℝ) := Nat.cast_nonneg _
+    have hv' : 0 ≤ (padicValNat ℓ n'.natAbs : ℝ) := Nat.cast_nonneg _
+    have hbound : a ℓ ≤ c * padicValNat ℓ n.natAbs + c * padicValNat ℓ n'.natAbs := by
+      by_cases hp : (ℓ : ℕ) = p
+      · have := h' ℓ ℓ.2 (hp ▸ hne)
+        simp only [padicValInt] at this
+        nlinarith [mul_nonneg hc hv]
+      · have := h ℓ ℓ.2 hp
+        simp only [padicValInt] at this
+        nlinarith [mul_nonneg hc hv']
+    nlinarith [mul_le_mul_of_nonneg_left hbound hlog]
+  calc ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * a ℓ
+      ≤ ∑ ℓ ∈ Ls, c * (Real.log (ℓ : ℕ) * padicValNat ℓ n.natAbs +
+          Real.log (ℓ : ℕ) * padicValNat ℓ n'.natAbs) := sum_le_sum hcover
+    _ = c * (∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * padicValNat ℓ n.natAbs +
+          ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * padicValNat ℓ n'.natAbs) := by
+        rw [← mul_sum, sum_add_distrib]
+    _ ≤ c * (Real.log n.natAbs + Real.log n'.natAbs) := by
+        gcongr
+        · exact sum_log_mul_padicValNat_le (Int.natAbs_ne_zero.mpr hn) Ls
+        · exact sum_log_mul_padicValNat_le (Int.natAbs_ne_zero.mpr hn') Ls
+    _ = c * (Real.log |(n : ℝ)| + Real.log |(n' : ℝ)|) := by
+        simp [Nat.cast_natAbs]
+
 /-- **Instance of transfer 1**: the hook-length formula `H(λ) · f^λ = |λ|!`. -/
 theorem hook_transfer {N : ℕ} {ν : Fin N → ℕ} (hν : Antitone ν) :
     RMT.hookProd ν * RMT.fSYT (∑ i, ν i) ν = (∑ i, ν i).factorial := by
