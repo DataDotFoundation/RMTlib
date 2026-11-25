@@ -173,23 +173,25 @@ def towerOneObject : Claim where
   scope := .fox
   declared := .proved
   statements := [``RMT.Tower.cut_succ_fst, ``RMT.Tower.cut_fst_snd,
-    ``RMT.Tower.log_hset_above_succ, ``RMT.Tower.hset_below_succ_le, ``RMT.Tower.card_cut,
+    ``RMT.Tower.log_hset_above_succ, ``RMT.Tower.hset_below_succ_le, ``RMT.Tower.hset_above_le_succ, ``RMT.Tower.card_cut,
     ``RMT.Tower.cut_reflectTower, ``RMT.Tower.factorInf_reflectTower,
     ``RMT.Tower.padicValRat_above_succ, ``RMT.Tower.log_factorInf_eq_sum, ``RMT.Tower.vdZ_level]
   supports := [``places, ``bosonFermion]
 
-/-- **F11**: in Alpöge's proof, `ω` (`λ ↦ λ′`) occurs only at `∞`. No Aubert / Zelevinsky
-involution, no Alvis–Curtis, no Iwahori–Matsumoto anywhere in the proof's closure; the only
-finite-place duality is the contragredient `ν ↦ ν⁻¹`, which is the reflection (particle ↔ hole,
-`RMT.Tower.reflectTower`), not transposition. A sharp form of the programme thesis that the place
-at `∞` is where `ω` lives and breaks. -/
-def omegaOnlyAtInfinity : Claim where
-  text := "in the proof, ω (λ ↦ λ′) is used at ∞ only; the finite places see only the \
-    contragredient, which is the particle–hole reflection, not ω"
+/-- **F11**: Alpöge's proof uses `ω` (`λ ↦ λ′`) as a duality at **no** place. No Aubert /
+Zelevinsky involution, no Alvis–Curtis, no Iwahori–Matsumoto at the finite places; at `∞` the Fock
+model is bosonic only and `YoungDiagram.transpose` is never called. The dualities the proof uses
+are contragredients (`ν ↦ ν⁻¹` at `p`, `−w₀` at `∞`): on Maya diagrams the band's `a⁻` reflection
+(`RMT.Tower.reflectTower`), which is `ω` *without* the particle–hole complement. Column data of
+shapes is used, but never to prove a statement about `λ′` from one about `λ`. (Corrected: an earlier
+version said "at `∞` only"; RH-Dual #101.) -/
+def omegaAtNoPlace : Claim where
+  text := "the proof uses ω (λ ↦ λ′) as a duality at no place; its dualities are contragredients, \
+    which on Maya diagrams are the reflection without the particle–hole complement"
   scope := .fox
   declared := .checked
-  source := "RH-Dual #89, #95: bridge/links/omega-finite-places.md, bridge/scripts/closure_names.py \
-    (name census over riemannHypothesis's closure)"
+  source := "RH-Dual #89, #95, #101: bridge/links/omega-finite-places.md, \
+    bridge/links/omega-infinite-places.md, bridge/scripts/closure_names.py"
   supports := [``bosonFermion, ``places]
 
 /-- **F12**: the proof is bosonic throughout. Every partition sum it truncates sits behind the

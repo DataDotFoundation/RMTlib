@@ -311,3 +311,31 @@ theorem vdZ_level (T : RMT.Tower) (i : ℕ) : vdZ (T.level i) = vdZ T.X :=
   vdZ_translate _ _
 
 end RMT.Tower
+
+/-! ## Growth of the particle side -/
+
+namespace RMT.Tower
+
+open Finset RMT.StringInsertion
+
+/-- The crossing point lands below every other particle. -/
+theorem crossing_lt_particles {Y : Finset ℤ} {c d z : ℤ} (hc : 0 < c) (hd : 0 ≤ d)
+    (h : OneCrossing Y c d z) :
+    ∀ x ∈ above Y c, (z + d - c).toNat < x + d.toNat := by
+  intro x hx
+  obtain ⟨y, hy, ha, rfl⟩ := mem_above.mp hx
+  have := h.below; have := h.lands
+  omega
+
+/-- **Growth along the tower**: `H(a⁺_i) ≤ H(a⁺_{i+1})`. It is draining read the other way
+(RH-Dual #102, move M8): the crossing point lands as the lowest particle, so `hset_drain` applies to
+the particle side as it stands. -/
+theorem hset_above_le_succ (T : RMT.Tower) {i : ℕ} {z : ℤ} (h : T.StepOK i z) :
+    hset (T.cut i).1 ≤ hset (T.cut (i + 1)).1 := by
+  rw [T.cut_succ_fst h]
+  have h1 : 1 ≤ (T.gap i).toNat := by
+    have := h.one.below; have := h.one.lands; have := h.hc
+    omega
+  exact hset_drain h1 (crossing_lt_particles h.hc h.hd h.one)
+
+end RMT.Tower
