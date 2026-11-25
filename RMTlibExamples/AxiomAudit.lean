@@ -356,3 +356,4 @@ import RMTlib
 #print axioms RMT.padicValNat_hookProd
 #print axioms RMT.Transfer.padicValNat_add
 #print axioms RMT.Transfer.log_eq_sum
+#print axioms RMT.StringInsertion.vd_union
