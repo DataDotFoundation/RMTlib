@@ -77,6 +77,7 @@ import RMTlib.Symmetric.Wall
 import RMTlib.BDTW.Potential
 import RMTlib.BDTW.PatternA
 import RMTlib.Positivity.Welch
+import RMTlib.Positivity.FockBounds
 import RMTlib.Plethysm.AdamsTwo
 import RMTlib.Symmetric.DesnanotJacobi
 import RMTlib.Symmetric.SquareToda

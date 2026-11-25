@@ -349,3 +349,5 @@ import RMTlib
 #print axioms RMT.BDTW.bdtw_fin
 #print axioms RMT.Positivity.trace_sq_le_card_mul_trace_mul_self
 #print axioms RMT.Positivity.det_mul_transpose_eq_sum_sq
+#print axioms RMT.Fock.fischer_pderiv_le
+#print axioms RMT.Fock.fischer_X_mul_le
