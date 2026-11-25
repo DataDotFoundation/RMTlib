@@ -8,4 +8,5 @@ import RMTlibExamples.RSK
 import RMTlibExamples.Theorem3UN
 import RMTlibExamples.Frames
 import RMTlibExamples.Omega
+import RMTlibExamples.Claims
 import RMTlibExamples.AxiomAudit
