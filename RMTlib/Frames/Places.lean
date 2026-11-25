@@ -1,5 +1,6 @@
 import MeaningLib.Frame
 import RMTlib.Symmetric.WeightedCauchy
+import RMTlib.BDTW.PatternA
 
 /-!
 # RMTlib's binding of the places frame
@@ -71,7 +72,10 @@ never name `archContent` (MeaningLib#2). -/
 def placesBinding : MeaningLib.Frame.Binding where
   frame := MeaningLib.Frame.places
   assign := [("archContent", ``archContent), ("finContent", ``finContent),
-    ("archSupport", ``archSupport), ("finSupport", ``finSupport)]
+    ("archSupport", ``archSupport), ("finSupport", ``finSupport),
+    ("archPotential", ``RMT.BDTW.rhoInf), ("finPotential", ``RMT.BDTW.rhoFin)]
+  adapters := [(("archPotential", "finPotential"), ``RMT.BDTW.infToFin),
+    (("finPotential", "archPotential"), ``RMT.BDTW.finToInf)]
   folds := [``archContent_fold, ``archContent_fold_int, ``finContent_fold]
 
 /-- At a finite place the content product counts boxes. -/
