@@ -71,6 +71,7 @@ import RMTlib.Symmetric.GTSum
 import RMTlib.Symmetric.Bialternant
 import RMTlib.Symmetric.DualJacobiTrudi
 import RMTlib.Symmetric.DualCauchy
+import RMTlib.Symmetric.Wall
 import RMTlib.Symmetric.DesnanotJacobi
 import RMTlib.Symmetric.SquareToda
 import RMTlib.Symmetric.QWhittaker
