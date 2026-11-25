@@ -25,7 +25,7 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 20 patterns: [RMT.hook_content_formula,
+info: 22 patterns: [RMT.hook_content_formula,
  RMT.BDTW.det_mul_diagonal_mul_transpose,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
@@ -33,6 +33,8 @@ info: 20 patterns: [RMT.hook_content_formula,
  RMT.Plethysm.sum_sq_eq,
  RMT.Plethysm.sum_sq_eq_hTwo_add,
  RMT.Plethysm.sum_sq_eq_hTwo_sub,
+ RMT.Positivity.det_mul_transpose_eq_sum_sq,
+ RMT.Positivity.trace_sq_le_card_mul_trace_mul_self,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,
@@ -57,7 +59,7 @@ to `theta` only. -/
 
 open Lean Elab Command in
 /--
-info: 21 patterns: [RMT.hook_content_formula,
+info: 23 patterns: [RMT.hook_content_formula,
  RMT.BDTW.det_mul_diagonal_mul_transpose,
  RMT.Fock.fischer_eX_contentProd,
  RMT.Fock.fischer_hX_contentProd,
@@ -65,6 +67,8 @@ info: 21 patterns: [RMT.hook_content_formula,
  RMT.Plethysm.sum_sq_eq,
  RMT.Plethysm.sum_sq_eq_hTwo_add,
  RMT.Plethysm.sum_sq_eq_hTwo_sub,
+ RMT.Positivity.det_mul_transpose_eq_sum_sq,
+ RMT.Positivity.trace_sq_le_card_mul_trace_mul_self,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,

@@ -347,3 +347,5 @@ import RMTlib
 #print axioms RMT.BDTW.det_mul_diagonal_mul_transpose
 #print axioms RMT.BDTW.bdtw_inf
 #print axioms RMT.BDTW.bdtw_fin
+#print axioms RMT.Positivity.trace_sq_le_card_mul_trace_mul_self
+#print axioms RMT.Positivity.det_mul_transpose_eq_sum_sq
