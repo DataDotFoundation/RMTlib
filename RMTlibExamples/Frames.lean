@@ -25,7 +25,7 @@ RMT.UN.momentPoly_eq_contentProd: reads [archContent]
 
 open Lean Elab Command in
 /--
-info: 27 patterns: [RMT.hookProd_dvd_factorial,
+info: 28 patterns: [RMT.hookProd_dvd_factorial,
  RMT.hook_content_formula,
  RMT.padicValNat_hookProd,
  RMT.padicValNat_hookProd_add_fSYT,
@@ -40,6 +40,7 @@ info: 27 patterns: [RMT.hookProd_dvd_factorial,
  RMT.Plethysm.sum_sq_eq_hTwo_sub,
  RMT.Positivity.det_mul_transpose_eq_sum_sq,
  RMT.Positivity.trace_sq_le_card_mul_trace_mul_self,
+ RMT.StringInsertion.vd_union,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,
@@ -64,7 +65,7 @@ to `theta` only. -/
 
 open Lean Elab Command in
 /--
-info: 28 patterns: [RMT.hookProd_dvd_factorial,
+info: 29 patterns: [RMT.hookProd_dvd_factorial,
  RMT.hook_content_formula,
  RMT.padicValNat_hookProd,
  RMT.padicValNat_hookProd_add_fSYT,
@@ -79,6 +80,7 @@ info: 28 patterns: [RMT.hookProd_dvd_factorial,
  RMT.Plethysm.sum_sq_eq_hTwo_sub,
  RMT.Positivity.det_mul_transpose_eq_sum_sq,
  RMT.Positivity.trace_sq_le_card_mul_trace_mul_self,
+ RMT.StringInsertion.vd_union,
  RMT.Symmetric.cauchy_hasSum,
  RMT.Symmetric.cauchy_inf,
  RMT.Symmetric.cauchy_powerSeries,
