@@ -107,7 +107,9 @@ cases. Each partial version fails:
 | reverse, flip letters only | 11,212 / 20,320 |
 
 The local rule is **not** ω-equivariant square by square in a fixed orientation (`conj ∘ fwd_flip ∘
-conj ≠ fwd` on most squares of every type, already at `ρ = ∅`, `μ = ν = (1)`). So the ω-symmetry of
-super-RSK is a reflection of the whole grid (reversal) combined with the parity flip, not a
+conj ≠ fwd` on most squares of every type, already at `ρ = ∅`, `μ = ν = (1)`). BSV's rule is locally equivariant at (f,f) by construction (`FF_CONJ`), but it is not symmetric. Among the
+three rules implemented, each has local ω-equivariance or the P↔Q symmetry, never both (an
+observation, not a theorem). So the ω-symmetry of
+super-RSK (Hage) is a reflection of the whole grid (reversal) combined with the parity flip, not a
 property of one square. A Lean proof should therefore go through the grid reflection, as for
 Schensted's theorem, not through a local equivariance lemma.
