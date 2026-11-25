@@ -5,6 +5,7 @@ import RMTlib.Fock.SchurPowerSum
 import RMTlib.Fermion.Transport
 import RMTlib.Places.StringInsertion
 import RMTlib.Places.HookValuation
+import RMTlib.Symmetric.Specialise
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -116,5 +117,19 @@ def hookEveryPlace : Claim where
   declared := .proved
   statements := [``RMT.hookProd_dvd_factorial, ``RMT.padicValNat_hookProd_add_fSYT]
   supports := [``places]
+
+/-- **F7, Rankin–Selberg by rows**: at a split prime the Mellin step of the unfolding (the one-row
+Dirichlet series) and the full Cauchy kernel differ exactly by the second row, the factor
+`1 − x y x′ y′ c² X²` (the Eisenstein series' `ζ(2s)`). Both forms occur in the proof, in different
+nodes (RH-Dual #66: the `GL_a` unfolding uses the full kernel; the `GL₂` Hecke node the one-row
+series). -/
+def rankinSelbergRows : Claim where
+  text := "at a split prime, the one-row Rankin–Selberg series times the full Cauchy kernel's \
+    inverse is exactly the second-row factor 1 − x y x' y' c² X², and the full kernel sums all shapes"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.Symmetric.oneRow_cauchy_two, ``RMT.Symmetric.cauchy_powerSeries]
+  supports := [``places]
+  source := "RH-Dual #66 (both forms in the proof, in different nodes)"
 
 end RMT.Claims

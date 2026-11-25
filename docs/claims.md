@@ -36,6 +36,8 @@ interpretation of a statement, never a rung.
 | F5 | The moment measure puts its mass at the wall (`N·P(λ₁ = N) → k²`); the wall is a hard edge. | **checked on examples** (Loop 3); "hard edge / Bessel" a **reading** | `scripts/wall_moments.py` |
 | F6 | Hook products at every place: `H(λ) ∣ |λ|!`, `v_p H + v_p f^λ = v_p |λ|!`. | proved; tagged as transfers | `hookProd_dvd_factorial`, `padicValNat_hookProd_add_fSYT` |
 
+| F7 | Rankin–Selberg by rows: the one-row series (the unfolding's Mellin step) and the full Cauchy kernel differ exactly by the second-row factor `1 − x y x′ y′ c² X²` (the Eisenstein `ζ(2s)`). Both occur in the proof, in different nodes (RH-Dual #66). | proved | `oneRow_cauchy_two`, `cauchy_powerSeries` |
+
 ## What may not be said
 
 - That the places programme **is** boson–fermion: J1 is proved for one pattern, not as an equivalence.
