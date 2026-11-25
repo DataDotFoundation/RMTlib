@@ -7,6 +7,7 @@ import RMTlib.Places.StringInsertion
 import RMTlib.Places.HookValuation
 import RMTlib.Symmetric.Specialise
 import RMTlib.Edges.WallBreaking
+import RMTlib.Places.BandStep
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -145,5 +146,16 @@ def wallBreaksOmega : Claim where
     ``RMT.Edges.sum_bosonWall_transpose, ``RMT.Edges.sum_odd_eq_zero,
     ``RMT.Edges.two_mul_sum_odd_eq_sum_defect]
   supports := [``bosonFermion]
+
+/-- **F9**: one lift is one step. Translating a Maya set by `Δ` and inserting the crossing charge
+`ℓ` changes `log H` by exactly `T + S + V` (RMTlib#72): the exact split RH-Dual computed (F4). -/
+def bandStep : Claim where
+  text := "Δ log H = T + S + V for translate-then-insert on any finite Maya set: T the translation, \
+    S = log ℓ! the self-energy, V = −Σ log|x + Δ − ℓ| the Vandermonde"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.StringInsertion.log_hset_step, ``RMT.StringInsertion.hset_step,
+    ``RMT.StringInsertion.vd_shift]
+  supports := [``places]
 
 end RMT.Claims
