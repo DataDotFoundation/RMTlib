@@ -22,8 +22,8 @@ coordinates; `RMT.StringInsertion`):
 This is RH-Dual's computed law (exceptionless on 1.29 M parameter sets) as an identity, for every
 finite Maya set and every crossing point not already occupied. The hole side is the same lemmas
 read backwards (`hset_insert` for the removal of the hole that crossed, `vd_shift`, `fac_shift`
-for the translation down). Draining (`H` of the hole side never increases) is an inequality and is
-not proved here.
+for the translation down). **Draining** (`hset_drain`): `H` of the hole side never increases, for any
+translation `Δ ≥ 1` and removal of the lowest hole, proved factor by factor.
 -/
 
 namespace RMT.StringInsertion
@@ -132,5 +132,51 @@ theorem log_hset_step {L : Finset ℕ} {Δ ℓ : ℕ} (hℓ : ℓ ∉ shift L Δ
     Real.log_mul (mul_ne_zero hH (prod_ne_zero_iff.mpr hT)) hS,
     Real.log_mul hH (prod_ne_zero_iff.mpr hT), Real.log_prod hT, Real.log_prod hd]
   ring
+
+/-! ### Draining: the hole side never grows -/
+
+theorem factorial_mul_le_factorial_add {x Δ : ℕ} (hΔ : 1 ≤ Δ) :
+    x.factorial * (x + Δ) ≤ (x + Δ).factorial := by
+  obtain ⟨d, rfl⟩ : ∃ d, Δ = d + 1 := ⟨Δ - 1, by omega⟩
+  rw [← add_assoc, Nat.factorial_succ, mul_comm]
+  exact Nat.mul_le_mul_left _ (Nat.factorial_le (Nat.le_add_right x d))
+
+/-- **Draining** (RMTlib#72, RH-Dual's lane-C target). On the hole side a lift removes the hole that
+crossed, the lowest one `ℓ`, and translates the others down by `Δ ≥ 1`. Read upwards: the old hole
+set is `insert ℓ (L + Δ)` with `ℓ` below every other hole, and the new one is `L`. Then `H` never
+grows: `H(L) ≤ H(insert ℓ (L + Δ))`.
+
+The proof is factor by factor, and says why both pieces are needed together: the removal alone can
+raise `H`, but each remaining hole's distance to the removed one, `x + Δ − ℓ`, is at most its own
+position `x + Δ`, and the translation divides by `(x + Δ)!/x! ≥ x + Δ`. -/
+theorem hset_drain {L : Finset ℕ} {Δ ℓ : ℕ} (hΔ : 1 ≤ Δ) (hℓ : ∀ x ∈ L, ℓ < x + Δ) :
+    hset L ≤ hset (insert ℓ (shift L Δ)) := by
+  have hℓ' : ℓ ∉ shift L Δ := by
+    rw [mem_shift]; rintro ⟨x, hx, h⟩; have := hℓ x hx; omega
+  rw [hset_step hℓ']
+  have hB : 0 < ∏ x ∈ L, (Nat.dist (x + Δ) ℓ : ℚ) := prod_pos fun x hx => by
+    have := hℓ x hx
+    have : Nat.dist (x + Δ) ℓ ≠ 0 := fun h => by have := Nat.eq_of_dist_eq_zero h; omega
+    positivity
+  have hBA : ∏ x ∈ L, (Nat.dist (x + Δ) ℓ : ℚ) ≤
+      ∏ x ∈ L, ((x + Δ).factorial : ℚ) / x.factorial := by
+    refine prod_le_prod (fun x _ => by positivity) fun x hx => ?_
+    have h1 : Nat.dist (x + Δ) ℓ ≤ x + Δ := by
+      have := hℓ x hx
+      rw [Nat.dist_comm, Nat.dist_eq_sub_of_le (by omega)]; omega
+    have h2 := factorial_mul_le_factorial_add (x := x) hΔ
+    have hx0 : (0 : ℚ) < x.factorial := by exact_mod_cast Nat.factorial_pos x
+    rw [le_div_iff₀ hx0]
+    calc (Nat.dist (x + Δ) ℓ : ℚ) * x.factorial ≤ ((x + Δ : ℕ) : ℚ) * x.factorial := by
+          gcongr
+      _ ≤ (x + Δ).factorial := by rw [mul_comm]; exact_mod_cast h2
+  have hS : (1 : ℚ) ≤ ℓ.factorial := by exact_mod_cast Nat.one_le_iff_ne_zero.mpr (Nat.factorial_ne_zero ℓ)
+  have hH := hset_pos L
+  rw [le_div_iff₀ hB, mul_assoc]
+  refine mul_le_mul_of_nonneg_left ?_ hH.le
+  calc ∏ x ∈ L, (Nat.dist (x + Δ) ℓ : ℚ) ≤ ∏ x ∈ L, ((x + Δ).factorial : ℚ) / x.factorial := hBA
+    _ = (∏ x ∈ L, ((x + Δ).factorial : ℚ) / x.factorial) * 1 := (mul_one _).symm
+    _ ≤ (∏ x ∈ L, ((x + Δ).factorial : ℚ) / x.factorial) * ℓ.factorial := by
+        gcongr
 
 end RMT.StringInsertion
