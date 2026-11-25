@@ -30,10 +30,20 @@ one constant for the other). -/
 @[nolint unusedArguments]
 def finContent {R : Type*} [CommRing R] (T : R) : ℤ → R := fun _ => T
 
-/-- RMTlib's binding of the places frame. -/
+/-- Folding lemma: RMTlib writes the archimedean content anonymously, `fun z => N + z`. -/
+theorem archContent_fold (N : R) : archContent N = fun z : ℤ => N + (z : R) := rfl
+
+/-- Folding lemma over `ℤ`, where no cast is written: `fun z => N + z`. -/
+theorem archContent_fold_int (N : ℤ) : archContent N = fun z : ℤ => N + z := by
+  funext z
+  simp [archContent]
+
+/-- RMTlib's binding of the places frame. The folding lemmas let the report read statements that
+never name `archContent` (MeaningLib#2). -/
 def placesBinding : MeaningLib.Frame.Binding where
   frame := MeaningLib.Frame.places
   assign := [("archContent", ``archContent), ("finContent", ``finContent)]
+  folds := [``archContent_fold, ``archContent_fold_int]
 
 /-- At a finite place the content product counts boxes. -/
 theorem contentProd_finContent (T : R) (μ : YoungDiagram) :
