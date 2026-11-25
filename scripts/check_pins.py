@@ -55,7 +55,7 @@ COPY_PATHS = ("scripts/" + SCRIPT_NAME, "tools/scripts/" + SCRIPT_NAME)
 # Files kept byte-identical down the chain, canonical in MeaningLib (MeaningLib#44). A repository
 # that does not carry one is not checked for it.
 SHARED_FILES = ("Dissemination/render.sh", "Dissemination/common/style.py",
-                "Dissemination/common/storyboard.py")
+                "Dissemination/common/storyboard.py", "Dissemination/common/youtube.py")
 
 
 def local_bytes(root, rel):
