@@ -328,3 +328,5 @@ import RMTlib
 #print axioms RMT.Fermion.Maya.charge_conj
 #print axioms RMT.Fermion.Maya.energy_conj
 #print axioms RMT.Fermion.Maya.weight_conj
+#print axioms RMT.Fermion.occ_ofRows_rowLen
+#print axioms RMT.Fermion.ofRows_transpose
