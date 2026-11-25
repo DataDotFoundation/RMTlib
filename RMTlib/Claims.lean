@@ -192,4 +192,19 @@ def omegaOnlyAtInfinity : Claim where
     (name census over riemannHypothesis's closure)"
   supports := [``bosonFermion, ``places]
 
+/-- **F12**: the proof is bosonic throughout. Every partition sum it truncates sits behind the
+boson wall at the rank (none behind a fermion wall), the `ω`-images of its sums (dual Cauchy,
+vertical-strip Pieri) are absent from its closure, and its kernel positivities fail under the
+fermionic twin (the Jacquet–Shalika log-coefficients become `(−1)^{k+1}|p_k|²/k`, negative at
+`k = 2`). Together with F11 this locates `ω`'s role exactly: it is absent from the proof, and the
+proof's positivity is what it would break. -/
+def bosonicProof : Claim where
+  text := "every wall sum in the proof is behind the boson wall at the rank, the ω-images of its \
+    sums are absent, and its kernel positivities fail under the fermionic twin"
+  scope := .fox
+  declared := .checked
+  source := "RH-Dual #86, #92, #98: bridge/links/wall-sums.md, bridge/links/positivity-census.md, \
+    bridge/scripts/wall_positivity_census.py (twins checked exactly)"
+  supports := [``bosonFermion]
+
 end RMT.Claims
