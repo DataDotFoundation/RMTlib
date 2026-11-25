@@ -171,7 +171,6 @@ theorem size_rskShape (hm : m ≤ N) (A : Fin n → Fin m → ℕ) :
   `∑' λ, T^{|λ|} s_λ(x) s_λ(y) = ∑' A, T^{Σ A} ∏_{i,j} (x_j y_i) ^ (A i j)`.
 
 This is the form specialised at the finite places, `T = q^{−s}`. -/
-@[frame_pattern]
 theorem cauchy_graded {ι R : Type*} [CommSemiring R] [TopologicalSpace R]
     [IsTopologicalSemiring R] [T3Space R] (x y : ℕ → ι) (hm : m ≤ N) (T : R) :
     ∑' lam : Part, T ^ size lam • (schur R x N m lam * schur R y N n lam)
@@ -317,7 +316,6 @@ end Padded
 
   `∑' λ, (∏_{(i,j) ∈ λ} f (j − i)) s_λ(x) s_λ(y)
      = ∑' A, (∏_{(i,j) ∈ shape (RSK A)} f (j − i)) ∏ (x_j y_i) ^ (A i j)`. -/
-@[frame_pattern]
 theorem cauchy_content {ι R : Type*} [CommSemiring R] [TopologicalSpace R]
     [IsTopologicalSemiring R] [T3Space R] (x y : ℕ → ι) (hm : m ≤ N) (f : ℤ → R) :
     ∑' lam : Part, contentProdP f lam • (schur R x N m lam * schur R y N n lam)

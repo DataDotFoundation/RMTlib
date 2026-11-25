@@ -1,6 +1,5 @@
 import RMTlib.Symmetric.Cauchy
 import Mathlib.Combinatorics.Young.SemistandardTableau
-import MeaningLib.Frame.Pattern
 
 /-!
 # Chains of horizontal strips and Mathlib's semistandard Young tableaux
@@ -521,7 +520,6 @@ variable {ι R : Type*} [CommSemiring R] [TopologicalSpace R] [IsTopologicalSemi
 
 in `MvPowerSeries ι R` with the product topology, the sum on the left over all Young diagrams,
 `s_μ` the total weight of the tableaux of shape `μ` with entries `< m` (resp. `< n`). -/
-@[frame_pattern]
 theorem cauchy_ssyt (x y : ℕ → ι) :
     ∑' μ : YoungDiagram, schurSSYT R x m μ * schurSSYT R y n μ
       = ∑' A : Fin n → Fin m → ℕ, (mono (matWt x y A) : MvPowerSeries ι R) := by
@@ -570,7 +568,6 @@ end Cauchy
 
 in `MvPowerSeries ι R` with the product topology, `s_μ` the total weight of Mathlib's
 semistandard Young tableaux of shape `μ`. -/
-@[frame_pattern]
 theorem cauchy_prod_ssyt {ι R : Type*} [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
     [T3Space R] {m n : ℕ} (x y : ℕ → ι) :
     (∏ i : Fin n, ∏ j : Fin m, (1 - X (x j) * X (y i) : MvPowerSeries ι R))
