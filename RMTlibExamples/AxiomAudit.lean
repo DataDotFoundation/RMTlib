@@ -365,3 +365,5 @@ import RMTlib
 #print axioms RMT.Edges.two_mul_sum_odd_eq_sum_defect
 #print axioms RMT.StringInsertion.log_hset_step
 #print axioms RMT.StringInsertion.hset_drain
+#print axioms RMT.Tower.hset_below_succ_le
+#print axioms RMT.Tower.log_hset_above_succ

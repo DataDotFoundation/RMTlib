@@ -84,6 +84,7 @@ import RMTlib.Edges.WallBreaking
 import RMTlib.Places.Transfer
 import RMTlib.Places.StringInsertion
 import RMTlib.Places.BandStep
+import RMTlib.Places.Tower
 import RMTlib.Claims
 import RMTlib.Plethysm.AdamsTwo
 import RMTlib.Symmetric.DesnanotJacobi
