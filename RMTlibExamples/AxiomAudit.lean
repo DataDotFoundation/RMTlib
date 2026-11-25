@@ -359,3 +359,6 @@ import RMTlib
 #print axioms RMT.StringInsertion.vd_union
 #print axioms RMT.hookProd_le_prod_factorial_mul_pow
 #print axioms RMT.Transfer.sum_log_le_of_two_aux
+#print axioms RMT.Edges.contentMoment_transpose
+#print axioms RMT.Edges.sum_bosonWall_odd
+#print axioms RMT.Edges.sum_box_odd_eq_zero
