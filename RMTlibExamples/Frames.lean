@@ -140,4 +140,4 @@ RMT.BDTW.bdtw_inf: reads [archPotential]
 -- The whole library through the places frame must stay within the default heartbeats
 -- (RMTlib#42: generic transfer conclusions once made this time out), with its read count pinned.
 #guard_msgs (drop info) in
-#frame_report RMT.Frames.placesBinding in RMT expect (read := 32) (problems := 0)
+#frame_report RMT.Frames.placesBinding in RMT expect (read := 34) (problems := 0)

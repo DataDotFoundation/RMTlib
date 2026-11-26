@@ -148,15 +148,13 @@ theorem sum_hops (S : Finset ℤ) {L : ℤ} (hS : ∀ x ∈ S, L ≤ x) (r : ℤ
   rw [sum_sub_distrib]
   linear_combination A - B - C - D + E
 
-/-- **Fomin's commutator on the Maya diagram, for every weight `r`**:
-`[D_r, U] e_ν = (Σ_{particles x} (r(x+1) − r(x)) + [−N occupied] r(−N)) e_ν`.
-The commutator is the discrete gradient of `r` summed over the particles, plus a wall term. -/
-theorem commutator_single_maya {ν : Fin N → ℕ} (hν : Antitone ν) (r : ℤ → R) :
-    down N r (up N R (Finsupp.single ν 1)) - up N R (down N r (Finsupp.single ν 1)) =
-      ((∑ x ∈ mayaSet ν, (r (x + 1) - r x)) +
-        if -(N : ℤ) ∈ mayaSet ν then r (-(N : ℤ)) else 0) • Finsupp.single ν 1 := by
-  rw [commutator_single hν]
-  congr 1
+/-- **The corner sum on the Maya diagram**: `Σ_{add} r(c) − Σ_{rem} r(c)` is the gradient of `r`
+summed over the particles, plus `r(−N)` if the wall site is occupied. -/
+theorem sum_corners_eq_maya {ν : Fin N → ℕ} (hν : Antitone ν) (r : ℤ → R) :
+    ((∑ i, if RMT.IsAddable ν i then r ((ν i : ℤ) - i) else 0) -
+        (∑ i, if RMT.IsCorner ν i then r ((ν i : ℤ) - 1 - i) else 0)) =
+      (∑ x ∈ mayaSet ν, (r (x + 1) - r x)) +
+        if -(N : ℤ) ∈ mayaSet ν then r (-(N : ℤ)) else 0 := by
   have hwall : ∀ x ∈ mayaSet ν, -(N : ℤ) ≤ x := by
     intro x hx; obtain ⟨i, rfl⟩ := mem_mayaSet.mp hx; unfold maya; have := i.isLt; omega
   rw [← sum_hops (mayaSet ν) hwall r, sum_filter, sum_filter]
@@ -177,6 +175,16 @@ theorem commutator_single_maya {ν : Fin N → ℕ} (hν : Antitone ν) (r : ℤ
     · have h' := e.mp h; unfold mayaSet at h'; simp [h, h', hv]
     · have h' : ¬ (maya ν i - 1 ∉ mayaSet ν ∧ -(N : ℤ) < maya ν i) := fun h' => h (e.mpr h')
       unfold mayaSet at h'; simp only [h, h', Bool.false_eq_true, ite_false]
+
+
+/-- **Fomin's commutator on the Maya diagram, for every weight `r`**:
+`[D_r, U] e_ν = (Σ_{particles x} (r(x+1) − r(x)) + [−N occupied] r(−N)) e_ν`.
+The commutator is the discrete gradient of `r` summed over the particles, plus a wall term. -/
+theorem commutator_single_maya {ν : Fin N → ℕ} (hν : Antitone ν) (r : ℤ → R) :
+    down N r (up N R (Finsupp.single ν 1)) - up N R (down N r (Finsupp.single ν 1)) =
+      ((∑ x ∈ mayaSet ν, (r (x + 1) - r x)) +
+        if -(N : ℤ) ∈ mayaSet ν then r (-(N : ℤ)) else 0) • Finsupp.single ν 1 := by
+  rw [commutator_single hν, sum_corners_eq_maya hν]
 
 /-! ## The hop operators on Maya sets, and the dictionary -/
 

@@ -390,3 +390,6 @@ import RMTlib
 #print axioms RMT.Symmetric.Corners.hop_commutator
 #print axioms RMT.Symmetric.Corners.hop_commutator_grad
 #print axioms RMT.Symmetric.Corners.fominEigen_conjBox
+#print axioms RMT.Symmetric.Corners.commutator_weighted_maya
+#print axioms RMT.Symmetric.Corners.sl2_commutator_all
+#print axioms RMT.Symmetric.Corners.sl2_commutator_wall
