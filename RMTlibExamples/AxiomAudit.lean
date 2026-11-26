@@ -420,3 +420,5 @@ import RMTlib
 #print axioms RMT.Transfer.sum_padicValNat_mul_log_le
 #print axioms RMT.Symmetric.det_interlacing_indicator
 #print axioms RMT.Symmetric.det_staircase_gtStep_of_interlacing
+#print axioms RMT.Symmetric.MayaMolien.F_mul_prod
+#print axioms RMT.Symmetric.MayaMolien.share_eq
