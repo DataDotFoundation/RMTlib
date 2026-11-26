@@ -422,3 +422,5 @@ import RMTlib
 #print axioms RMT.Symmetric.det_staircase_gtStep_of_interlacing
 #print axioms RMT.Symmetric.MayaMolien.F_mul_prod
 #print axioms RMT.Symmetric.MayaMolien.share_eq
+#print axioms RMT.Growth.det_site_strip
+#print axioms RMT.Growth.det_site_strip_iff

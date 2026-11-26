@@ -47,6 +47,7 @@ import RMTlib.Tableaux.MultisetHook.PaperStatements
 import RMTlib.Growth.RSK
 import RMTlib.Growth.Maya
 import RMTlib.Growth.PiecewiseLinear
+import RMTlib.Growth.StripDet
 import RMTlib.Growth.Matrix
 import RMTlib.RSK.Basic
 import RMTlib.RSK.Nested
