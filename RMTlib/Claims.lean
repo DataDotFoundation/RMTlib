@@ -222,8 +222,8 @@ def vacuumPointCharge : Claim where
     (j, from the signature); ω inverts the charge and fixes the point"
   scope := .fox
   declared := .checked
-  source := "RH-Dual #7, #122, #125: bridge/links/vacuum-character-places.md (read; the \
-    factorisation muInf = mu_∞ · j inferred from the closed form)"
+  source := "RH-Dual #7, #122, #125: bridge/links/vacuum-character-places.md (read); \
+    the factorisation muInf = mu_∞ · j proved in RH-Dual's Lean, lane C, RH-Dual #138"
   supports := [``places, ``bosonFermion]
 
 /-- **F14**: the place enters a content weight as **point × charge**,
