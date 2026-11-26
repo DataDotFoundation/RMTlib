@@ -22,8 +22,12 @@ remember them. For every Lake package in the repository (every tracked `lakefile
               local edits (fix the dependency upstream, never in `.lake/packages/`);
   copy        this script is byte-identical to the copy each owned dependency carries at its
               pinned commit (canonical copy: DataDotFoundation/MeaningLib, scripts/check_pins.py),
-              and so is every shared file (`SHARED_FILES`: the Dissemination helpers) that both
-              this repository and the dependency carry.
+              and so is every shared file (`SHARED_FILES`, empty today) that both this repository
+              and the dependency carry;
+  source      if the repository has `Dissemination/SOURCE` (`repo …` and `commit <40 hex>` lines),
+              every file listed in `Dissemination/SHARED` of that repository at that commit and
+              carried here is byte-identical to it (canonical: DataDotFoundation/DisseminationLib;
+              MeaningLib#44). A listed file not carried here is reported, not failed.
 
 Every check is a rule applied to files and git objects; nothing is judged. Dependencies are read
 from `.lake/packages/` when present, otherwise fetched (blob-less) into `.lake/pin-check.git`.
@@ -31,6 +35,7 @@ from `.lake/packages/` when present, otherwise fetched (blob-less) into `.lake/p
 usage:
   python3 -I <path>/check_pins.py [--offline] [--fresh] [--owned PREFIX ...] [PKGDIR ...]
   python3 -I <path>/check_pins.py bump NAME [REV] [--pkg PKGDIR] [--allow-off-main]
+  python3 -I <path>/check_pins.py source-bump [REV]
 
 `bump` sets the pin of NAME (default: the head of its default branch) in PKGDIR/lakefile.toml,
 refreshes this script and the shared files this repository carries from the dependency if it
@@ -52,10 +57,12 @@ import tomllib
 SCRIPT = os.path.abspath(__file__)
 SCRIPT_NAME = "check_pins.py"
 COPY_PATHS = ("scripts/" + SCRIPT_NAME, "tools/scripts/" + SCRIPT_NAME)
-# Files kept byte-identical down the chain, canonical in MeaningLib (MeaningLib#44). A repository
-# that does not carry one is not checked for it.
-SHARED_FILES = ("Dissemination/render.sh", "Dissemination/common/style.py",
-                "Dissemination/common/storyboard.py", "Dissemination/common/youtube.py")
+# Files kept byte-identical down the chain, canonical in MeaningLib. A repository that does not
+# carry one is not checked for it. Empty since the Dissemination files moved to DisseminationLib,
+# which is checked through `Dissemination/SOURCE` instead (the `source` check; MeaningLib#44).
+SHARED_FILES = ()
+SOURCE_PATH = os.path.join("Dissemination", "SOURCE")
+SOURCE_KEYS = ("repo", "commit")
 
 
 def local_bytes(root, rel):
@@ -411,11 +418,120 @@ def packages(root, given):
     return sorted(os.path.join(root, os.path.dirname(f)) for f in out.splitlines() if f)
 
 
+def parse_source(path):
+    """`Dissemination/SOURCE`: `key value` lines, `#` comments and blank lines ignored."""
+    pin, errs = {}, []
+    with open(path, encoding="utf-8") as f:
+        for n, line in enumerate(f, 1):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            key, _, val = line.partition(" ")
+            if key not in SOURCE_KEYS or not val.strip():
+                errs.append(f"line {n}: expected one of {SOURCE_KEYS} followed by a value")
+            else:
+                pin[key] = val.strip()
+    errs += [f"missing `{k}`" for k in SOURCE_KEYS if k not in pin]
+    if "commit" in pin and not re.fullmatch(r"[0-9a-f]{40}", pin["commit"]):
+        errs.append("`commit` must be a full 40-hex commit")
+    return pin, errs
+
+
+def source_clone(root, repo, offline):
+    """A local clone of the source repository: $DISSEMINATIONLIB, or a blob-less cache under .lake/."""
+    local = os.environ.get("DISSEMINATIONLIB")
+    if local:
+        return local
+    cache = os.path.join(root, ".lake", "source-check.git")
+    if not os.path.isdir(cache):
+        if offline:
+            raise GitError("offline", f"no clone of {repo} (set DISSEMINATIONLIB)")
+        git(["clone", "-q", "--bare", "--filter=blob:none", f"https://github.com/{repo}.git", cache])
+    return cache
+
+
+def source_rev(clone, rev, offline):
+    sha = git(["rev-parse", "--verify", "-q", f"{rev}^{{commit}}"], cwd=clone, check=False)
+    if sha is None and not offline:
+        git(["fetch", "-q", "origin", "+refs/heads/*:refs/heads/*"], cwd=clone, check=False)
+        sha = git(["rev-parse", "--verify", "-q", f"{rev}^{{commit}}"], cwd=clone, check=False)
+    if sha is None:
+        raise GitError("rev-parse", f"{rev} not found in {clone}")
+    return sha.strip()
+
+
+def source_listing(clone, sha):
+    listing = git(["show", f"{sha}:Dissemination/SHARED"], cwd=clone, check=False)
+    if listing is None:
+        raise GitError("show", f"Dissemination/SHARED missing at {sha[:12]}")
+    return [l.strip() for l in listing.splitlines() if l.strip() and not l.startswith("#")]
+
+
+def check_source(root, rep, offline):
+    path = os.path.join(root, SOURCE_PATH)
+    if not os.path.isfile(path):
+        return
+    pin, errs = parse_source(path)
+    for e in errs:
+        rep.fail("source", SOURCE_PATH, e)
+    if errs:
+        return
+    try:
+        clone = source_clone(root, pin["repo"], offline)
+        sha = source_rev(clone, pin["commit"], offline)
+        for rel in source_listing(clone, sha):
+            f = os.path.join("Dissemination", rel)
+            theirs = git(["show", f"{sha}:Dissemination/{rel}"], cwd=clone, check=False, binary=True)
+            if theirs is None:
+                rep.fail("source", f, f"listed in SHARED but absent at {sha[:12]}")
+                continue
+            mine = local_bytes(root, f)
+            if mine is None:
+                rep.info("source", f, "not carried here")
+            elif mine == theirs:
+                rep.ok("source", f, f"identical to {pin['repo']} at {sha[:12]}")
+            else:
+                rep.fail("source", f, f"differs from {pin['repo']} at {sha[:12]}; change it "
+                                      f"there, then `check_pins.py source-bump`")
+    except GitError as e:
+        rep.unavailable("source", SOURCE_PATH, e)
+
+
+def cmd_source_bump(rev):
+    root = repo_root()
+    path = os.path.join(root, SOURCE_PATH)
+    pin = {"repo": "DataDotFoundation/DisseminationLib"}
+    if os.path.isfile(path):
+        pin, errs = parse_source(path)
+        if "repo" not in pin:
+            print(f"{SOURCE_PATH}: {'; '.join(errs)}", file=sys.stderr)
+            return 2
+    try:
+        clone = source_clone(root, pin["repo"], offline=False)
+        sha = source_rev(clone, rev or "main", offline=False)
+        for rel in source_listing(clone, sha):
+            f = os.path.join("Dissemination", rel)
+            theirs = git(["show", f"{sha}:Dissemination/{rel}"], cwd=clone, check=False, binary=True)
+            mine = local_bytes(root, f)
+            if theirs is not None and mine is not None and theirs != mine:
+                with open(os.path.join(root, f), "wb") as out:
+                    out.write(theirs)
+                print(f"{f}: refreshed from {pin['repo']} at {sha[:12]}")
+    except GitError as e:
+        print(f"{e.args[0]}: {e.args[1]}", file=sys.stderr)
+        return 2
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(f"repo {pin['repo']}\ncommit {sha}\n")
+    print(f"{SOURCE_PATH}: pinned {sha[:12]}; commit it with the refreshed files.")
+    return 0
+
+
 def cmd_check(a):
     root = repo_root()
     up, rep = Upstreams(root, a.offline, a.owned), Report(a.offline)
     for pkg in packages(root, a.pkgdirs):
         check_package(pkg, root, up, rep, a.owned, a.fresh)
+    check_source(root, rep, a.offline)
     print(f"-- {rep.fails} FAIL, {rep.errors} ERROR")
     return 1 if rep.fails else (2 if rep.errors else 0)
 
@@ -483,6 +599,8 @@ def cmd_bump(a):
 
 
 def main(argv):
+    if argv and argv[0] == "source-bump":
+        return cmd_source_bump(argv[1] if len(argv) > 1 else None)
     if argv and argv[0] == "bump":
         p = argparse.ArgumentParser(prog="check_pins.py bump")
         p.add_argument("name")
