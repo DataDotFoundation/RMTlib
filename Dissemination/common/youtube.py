@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """YouTube access for the Dissemination videos: sign-in, tokens, and a few read checks.
 
-Canonical copy: DataDotFoundation/MeaningLib, Dissemination/common/youtube.py (byte-identical copies
-downstream, checked by scripts/check_pins.py). Stdlib only. See Dissemination/README.md, "YouTube".
+Canonical copy: DataDotFoundation/DisseminationLib, Dissemination/common/youtube.py (byte-identical copies
+downstream, pinned by Dissemination/SOURCE). Stdlib only. See Dissemination/README.md, "YouTube".
 
 Credentials come from the environment, never from the repository:
     YT_CLIENT, YT_SECRET     the OAuth client (type "Desktop app") of the channel's Google Cloud project
