@@ -41,6 +41,7 @@ import RMTlib.Tableaux.MultisetHook.Corollary4
 import RMTlib.Tableaux.MultisetHook.Theorem17
 import RMTlib.Tableaux.MultisetHook.Sine
 import RMTlib.Tableaux.MultisetHook.Littlewood
+import RMTlib.Tableaux.MultisetHook.CoreCount
 import RMTlib.Tableaux.MultisetHook.Generating
 import RMTlib.Tableaux.MultisetHook.PaperStatements
 import RMTlib.Growth.RSK

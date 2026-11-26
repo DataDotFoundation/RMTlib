@@ -10,6 +10,7 @@ import RMTlib.Edges.WallBreaking
 import RMTlib.Places.BandStep
 import RMTlib.Places.Tower
 import RMTlib.Places.TowerPlaces
+import RMTlib.Tableaux.MultisetHook.CoreCount
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -63,7 +64,8 @@ def omegaEveryPlace : Claim where
     (on each abacus, through cores)"
   scope := .junction
   declared := .checked
-  statements := [``RMT.Fermion.ofRows_transpose]
+  statements := [``RMT.Fermion.ofRows_transpose, ``RMT.MultisetHook.card_hooks_dvd,
+    ``RMT.MultisetHook.padicValNat_prod_hooks]
   joins := [``places, ``bosonFermion]
   source := "RMTlib#53: 271 and 3,348 exact checks, and core(λ′) = core(λ)′ on the same 3,348 \
     (scripts/hook_places_check.py); the ∞ half is RMT.Fermion.ofRows_transpose"

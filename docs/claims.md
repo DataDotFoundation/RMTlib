@@ -23,7 +23,7 @@ interpretation of a statement, never a rung.
 | id | claim | maturity | statements |
 |---|---|---|---|
 | J1 | **Places × boson–fermion: the place enters only through a one-body potential on Maya sites**, affine at `p`, not at ∞. | **proved for BDTW pattern A**; **pinned** for the potential roles; otherwise a conjecture | `det_mul_diagonal_mul_transpose`, `bdtw_inf`/`bdtw_fin` (instances, twin witnessed), `isExpLinear_rhoFin`, `not_isExpLinear_rhoInf` (REFUTED row pinned) |
-| J2 | **ω × places: ω is the same particle–hole swap at ∞ and at every `p`.** At ∞ the hook product is a two-species log-gas in Frobenius coordinates; at `p` its valuations are core statistics. | **checked on examples** (#53: 271 and 3,348 exact checks, plus `core(λ′) = core(λ)′` on the same 3,348; evidence record `rmtlib.hook-places-53`, `scripts/hook_places_check.py`) | none in Lean yet (#53 targets) |
+| J2 | **ω × places: ω is the same particle–hole swap at ∞ and at every `p`.** At ∞ the hook product is a two-species log-gas in Frobenius coordinates; at `p` its valuations are core statistics. | **checked on examples** (#53: 271 and 3,348 exact checks, plus `core(λ′) = core(λ)′` on the same 3,348; evidence record `rmtlib.hook-places-53`, `scripts/hook_places_check.py`) | at `p` the valuations are core statistics: `RMT.MultisetHook.card_hooks_dvd`, `padicValNat_prod_hooks` (#53 item 2); the ∞ half `RMT.Fermion.ofRows_transpose`; still open: `core(λ′) = core(λ)′` (#1 §3) and the defect form (#53 item 1) |
 
 ## Foxes (specific results the hedgehogs rest on)
 
