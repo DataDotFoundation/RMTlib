@@ -376,4 +376,6 @@ import RMTlib
 #print axioms RMT.Places.deg_principal
 #print axioms RMT.StringInsertion.log_hset_step_gap_mono
 #print axioms RMT.StringInsertion.translation_le_step
+#print axioms RMT.Fock.Virasoro.ev_Lm2
+#print axioms RMT.Fock.Virasoro.ev_one_L2_s11
 #print axioms RMT.Transfer.sum_log_mul_padicValInt_le

@@ -205,3 +205,55 @@ theorem omega_Lm2 (a : ℚ) (f : Λ) : omega (Lm2 a f) = Lm2 (-a) (omega f) := b
   norm_num
 
 end RMT.Fock.Virasoro
+
+/-! ## The `N`-row window: `L_{−2}` descends to `N` variables, `L_2` does not (RMTlib#99) -/
+
+namespace RMT.Fock.Virasoro
+
+open MvPolynomial
+
+variable (N : ℕ)
+
+/-- `Σ_i x_i³ ∂/∂x_i` is `up₂` in `N` variables: `(Σ_i x_i³ ∂_{x_i}) ∘ ev = ev ∘ up₂`. -/
+theorem ev_up2 (f : Λ) : ev N (up2 f) = xD N 3 (ev N f) := by
+  refine intertwine (ev N) _ _ (fun k => ?_) f
+  rcases k with _ | k
+  · simp [up2_X, ev]
+  · simp only [up2_X, ev, aeval_X, map_smul]
+    rw [xD_psum N 3 k]
+
+/-- **`L_{−2}` at charge `N` descends to `N` variables** (RMTlib#99 item 1, the `−2` twin of `ev_L1`):
+`ev (L_{−2}^{(N)} f) = Σ_i x_i³ ∂_i (ev f) + (N p_2 + ½ p_1²) · ev f`. -/
+theorem ev_Lm2 (f : Λ) :
+    ev N (Lm2 N f) = xD N 3 (ev N f) +
+      ((N : MvPolynomial (Fin N) ℚ) * psum (Fin N) ℚ 2 +
+        (1 / 2 : ℚ) • (psum (Fin N) ℚ 1 * psum (Fin N) ℚ 1)) * ev N f := by
+  simp only [Lm2, LinearMap.add_apply, LinearMap.smul_apply, LinearMap.mulLeft_apply, map_add,
+    map_smul, map_mul, Derivation.coeFn_coe, ev_up2]
+  simp only [ev, aeval_X]
+  rw [smul_eq_C_mul, smul_eq_C_mul]
+  simp only [smul_eq_C_mul, map_natCast, add_mul, mul_assoc]
+  ring
+
+/-- So **`ker (ev N)` is `L_{−2}^{(N)}`-stable**: shapes with more than `N` rows stay out of the
+window under `L_{−2}`. -/
+theorem ev_Lm2_eq_zero {f : Λ} (hf : ev N f = 0) : ev N (Lm2 N f) = 0 := by
+  rw [ev_Lm2, hf, map_zero, mul_zero, add_zero]
+
+/-- `p_1² − p_2` (`= 2 s_{11}`) vanishes in one variable. -/
+theorem ev_one_s11 : ev 1 ((X 1 : Λ) ^ 2 - X 2) = 0 := by
+  simp [ev, psum, pow_two]
+
+/-- **`L_2` does not descend** (RMTlib#99 item 2): `L_2^{(1)} (p_1² − p_2) = −1`, so it leaks out of
+the one-row window although `p_1² − p_2` is in `ker (ev 1)`. The `N`-row window at `∞` is an `sl₂`
+statement (`L_{±1}`, `L_{−2}`), not a Virasoro one. -/
+theorem L2_one_s11 : L2 1 ((X 1 : Λ) ^ 2 - X 2) = -1 := by
+  simp only [L2, D1, LinearMap.add_apply, LinearMap.smul_apply, Module.End.mul_apply, map_sub]
+  simp [pow_two, Derivation.leibniz, down2_X, pc, pderiv_X]
+  module
+
+theorem ev_one_L2_s11 : ev 1 (L2 1 ((X 1 : Λ) ^ 2 - X 2)) ≠ 0 := by
+  rw [L2_one_s11, map_neg, map_one]
+  exact neg_ne_zero.mpr one_ne_zero
+
+end RMT.Fock.Virasoro
