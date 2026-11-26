@@ -471,13 +471,15 @@ class Hypothesis(Scene):
             Text("Refuted by:", font_size=22, color=MUT),
             Text("• a step that is not a translation followed by a disjoint string insertion (the defect sits there);",
                  font_size=19),
-            Text("• a string-insertion step whose slack increment differs from self − mutual;", font_size=19),
+            Text("• a string-insertion step whose slack increment differs from translation + self − mutual;", font_size=19),
             Text("• a nonzero defect on a square of two disjoint insertions (a mis-identified Maya set).",
                  font_size=19),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(h, DOWN, buff=0.3).align_to(h, LEFT)
         for line in ref:
             if line.width > 11.6:
                 line.scale_to_fit_width(11.6)
+        # Scaling a line moves its left edge (it scales about its centre): re-align the lines.
+        ref.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         if ref.width > 10.8:
             ref.scale_to_fit_width(10.8)
         ref.next_to(h, DOWN, buff=0.3).align_to(h, LEFT)
