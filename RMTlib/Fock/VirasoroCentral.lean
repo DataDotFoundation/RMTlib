@@ -256,4 +256,50 @@ theorem ev_one_L2_s11 : ev 1 (L2 1 ((X 1 : Λ) ^ 2 - X 2)) ≠ 0 := by
   rw [L2_one_s11, map_neg, map_one]
   exact neg_ne_zero.mpr one_ne_zero
 
+/-! ## The `N`-column window: the ω-twin (RMTlib#99 item 3)
+
+The super evaluation `ev_{0|N}` sends `p_k ↦ (−1)^{k+1} Σ_i y_i^k`, i.e. it is `ev N ∘ ω`. Its kernel is
+spanned by the Schur functions with more than `N` columns. By `ω L_n^{(a)} ω = (−1)^n L_n^{(−a)}`,
+the row statements at charge `N` become column statements at charge `−N`. -/
+
+/-- The super evaluation `ev_{0|N} = ev N ∘ ω`: `p_k ↦ (−1)^{k+1} p_k(y_1, …, y_N)`. -/
+noncomputable def evS : Λ →ₐ[ℚ] MvPolynomial (Fin N) ℚ := (ev N).comp omega
+
+theorem evS_apply (f : Λ) : evS N f = ev N (omega f) := rfl
+
+/-- **`L_{−2}` at charge `−N` descends to the `N`-column window** (the ω-twin of `ev_Lm2`):
+`ev_{0|N} (L_{−2}^{(−N)} f) = Σ_i y_i³ ∂_i (ev_{0|N} f) + (N p_2 + ½ p_1²) · ev_{0|N} f`. -/
+theorem evS_Lm2 (f : Λ) :
+    evS N (Lm2 (-N) f) = xD N 3 (evS N f) +
+      ((N : MvPolynomial (Fin N) ℚ) * psum (Fin N) ℚ 2 +
+        (1 / 2 : ℚ) • (psum (Fin N) ℚ 1 * psum (Fin N) ℚ 1)) * evS N f := by
+  rw [evS_apply, omega_Lm2, neg_neg, ev_Lm2]
+  rfl
+
+/-- So **`ker ev_{0|N}` is `L_{−2}^{(−N)}`-stable**: shapes with more than `N` columns stay out of the
+column window. -/
+theorem evS_Lm2_eq_zero {f : Λ} (hf : evS N f = 0) : evS N (Lm2 (-N) f) = 0 := by
+  rw [evS_Lm2, hf, map_zero, mul_zero, add_zero]
+
+/-- `p_1² + p_2` (`= 2 s_2 = ω (2 s_{11})`) vanishes in one super (column) variable. -/
+theorem evS_one_s2 : evS 1 ((X 1 : Λ) ^ 2 + X 2) = 0 := by
+  rw [evS_apply, map_add, map_pow, omega_X, omega_X]
+  have h := ev_one_s11
+  rw [map_sub, map_pow] at h
+  norm_num at h ⊢
+  linear_combination h
+
+/-- `L_2^{(−1)} (p_1² + p_2) = −1`: the ω-twin of `L2_one_s11`. -/
+theorem L2_negone_s2 : L2 (-1) ((X 1 : Λ) ^ 2 + X 2) = -1 := by
+  have h := congrArg omega L2_one_s11
+  rw [omega_L2, map_neg, map_one, map_sub, map_pow, omega_X, omega_X] at h
+  norm_num at h
+  rw [map_add]
+  linear_combination h
+
+/-- **`L_2` does not descend to the column window either** (RMTlib#99 item 3). -/
+theorem evS_one_L2_s2 : evS 1 (L2 (-1) ((X 1 : Λ) ^ 2 + X 2)) ≠ 0 := by
+  rw [L2_negone_s2, map_neg, map_one]
+  exact neg_ne_zero.mpr one_ne_zero
+
 end RMT.Fock.Virasoro
