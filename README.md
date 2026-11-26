@@ -30,7 +30,7 @@ zeros (Hall's method turns moment coefficients into gap bounds). The frame tools
 
 ## Build
 
-Lean `v4.35.0` (`lean-toolchain`), Mathlib pinned in `lakefile.toml`.
+Lean `v4.37.0-rc1` (`lean-toolchain`), Mathlib pinned in `lakefile.toml`.
 
 ```bash
 lake exe cache get    # prebuilt Mathlib
