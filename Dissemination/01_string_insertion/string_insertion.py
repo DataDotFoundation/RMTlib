@@ -383,11 +383,11 @@ class CommutingSquare(Scene):
         self.wait(1.5)
         diag = VGroup(
             Tex(r"So a defect is a diagnostic:", font_size=26, color=L_COL),
-            MathTex(r"\text{measured }\Delta(\text{slack})-\big[\log H_{\mathrm{set}}(S)-\log\mathrm{Mut}(L,S)\big]",
+            MathTex(r"\text{measured }\Delta(\text{slack})-\big[\text{translation}+\log H_{\mathrm{set}}(S)-\log\mathrm{Mut}(L,S)\big]",
                     font_size=24),
             Tex(r"vanishes at every true string insertion;", font_size=24),
-            Tex(r"where it does not, the step is a collision", font_size=24),
-            Tex(r"or a shift that does not cancel.", font_size=24),
+            Tex(r"where it does not, the step is a collision,", font_size=24),
+            Tex(r"not a translation followed by a disjoint insertion.", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         for line in diag:
             if line.get_right()[0] > 6.9:
@@ -469,7 +469,7 @@ class Hypothesis(Scene):
         self.wait(1.5)
         ref = VGroup(
             Text("Refuted by:", font_size=22, color=MUT),
-            Text("• a step not related by a disjoint string insertion, up to shift (the defect sits there);",
+            Text("• a step that is not a translation followed by a disjoint string insertion (the defect sits there);",
                  font_size=19),
             Text("• a string-insertion step whose slack increment differs from self − mutual;", font_size=19),
             Text("• a nonzero defect on a square of two disjoint insertions (a mis-identified Maya set).",
