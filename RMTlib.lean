@@ -121,6 +121,7 @@ import RMTlib.RSK.FunInd
 import RMTlib.RSK.Intrinsic
 import RMTlib.RSK.JeuDeTaquin
 import RMTlib.Fermion.Block
+import RMTlib.Fermion.BlockRule
 import RMTlib.Fermion.Maya
 import RMTlib.Fermion.Conj
 import RMTlib.Fermion.Transport
