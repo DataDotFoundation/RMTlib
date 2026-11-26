@@ -428,3 +428,5 @@ import RMTlib
 #print axioms RMT.Symmetric.MayaMolien.share_eq_inv
 #print axioms RMT.Places.ChebyshevWeights.log_factorial_eq_sum_psi
 #print axioms RMT.Places.ChebyshevWeights.sum_weight_log_factorial_psi
+#print axioms RMT.ErdosChain.hset_shift_block
+#print axioms RMT.Tower.hset_above_succ_of_block
