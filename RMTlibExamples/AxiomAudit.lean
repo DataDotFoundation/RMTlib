@@ -404,3 +404,6 @@ import RMTlib
 #print axioms RMT.Growth.sum_plRule_eq
 #print axioms RMT.Growth.localRule_bump_eq_plRule
 #print axioms RMT.Growth.site_plRule_succ
+#print axioms RMT.Places.Bertrand.qFact_two_mul
+#print axioms RMT.Places.Bertrand.log_choose_eq_sum_carry
+#print axioms RMT.Places.Bertrand.carry_eq
