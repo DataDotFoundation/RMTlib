@@ -92,6 +92,26 @@ theorem sum_log_mul_padicValNat_le {Q : ℕ} (hQ : Q ≠ 0) (Ls : Finset Nat.Pri
         exact mul_nonneg (Real.log_nonneg (by exact_mod_cast this.le)) (Nat.cast_nonneg _)
     _ = _ := sum_congr rfl fun p _ => mul_comm _ _
 
+/-- **The truncated product formula over a `Finset ℕ` of primes, bounded at any `b ≥ a`**: the exact
+shape of the condensed edition's `New.Selmer.sum_padicValNat_mul_log_le` (RMTlib#140), from
+`sum_log_mul_padicValNat_le` by three adapters (a `Finset ℕ` with a primality hypothesis for
+`Nat.Primes`, the product order, and `log a ≤ log b`), and the case `a = 0`. -/
+theorem sum_padicValNat_mul_log_le (T : Finset ℕ) (hT : ∀ l ∈ T, l.Prime) {a b : ℕ}
+    (hab : a ≤ b) : ∑ l ∈ T, (padicValNat l a : ℝ) * Real.log l ≤ Real.log b := by
+  classical
+  rcases Nat.eq_zero_or_pos a with rfl | ha
+  · have h0 : ∀ l ∈ T, (padicValNat l 0 : ℝ) * Real.log l = 0 := fun l _ => by
+      simp [padicValNat]
+    rw [Finset.sum_eq_zero h0]
+    exact Real.log_natCast_nonneg b
+  · have h := sum_log_mul_padicValNat_le ha.ne' (T.subtype Nat.Prime)
+    calc ∑ l ∈ T, (padicValNat l a : ℝ) * Real.log l
+        = ∑ l ∈ T, Real.log l * (padicValNat l a : ℝ) := Finset.sum_congr rfl fun _ _ => mul_comm _ _
+      _ = ∑ ℓ ∈ T.subtype Nat.Prime, Real.log ((ℓ : ℕ)) * (padicValNat ℓ a : ℝ) :=
+          (Finset.sum_subtype_of_mem (fun l : ℕ => Real.log l * (padicValNat l a : ℝ)) hT).symm
+      _ ≤ Real.log a := h
+      _ ≤ Real.log b := Real.log_le_log (by exact_mod_cast ha) (by exact_mod_cast hab)
+
 /-- **Two auxiliary primes cover every prime** (RH-Dual on MeaningLib#51; the content of the proof's
 `corGK` without Ш). If `a_ℓ ≤ c · v_ℓ(n)` for every prime `ℓ ≠ p` and `a_ℓ ≤ c · v_ℓ(n′)` for every
 prime `ℓ ≠ p′`, with `p ≠ p′`, then over any set of primes

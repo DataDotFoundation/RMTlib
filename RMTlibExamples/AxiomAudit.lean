@@ -417,3 +417,4 @@ import RMTlib
 #print axioms RMT.Places.Bertrand.carry_eq_one_iff_window
 #print axioms RMT.Places.Bertrand.prod_content_one_row
 #print axioms RMT.RSK.Growth.grow_transpose
+#print axioms RMT.Transfer.sum_padicValNat_mul_log_le
