@@ -1,0 +1,15 @@
+{
+  "core_of_conjugate": {
+    "checked": 3348,
+    "failures": []
+  },
+  "defect_form_infinity": {
+    "checked": 271,
+    "failures": []
+  },
+  "hook_count_eq_core_defect": {
+    "checked": 3348,
+    "failures": []
+  },
+  "ok": true
+}

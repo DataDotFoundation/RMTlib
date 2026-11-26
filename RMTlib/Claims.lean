@@ -65,7 +65,9 @@ def omegaEveryPlace : Claim where
   declared := .checked
   statements := [``RMT.Fermion.ofRows_transpose]
   joins := [``places, ``bosonFermion]
-  source := "RMTlib#53: 271 and 3,348 exact checks; the ∞ half is RMT.Fermion.ofRows_transpose"
+  source := "RMTlib#53: 271 and 3,348 exact checks, and core(λ′) = core(λ)′ on the same 3,348 \
+    (scripts/hook_places_check.py); the ∞ half is RMT.Fermion.ofRows_transpose"
+  evidence := ["evidence/hook_places_check.evidence.json"]
 
 /-! ## Foxes -/
 

@@ -1,0 +1,58 @@
+{
+ "schema": "meaninglib.evidence/1",
+ "id": "rmtlib.hook-places-53",
+ "claim": "RMT.Claims.omegaEveryPlace",
+ "script": {
+  "path": "scripts/hook_places_check.py",
+  "commit": "3e81e34567ffd27e346aa1c1e4ae5ff571bb49bb",
+  "sha256": "2590db05ce6d0fa36f1c629ced200ab16397faab9dcb4e374a920b04286792f5"
+ },
+ "command": [
+  "python3",
+  "-I",
+  "scripts/hook_places_check.py",
+  "--out",
+  "evidence/hook_places_check.json"
+ ],
+ "cwd": ".",
+ "inputs": [
+  {
+   "path": "scripts/hook_places_check.py",
+   "sha256": "2590db05ce6d0fa36f1c629ced200ab16397faab9dcb4e374a920b04286792f5"
+  }
+ ],
+ "outputs": [
+  {
+   "path": "evidence/hook_places_check.json",
+   "sha256": "6955d5a87b3eb0de145a9a9ec3a1550615727dfce5ff367343b03ecea9b1d4a0"
+  }
+ ],
+ "quoted": [
+  {
+   "key": "defect_infinity",
+   "file": "evidence/hook_places_check.json",
+   "pointer": "/defect_form_infinity/checked",
+   "value": 271
+  },
+  {
+   "key": "core_checks",
+   "file": "evidence/hook_places_check.json",
+   "pointer": "/hook_count_eq_core_defect/checked",
+   "value": 3348
+  },
+  {
+   "key": "omega_checks",
+   "file": "evidence/hook_places_check.json",
+   "pointer": "/core_of_conjugate/checked",
+   "value": 3348
+  },
+  {
+   "key": "ok",
+   "file": "evidence/hook_places_check.json",
+   "pointer": "/ok",
+   "value": true
+  }
+ ],
+ "created": "2026-11-26T02:52:04Z",
+ "python": "3.12.3"
+}
