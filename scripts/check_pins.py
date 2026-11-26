@@ -23,7 +23,9 @@ remember them. For every Lake package in the repository (every tracked `lakefile
   copy        this script is byte-identical to the copy each owned dependency carries at its
               pinned commit (canonical copy: DataDotFoundation/MeaningLib, scripts/check_pins.py),
               and so is every shared file (`SHARED_FILES`, empty today) that both this repository
-              and the dependency carry;
+              and the dependency carry. A **self-pin** (a dependency whose URL is this repository's
+              own `origin`, e.g. a sub-package frozen at a tag of an earlier toolchain) is frozen by
+              design: `copy` and `on-main` freshness are reported, not failed;
   source      if the repository has `Dissemination/SOURCE` (`repo …` and `commit <40 hex>` lines),
               every file listed in `Dissemination/SHARED` of that repository at that commit and
               carried here is byte-identical to it (canonical: DataDotFoundation/DisseminationLib;
@@ -103,6 +105,22 @@ def norm_url(url):
 
 def repo_root():
     return git(["rev-parse", "--show-toplevel"], cwd=os.path.dirname(SCRIPT))
+
+
+def own_origin(root):
+    """This repository's own `origin` URL, normalised (None without one)."""
+    try:
+        u = git(["remote", "get-url", "origin"], cwd=root, check=False)
+    except GitError:
+        return None
+    if not u:
+        return None
+    u = u.strip()
+    # git@github.com:Owner/Repo(.git) and https://github.com/Owner/Repo(.git) are the same repository
+    if u.startswith("git@") and ":" in u:
+        host, path = u[4:].split(":", 1)
+        u = f"https://{host}/{path}"
+    return norm_url(u)
 
 
 class Upstreams:
@@ -299,8 +317,11 @@ def check_package(pkg, root, up, rep, owned, fresh):
                 rep.ok("manifest", name, f"locked at {locked}")
         target = locked or rev
         dep_pkg = os.path.join(pkgs_dir, name)
+        self_pin = own_origin(root) is not None and norm_url(url) == own_origin(root)
 
-        if is_owned(url, owned):
+        if self_pin:
+            rep.info("on-main", name, f"self-pin: this repository at {target[:12]}, frozen by design")
+        elif is_owned(url, owned):
             try:
                 ok, behind, branch, head = up.on_branch(url, target)
                 if not ok:
@@ -327,7 +348,10 @@ def check_package(pkg, root, up, rep, owned, fresh):
                     "toolchain", name, dtool + ("" if dtool == toolchain else f" (here {toolchain})"))
             dman = up.show(url, target, "lake-manifest.json", dep_pkg)
             compare_shared(name, target[:12], json.loads(dman) if dman else None, mine, rep)
-            if is_owned(url, owned):
+            if self_pin:
+                rep.info("copy", name, f"self-pin: this repository's own files at {target[:12]} "
+                                       "are not compared with the working tree")
+            elif is_owned(url, owned):
                 copies = [(p, up.show(url, target, p, dep_pkg)) for p in COPY_PATHS]
                 copies = [(p, b) for p, b in copies if b is not None]
                 if not copies:
