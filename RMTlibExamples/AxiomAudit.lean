@@ -433,3 +433,7 @@ import RMTlib
 #print axioms RMT.ErdosChain.not_bandEmpty_of_Icc_subset
 #print axioms RMT.Fermion.Block.prod_one_sub_eq_sum_esymm
 #print axioms RMT.Fermion.Block.sum_block_sq
+#print axioms RMT.Fermion.Block.mem_dblock
+#print axioms RMT.Fermion.Block.card_dblock
+#print axioms RMT.Fermion.Block.sum_union_dblock
+#print axioms RMT.Fermion.Block.blockInsert_iff_matched
