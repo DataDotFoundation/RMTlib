@@ -47,3 +47,7 @@ accompany some modules; `docs/` holds design notes. `scripts/check_pins.py` chec
 Split on 2026-11-24 from the `combinatorics/` folder of `DataDotFoundation/RMTandMeaningLib`
 (commit `966e85f` and its predecessors), which uses this library as a dependency. Module names are
 unchanged.
+
+## External resources
+
+- **The Stacks Project in Lean** (Axiom; Lean 4.35.0, Apache-2.0): pinned for reference, not a dependency. See [`docs/external/stacks.md`](docs/external/stacks.md).
