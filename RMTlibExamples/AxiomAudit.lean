@@ -398,3 +398,6 @@ import RMTlib
 #print axioms RMT.Moments.OtherFamilies.mayaSet_sympShape_addBox
 #print axioms RMT.Moments.OtherFamilies.sl2_commutator_sympShape
 #print axioms RMT.Moments.OtherFamilies.two_mul_sum_stair_succ
+#print axioms RMT.Growth.localRule_two_maya
+#print axioms RMT.Growth.localRule_bump_maya
+#print axioms RMT.Growth.addable_bump
