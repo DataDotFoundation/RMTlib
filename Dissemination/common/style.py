@@ -1,7 +1,7 @@
 """Shared look and helpers for the Dissemination videos.
 
-Canonical copy: DataDotFoundation/MeaningLib, Dissemination/common/style.py. Downstream repositories
-carry byte-identical copies, checked and refreshed by scripts/check_pins.py (MeaningLib#44). Change
+Canonical copy: DataDotFoundation/DisseminationLib, Dissemination/common/style.py. Downstream repositories
+carry byte-identical copies, pinned by Dissemination/SOURCE and checked by scripts/check_pins.py. Change
 it here, then bump the pins.
 
 Each video imports this module with

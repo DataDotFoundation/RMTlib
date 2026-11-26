@@ -4,8 +4,8 @@
 #   ./render.sh 01_some_video -ql      480p15 preview
 #   ./render.sh 01_some_video -qh      1080p60
 # MEDIA_DIR=/elsewhere ./render.sh …  renders outside the tree.
-# Canonical copy: DataDotFoundation/MeaningLib, Dissemination/render.sh (byte-identical copies
-# downstream, checked by scripts/check_pins.py).
+# Canonical copy: DataDotFoundation/DisseminationLib, Dissemination/render.sh (byte-identical copies
+# downstream, pinned by Dissemination/SOURCE and checked by scripts/check_pins.py).
 # The scene list is the SCENES list at the end of the folder's single .py file.
 # Needs manim (pip install manim mpmath), LaTeX (texlive-latex-extra, dvisvgm) and ffmpeg.
 set -euo pipefail
