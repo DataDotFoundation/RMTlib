@@ -265,7 +265,7 @@ theorem det_mul_eq_sum_fun {N : ℕ} {W : Type*} [Fintype W] [DecidableEq W]
   calc det (A * B)
       = ∑ p : Fin N → W, ∑ σ : Equiv.Perm (Fin N),
           ((Equiv.Perm.sign σ : ℤ) : R) * ∏ i, A (σ i) (p i) * B (p i) i := by
-        simp only [det_apply', mul_apply, Finset.prod_univ_sum, Finset.mul_sum,
+        simp only [det_apply', Matrix.mul_apply, Finset.prod_univ_sum, Finset.mul_sum,
           Fintype.piFinset_univ]
         rw [Finset.sum_comm]
     _ = ∑ p : Fin N → W, det (A.submatrix id p) * ∏ i, B (p i) i := by
@@ -486,7 +486,7 @@ theorem det_jtMat_succ (a : ℕ → R) (m : ℕ) (lam : Fin N → ℕ) (hl : Ant
   let B : Matrix (Icc (-(N : ℤ)) S) (Fin N) R := of fun c j => hE a m (c + j)
   have hAB : jtMat a (m + 1) lam = A * B := by
     ext i j
-    rw [mul_apply]
+    rw [Matrix.mul_apply]
     simp only [A, B, of_apply, jtMat]
     rw [Finset.sum_coe_sort (Icc (-(N : ℤ)) S) (fun c => (if c ≤ (lam i : ℤ) - i then
       t ^ ((lam i : ℤ) - i - c).toNat else 0) * hE a m (c + j)),
@@ -584,7 +584,7 @@ theorem det_jtMat_zero (a : ℕ → R) (lam : Fin N → ℕ) (hl : Antitone lam)
   · subst h
     rw [show jtMat a 0 (0 : Fin N → ℕ) = 1 from by
       ext i j
-      simp only [jtMat, hE, Pi.zero_apply, CharP.cast_eq_zero, zero_sub, of_apply, one_apply]
+      simp only [jtMat, hE, Pi.zero_apply, CharP.cast_eq_zero, zero_sub, of_apply, Matrix.one_apply]
       split_ifs with h1 h2 h2 <;> first | rfl | (exfalso; apply h2; ext; omega) | (exfalso; subst h2; omega)]
     exact det_one
   · obtain ⟨i, hi⟩ : ∃ i, lam i ≠ 0 := by

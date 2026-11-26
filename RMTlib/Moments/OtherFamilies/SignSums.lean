@@ -308,7 +308,7 @@ theorem prod_sgn_mul_self (ε : Fin k → Bool) :
 theorem prod_Ici_add (z : Fin k → K) :
     ∏ i, ∏ j ∈ Ici i, (z i + z j) = (∏ i, ∏ j ∈ Ioi i, (z i + z j)) * ∏ i, (2 * z i) := by
   rw [← prod_mul_distrib]; refine prod_congr rfl fun i _ => ?_
-  rw [← Finset.Ioi_insert, prod_insert (by simp)]; ring
+  rw [← Finset.insert_Ioi, prod_insert (by simp)]; ring
 
 /-- **The note's `half_choices` (type `C`)**: for a partition `l` of length `≤ k` and nonzero
 `x_i`, `Σ_{ε ∈ {±1}^k} s_l(εx) / ∏_{i ≤ j} (ε_i x_i + ε_j x_j)` is `s_ν(x²)` when every `l_j + δ_j`

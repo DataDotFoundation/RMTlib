@@ -17,13 +17,13 @@ linter.missingDocs = true
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
-rev = "56a005855ea17e0b0958f73ec801ae140b0a1679"
+rev = "31ce06eaadf4a200c0e1407c5f10953cf606b8f8"
 
 # Frames of understanding (no dependencies of its own): RMTlib reads and improves itself through them.
 [[require]]
 name = "MeaningLib"
 git = "https://github.com/DataDotFoundation/MeaningLib"
-rev = "c05f0bf5a5df3c3c93d1f2c5c19dc498f29b3b3a"
+rev = "c414047a6043ac6c2c4975802bb3135ff1213c0a"
 
 # `roots = []`: a root defaults to the library name and Lake matches roots by prefix. Projects that
 # require RMTlib must not name their own modules `RMTlib*` (RH-Dual's `check_layout.py` enforces it).

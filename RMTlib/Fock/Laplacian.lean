@@ -64,7 +64,7 @@ noncomputable def trD : Derivation ℚ (MvPolynomial (Fin N × Fin N) ℚ) (MvPo
   ∑ a, pderiv (a, a)
 
 theorem trD_apply (f : MvPolynomial (Fin N × Fin N) ℚ) : trD N f = ∑ a, pderiv (a, a) f := by
-  rw [trD, ← Derivation.coeFnAddMonoidHom_apply, map_sum, Finset.sum_apply]
+  rw [trD, ← FunLike.coeAddMonoidHom_apply, map_sum, Finset.sum_apply]
   rfl
 
 /-- **The Fock adjoint of `tr X` is the trace Laplacian.** -/
@@ -229,7 +229,7 @@ theorem trD_hX (k : ℕ) : trD N (hX N (k + 1)) = ((N : ℚ) + k) • hX N k := 
   ext m
   rw [← matExp_toMat m]
   set M : Fin N → Fin N → ℕ := fun i j => m (i, j)
-  rw [trD_apply, coeff_sum, coeff_smul]
+  rw [trD_apply, coeff_sum, AddMonoidAlgebra.coeff_smul_apply]
   simp_rw [coeff_pderiv, ← matExp_bump, coeff_hX, matExp_apply]
   simp_rw [hCond_bump]
   split_ifs with hc

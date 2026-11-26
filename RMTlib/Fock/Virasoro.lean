@@ -76,7 +76,7 @@ noncomputable def place (α β : ℚ) : Der := α • L1 0 + β • alpha 1
 
 theorem alpha_X (n k : ℕ) : alpha n (X k) = if k = n then (n : ℚ) • 1 else 0 := by
   classical
-  simp only [alpha, Derivation.smul_apply, pderiv_X, Pi.single_apply]
+  simp only [alpha, smul_apply, pderiv_X, Pi.single_apply]
   split_ifs <;> simp
 
 theorem L1_X (a : ℚ) (k : ℕ) :
@@ -90,7 +90,7 @@ theorem up_X (k : ℕ) : up (X k) = (k : ℚ) • X (k + 1) := mkDerivation_X _ 
 theorem L1_eq (a : ℚ) : L1 a = a • alpha 1 + L1 0 := by
   apply MvPolynomial.derivation_ext
   intro k
-  simp only [Derivation.add_apply, Derivation.smul_apply, L1_X, alpha_X, pc]
+  simp only [add_apply, smul_apply, L1_X, alpha_X, pc]
   rcases k with _ | _ | k
   · simp
   · simp [C_eq_smul_one]
@@ -118,7 +118,7 @@ theorem place_comm (α β α' β' : ℚ) :
   refine Derivation.ext fun f => ?_
   have key : alpha 1 (L1 0 f) - L1 0 (alpha 1 f) = alpha 2 f := by
     rw [← Derivation.commutator_apply, alpha_one_L1_zero]
-  simp only [Derivation.commutator_apply, place, Derivation.add_apply, Derivation.smul_apply,
+  simp only [Derivation.commutator_apply, place, add_apply, smul_apply,
     map_add, Derivation.map_smul]
   linear_combination (norm := module) (α' * β - α * β') • key
 
@@ -169,10 +169,10 @@ theorem L1_Lm1 (a : ℚ) :
     (L1 a : Module.End ℚ Λ) * Lm1 a - Lm1 a * (L1 a : Module.End ℚ Λ) = (2 : ℚ) • L0 a := by
   refine LinearMap.ext fun f => ?_
   have h := congrArg (· f) (L1_up a)
-  simp only [Derivation.commutator_apply, Derivation.smul_apply] at h
-  simp only [Lm1, L0, LinearMap.sub_apply, Module.End.mul_apply, LinearMap.add_apply,
+  simp only [Derivation.commutator_apply, smul_apply] at h
+  simp only [Lm1, L0, LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.add_apply,
     LinearMap.smul_apply, LinearMap.mulLeft_apply, Derivation.coeFn_coe, map_add,
-    Derivation.map_smul, Derivation.leibniz, L1_X_one, smul_eq_mul, Module.End.one_apply]
+    Derivation.map_smul, Derivation.leibniz, L1_X_one, smul_eq_mul, one_apply_eq_self]
   rw [← sub_eq_zero]
   have hC : f * C a = a • f := by rw [smul_eq_C_mul, mul_comm]
   rw [hC]
@@ -183,10 +183,10 @@ theorem L0_L1 (a : ℚ) :
     L0 a * (L1 a : Module.End ℚ Λ) - (L1 a : Module.End ℚ Λ) * L0 a = -(L1 a : Module.End ℚ Λ) := by
   refine LinearMap.ext fun f => ?_
   have h := congrArg (· f) (deg_L1 a)
-  simp only [Derivation.commutator_apply, Derivation.neg_apply] at h
-  simp only [L0, LinearMap.sub_apply, Module.End.mul_apply, LinearMap.add_apply,
+  simp only [Derivation.commutator_apply, neg_apply] at h
+  simp only [L0, LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.add_apply,
     LinearMap.smul_apply, Derivation.coeFn_coe, map_add, Derivation.map_smul,
-    Module.End.one_apply, LinearMap.neg_apply]
+    one_apply_eq_self, LinearMap.neg_apply]
   linear_combination (norm := module) h
 
 /-- **`[L_0, L_{−1}] = L_{−1}`** at every charge. -/
@@ -194,9 +194,9 @@ theorem L0_Lm1 (a : ℚ) : L0 a * Lm1 a - Lm1 a * L0 a = Lm1 a := by
   refine LinearMap.ext fun f => ?_
   have h := congrArg (· f) deg_up
   simp only [Derivation.commutator_apply] at h
-  simp only [Lm1, L0, LinearMap.sub_apply, Module.End.mul_apply, LinearMap.add_apply,
+  simp only [Lm1, L0, LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.add_apply,
     LinearMap.smul_apply, LinearMap.mulLeft_apply, Derivation.coeFn_coe, map_add,
-    Derivation.map_smul, Derivation.leibniz, deg_X, smul_eq_mul, Module.End.one_apply]
+    Derivation.map_smul, Derivation.leibniz, deg_X, smul_eq_mul, one_apply_eq_self]
   rw [Nat.cast_one, one_smul, mul_comm f (X 1), Algebra.mul_smul_comm]
   linear_combination (norm := module) h
 
@@ -236,7 +236,7 @@ theorem omega_L1 (a : ℚ) (f : Λ) : omega (L1 a f) = (-L1 (-a)) (omega f) := b
 /-- **`ω α_2 = −α_2 ω`**: `ω p₂^⊥ = −p₂^⊥ ω`. -/
 theorem omega_alpha_two (f : Λ) : omega (alpha 2 f) = (-alpha 2) (omega f) := by
   refine intertwine omega _ _ (fun k => ?_) f
-  simp only [alpha_X, omega_X, Derivation.neg_apply, Derivation.map_smul]
+  simp only [alpha_X, omega_X, neg_apply, Derivation.map_smul]
   split_ifs with hk
   · subst hk; norm_num
   · simp
@@ -254,14 +254,14 @@ theorem omega_up (f : Λ) : omega (up f) = (-up) (omega f) := by
 /-- **`ω L_{−1}^{(a)} = −L_{−1}^{(−a)} ω`**. -/
 theorem omega_Lm1 (a : ℚ) (f : Λ) : omega (Lm1 a f) = -(Lm1 (-a) (omega f)) := by
   simp only [Lm1, LinearMap.add_apply, LinearMap.smul_apply, LinearMap.mulLeft_apply,
-    Derivation.coeFn_coe, map_add, map_smul, map_mul, omega_X, omega_up, Derivation.neg_apply]
+    Derivation.coeFn_coe, map_add, map_smul, map_mul, omega_X, omega_up, neg_apply]
   simp
   module
 
 /-- **`ω L_0^{(a)} = L_0^{(−a)} ω`**: the conformal weight `a²/2` of the charged vacuum is
 `ω`-invariant. -/
 theorem omega_L0 (a : ℚ) (f : Λ) : omega (L0 a f) = L0 (-a) (omega f) := by
-  simp only [L0, LinearMap.add_apply, LinearMap.smul_apply, Module.End.one_apply,
+  simp only [L0, LinearMap.add_apply, LinearMap.smul_apply, one_apply_eq_self,
     Derivation.coeFn_coe, map_add, map_smul, omega_deg, neg_sq]
 
 /-! ## The realisation in `N` variables: the rank is the charge -/

@@ -54,7 +54,7 @@ theorem L1R_shift (a b : ℚ) : L1R b = L1R (b - a) + a • pderiv (Sum.inr 1) :
 theorem X1_shift (a b : ℚ) : X1 a b - b • dL 1 = X1 (a - b) b := by
   refine LinearMap.ext fun F => ?_
   have h := congrArg (fun D : Derivation ℚ Λ₂ Λ₂ => D F) (L1L_shift a b)
-  simp only [Derivation.add_apply, Derivation.smul_apply] at h
+  simp only [add_apply, smul_apply] at h
   simp only [X1, LinearMap.sub_apply, LinearMap.add_apply, LinearMap.smul_apply, Derivation.coeFn_coe,
     dL, h]
   abel
@@ -63,7 +63,7 @@ theorem X1_shift (a b : ℚ) : X1 a b - b • dL 1 = X1 (a - b) b := by
 theorem Xm1_shift (a b : ℚ) : Xm1 a b + a • dR 1 = Xm1 a (b - a) := by
   refine LinearMap.ext fun F => ?_
   have h := congrArg (fun D : Derivation ℚ Λ₂ Λ₂ => D F) (L1R_shift a b)
-  simp only [Derivation.add_apply, Derivation.smul_apply] at h
+  simp only [add_apply, smul_apply] at h
   simp only [Xm1, LinearMap.sub_apply, LinearMap.add_apply, LinearMap.smul_apply, Derivation.coeFn_coe,
     dR, h]
   abel
@@ -80,14 +80,14 @@ theorem delta_smul (c : ℚ) (F : Λ₂) : delta (c • F) = c • delta F := by
   rw [delta_eq (K := K) (by omega), delta_eq (K := K) (by omega), map_smul]
 
 theorem deltaK_dL (K j : ℕ) (F : Λ₂) : deltaK K (dL j F) = dL j (deltaK K F) := by
-  simp only [deltaK, LinearMap.sum_apply, LinearMap.smul_apply, Module.End.mul_apply, map_sum, map_smul]
+  simp only [deltaK, LinearMap.sum_apply, LinearMap.smul_apply, mul_apply_eq_comp, map_sum, map_smul]
   refine Finset.sum_congr rfl fun k _ => ?_
   congr 1
   simp only [dL, dR, Derivation.coeFn_coe]
   rw [pd_comm (Sum.inr k) (Sum.inl j), pd_comm (Sum.inl k) (Sum.inl j)]
 
 theorem deltaK_dR (K j : ℕ) (F : Λ₂) : deltaK K (dR j F) = dR j (deltaK K F) := by
-  simp only [deltaK, LinearMap.sum_apply, LinearMap.smul_apply, Module.End.mul_apply, map_sum, map_smul]
+  simp only [deltaK, LinearMap.sum_apply, LinearMap.smul_apply, mul_apply_eq_comp, map_sum, map_smul]
   refine Finset.sum_congr rfl fun k _ => ?_
   congr 1
   simp only [dL, dR, Derivation.coeFn_coe]

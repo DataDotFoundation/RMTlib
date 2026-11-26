@@ -82,7 +82,7 @@ theorem lap_mul_eq_zero (A : ℕ) {f g : P k p q} (hf : f ∈ supported ℚ (xRo
     pderiv_eq_zero_of_supported hg (by rintro ⟨_, _, h, _⟩; cases h)
   have hcomm : pderiv (Sum.inl (l, i)) (pderiv (Sum.inr (l, j)) g) = 0 := by
     have := congrArg (· g) (RMT.Fock.Weil.D_D_comm (σ := V k p q) (Sum.inl (l, i)) (Sum.inr (l, j)))
-    simp only [RMT.Fock.Weil.D, Module.End.mul_apply, Derivation.coeFn_coe] at this
+    simp only [RMT.Fock.Weil.D, mul_apply_eq_comp, Derivation.coeFn_coe] at this
     rw [this, hgx, map_zero]
   rw [Derivation.leibniz, hfy, smul_zero, add_zero, smul_eq_mul, Derivation.leibniz, hcomm, smul_zero,
     zero_add, smul_eq_mul]

@@ -83,7 +83,7 @@ theorem dLdR_pq (k j : ℕ) (F : Λ₂) :
 /-- `N_k (p_j p̃_j F) = p_j p̃_j N_k F + 2 [k = j] p_j p̃_j F`. -/
 theorem Nk_pq (k j : ℕ) (F : Λ₂) :
     Nk k (pq j * F) = pq j * Nk k F + if k = j then (2 : ℚ) • (pq j * F) else 0 := by
-  simp only [Nk, LinearMap.add_apply, Module.End.mul_apply, mulL, LinearMap.mulLeft_apply, dL, dR,
+  simp only [Nk, LinearMap.add_apply, mul_apply_eq_comp, mulL, LinearMap.mulLeft_apply, dL, dR,
     pq, Derivation.coeFn_coe, Derivation.leibniz, smul_eq_mul, dL_X, dR_X, dL_Xr, dR_Xl]
   by_cases h : k = j
   · subst h; simp [two_smul]; ring
@@ -92,7 +92,7 @@ theorem Nk_pq (k j : ℕ) (F : Λ₂) :
 /-- `N_k ∂_{p_j} ∂_{p̃_j} F = ∂_{p_j} ∂_{p̃_j} N_k F − 2 [k = j] ∂_{p_j} ∂_{p̃_j} F`. -/
 theorem Nk_dLdR (k j : ℕ) (F : Λ₂) :
     Nk k (dL j (dR j F)) = dL j (dR j (Nk k F)) - if k = j then (2 : ℚ) • dL j (dR j F) else 0 := by
-  simp only [Nk, LinearMap.add_apply, Module.End.mul_apply, mulL, LinearMap.mulLeft_apply, dL, dR,
+  simp only [Nk, LinearMap.add_apply, mul_apply_eq_comp, mulL, LinearMap.mulLeft_apply, dL, dR,
     Derivation.coeFn_coe, Derivation.leibniz, smul_eq_mul, map_add, dL_X, dR_X, dL_Xr, dR_Xl,
     pd_ite, mul_zero, add_zero, zero_add]
   have hA : pderiv (Sum.inl j) (pderiv (Sum.inr j) (pderiv (Sum.inl k) F)) =
@@ -123,7 +123,7 @@ theorem smul_comm_smul (c d : ℚ) (A B : End₂) :
 theorem T_pq (k j : ℕ) :
     (dL k * dR k) * mulL (pq j) - mulL (pq j) * (dL k * dR k) = if k = j then 1 + Nk k else 0 := by
   refine LinearMap.ext fun F => ?_
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, mulL, LinearMap.mulLeft_apply, dLdR_pq]
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, mulL, LinearMap.mulLeft_apply, dLdR_pq]
   split_ifs with h
   · subst h; simp [Nk, mulL]; abel
   · simp
@@ -131,13 +131,13 @@ theorem T_pq (k j : ℕ) :
 theorem Nk_mul_pq (k j : ℕ) :
     Nk k * mulL (pq j) - mulL (pq j) * Nk k = if k = j then (2 : ℚ) • mulL (pq j) else 0 := by
   refine LinearMap.ext fun F => ?_
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, mulL, LinearMap.mulLeft_apply, Nk_pq]
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, mulL, LinearMap.mulLeft_apply, Nk_pq]
   split_ifs with h <;> simp
 
 theorem Nk_mul_dLdR (k j : ℕ) :
     Nk k * (dL j * dR j) - (dL j * dR j) * Nk k = if k = j then (-2 : ℚ) • (dL j * dR j) else 0 := by
   refine LinearMap.ext fun F => ?_
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, Nk_dLdR]
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, Nk_dLdR]
   split_ifs with h <;> simp [neg_smul]
 
 theorem deltaK_eq_Ico (K : ℕ) : deltaK K = ∑ k ∈ Ico 1 K, (k : ℚ) • (dL k * dR k) := by

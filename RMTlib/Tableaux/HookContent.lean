@@ -83,7 +83,7 @@ theorem binDet_succ {n : ℕ} (a : Fin (n + 1) → ℕ) :
   have hLM : ∀ i j, (L * M) i j =
       if h : (i : ℕ) < n then M i j - M ⟨i + 1, by omega⟩ j else M i j := by
     intro i j
-    rw [mul_apply]
+    rw [Matrix.mul_apply]
     split_ifs with h
     · rw [Fintype.sum_eq_add i ⟨i + 1, by omega⟩ (by simp [Fin.ext_iff]) (fun k hk => by
         simp only [hLdef, of_apply]

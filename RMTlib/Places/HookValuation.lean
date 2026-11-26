@@ -31,9 +31,10 @@ theorem padicValNat_finset_prod {ι : Type*} (p : ℕ) [Fact p.Prime] (s : Finse
     (hf : ∀ i ∈ s, f i ≠ 0) : padicValNat p (∏ i ∈ s, f i) = ∑ i ∈ s, padicValNat p (f i) := by
   classical
   induction s using Finset.induction_on with
-  | empty => simp
+  | empty => simp [Nat.padicValNat_def]
   | insert a s ha ih =>
-    rw [prod_insert ha, sum_insert ha, padicValNat.mul (hf a (mem_insert_self a s))
+    simp only [Nat.padicValNat_def] at ih ⊢
+    rw [prod_insert ha, sum_insert ha, Nat.multiplicity_mul (hf a (mem_insert_self a s))
       (prod_ne_zero_iff.mpr fun i hi => hf i (mem_insert_of_mem hi)),
       ih fun i hi => hf i (mem_insert_of_mem hi)]
 
@@ -61,7 +62,8 @@ theorem padicValNat_hookProd_add_fSYT (p : ℕ) [Fact p.Prime] {ν : Fin N → �
     have := hook_length_formula ν hν
     rw [h, zero_mul] at this
     exact (Nat.factorial_ne_zero _) this.symm
-  rw [← hook_length_formula ν hν, padicValNat.mul hf hH, add_comm]
+  simp only [Nat.padicValNat_def]
+  rw [← hook_length_formula ν hν, Nat.multiplicity_mul hf hH, add_comm]
 
 /-- **At every prime, box by box**: `v_p H(λ) = Σ_{□ ∈ λ} v_p h(□)`. -/
 @[frame_pattern]

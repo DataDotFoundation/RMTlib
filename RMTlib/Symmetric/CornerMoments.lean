@@ -612,7 +612,7 @@ theorem down_one_content_comm_row_two :
     intro r; simp [downVec, c2, e1]
   have d1 : ∀ r : ℤ → ℚ, downVec r (![1] : Fin 1 → ℕ) = Finsupp.single ![0] (r 0) := by
     intro r; simp [downVec, c1, e2]
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, down_single, one_smul, d2]
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, down_single, one_smul, d2]
   simp [d1]
 
 /-! ## Transposition -/

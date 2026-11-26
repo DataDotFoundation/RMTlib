@@ -76,7 +76,7 @@ theorem padicValNat_prod_hooks {p : ℕ} [hp : Fact p.Prime] (μ : YoungDiagram)
     have h2 := hb h hh
     refine ⟨by omega, ?_⟩
     zify; rw [Int.toNat_of_nonneg h1.le]; exact h2
-  rw [← Nat.factorization_def _ hp.out, factorization_prod_eq_sum_card hp.out _ hm]
+  rw [Nat.padicValNat_def, ← Nat.factorization_def _ hp.out, factorization_prod_eq_sum_card hp.out _ hm]
   refine sum_congr rfl fun j _ => ?_
   rw [← card_hooks_dvd_eq_div (pow_pos hp.out.pos j) μ, Multiset.filter_map, Multiset.card_map]
   congr 1

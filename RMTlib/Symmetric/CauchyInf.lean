@@ -506,7 +506,7 @@ theorem summable_schurInf_mul {x y : ℕ → ι} (hx : Function.Injective x) :
   have h1 : coeff p.1 (schurInf R x μ) ≠ 0 := left_ne_zero_of_mul hne
   rw [schurInf, coeff_tsum_mono (finiteFibres_ssytWt hx μ)] at h1
   have hne' : ((finiteFibres_ssytWt hx μ p.1).toFinset).Nonempty := by
-    rw [Finset.nonempty_iff_ne_empty]
+    rw [← Finset.ne_empty_iff_nonempty]
     intro h
     apply h1
     rw [h]
