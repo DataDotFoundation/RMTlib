@@ -226,4 +226,17 @@ def vacuumPointCharge : Claim where
     factorisation muInf = mu_∞ · j inferred from the closed form)"
   supports := [``places, ``bosonFermion]
 
+/-- **F14**: the place enters a content weight as **point × charge**,
+`T^{|λ|} · ∏ (N + c)` (`contentProd_point_charge`), one argument for `∞` and for the charged finite
+places; the uncharged Euler factor is a limit of it, not an instance (RH-Dual #132:
+`tendsto_rescaled_content`). On the proof's `LocalDatum` twins: charge 4/4, point 1/2, topology 0/3
+(transport blocked at summation). -/
+def pointChargeFactorisation : Claim where
+  text := "a place's content weight is point^|λ| times the charge's content product; at ∞ only the \
+    charge acts, at an unramified place only the point (as a limit)"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.Symmetric.contentProd_point_charge, ``RMT.Symmetric.contentProd_const]
+  supports := [``places]
+
 end RMT.Claims

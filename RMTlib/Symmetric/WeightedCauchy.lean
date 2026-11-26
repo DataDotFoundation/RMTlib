@@ -221,6 +221,14 @@ theorem contentProd_mul (f g : ℤ → R) (μ : YoungDiagram) :
     contentProd (fun z => f z * g z) μ = contentProd f μ * contentProd g μ := by
   simp [contentProd, Finset.prod_mul_distrib]
 
+/-- **Point times charge** (RH-Dual#11, #132): the content weight `c ↦ T · (N + c)` factors as the
+point `T` to the size times the charge's content product, `T^{|μ|} · ∏ (N + c)`. At `∞` the point is
+`1` and only the charge acts; at an unramified finite place the charge is absent and only the point
+acts (`contentProd_const`); a charged finite place has both. -/
+theorem contentProd_point_charge {R : Type*} [CommRing R] (T N : R) (μ : YoungDiagram) :
+    contentProd (fun z => T * (N + z)) μ = T ^ μ.cells.card * contentProd (fun z => N + z) μ := by
+  rw [contentProd_mul (fun _ => T) (fun z => N + z), contentProd_const]
+
 end Content
 
 section Zero
