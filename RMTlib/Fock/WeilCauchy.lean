@@ -167,7 +167,7 @@ theorem HK_CK (K : ℕ) : HK K * CK K - CK K * HK K = (2 : ℚ) • CK K := by
   rw [Finset.sum_comm]
   simp only [Finset.sum_ite_eq', Finset.smul_sum]
   refine Finset.sum_congr rfl fun j hj => ?_
-  rw [if_pos hj, smul_comm]
+  rw [ite_eq_left hj, smul_comm]
 
 /-- **`[H, δ] = −2δ`**. -/
 theorem HK_deltaK (K : ℕ) : HK K * deltaK K - deltaK K * HK K = (-2 : ℚ) • deltaK K := by
@@ -178,7 +178,7 @@ theorem HK_deltaK (K : ℕ) : HK K * deltaK K - deltaK K * HK K = (-2 : ℚ) •
   rw [Finset.sum_comm]
   simp only [Finset.sum_ite_eq', Finset.smul_sum]
   refine Finset.sum_congr rfl fun j hj => ?_
-  rw [if_pos hj, smul_comm]
+  rw [ite_eq_left hj, smul_comm]
 
 /-! ## Against the twisted-diagonal `sl_2` -/
 
@@ -265,7 +265,7 @@ theorem CK_X1 (a b : ℚ) (K : ℕ) :
       simp [pcL, mulL_C]
       module
     · have hK1 : K - 1 ≠ 0 := by omega
-      simp only [if_pos h2, if_pos (by omega : 2 ≤ K + 1), pcL, hK1, if_false, Nat.add_sub_cancel,
+      simp only [ite_eq_left h2, ite_eq_left (by omega : 2 ≤ K + 1), pcL, hK1, ite_false, Nat.add_sub_cancel,
         mul_smul_comm, mulL_smul]
       rw [show X (Sum.inr K) * X (Sum.inl (K - 1)) = X (Sum.inl (K - 1)) * X (Sum.inr K) by ring]
       rw [smul_add, smul_neg, smul_smul, smul_smul, inv_mul_cancel₀ (by positivity)]
@@ -288,7 +288,7 @@ theorem CK_Xm1 (a b : ℚ) (K : ℕ) :
       rw [mul_comm (X (Sum.inr 1))]
       abel
     · have hK1 : K - 1 ≠ 0 := by omega
-      simp only [if_pos h2, if_pos (by omega : 2 ≤ K + 1), pcR, hK1, if_false, Nat.add_sub_cancel,
+      simp only [ite_eq_left h2, ite_eq_left (by omega : 2 ≤ K + 1), pcR, hK1, ite_false, Nat.add_sub_cancel,
         mul_smul_comm, mulL_smul]
       rw [show X (Sum.inr K) * X (Sum.inl (K + 1)) = X (Sum.inl (K + 1)) * X (Sum.inr K) by ring]
       rw [smul_add, smul_neg, smul_smul, smul_smul, inv_mul_cancel₀ (by positivity)]

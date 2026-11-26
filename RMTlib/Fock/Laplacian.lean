@@ -101,16 +101,16 @@ theorem coeff_hX (k : ℕ) (M : Fin N → Fin N → ℕ) :
   · have hmem : (⟨rowSum M, M⟩ : Σ _ : Fin N → ℕ, Fin N → Fin N → ℕ) ∈
         (Nat.antidiagonalTuple N k).sigma (fun α => margins N α α) :=
       mem_sigma.mpr ⟨Nat.mem_antidiagonalTuple.mpr hc.2, hc.1⟩
-    rw [sum_eq_single_of_mem _ hmem, if_pos rfl]
+    rw [sum_eq_single_of_mem _ hmem, ite_eq_left rfl]
     rintro ⟨α, M'⟩ hp hne
-    rw [if_neg]
+    rw [ite_eq_right]
     intro h
     apply hne
     obtain rfl : M = M' := (matExp_injective h).symm
     have hα := (mem_margins.mp (mem_sigma.mp hp).2).1
     obtain rfl : α = rowSum M := funext fun i => (hα i).symm
     rfl
-  · refine sum_eq_zero fun p hp => if_neg fun h => hc ?_
+  · refine sum_eq_zero fun p hp => ite_eq_right fun h => hc ?_
     obtain ⟨α, M'⟩ := p
     obtain rfl : M = M' := (matExp_injective h).symm
     have hp' := mem_sigma.mp hp
@@ -132,14 +132,14 @@ theorem hX_zero : hX N 0 = 1 := by
   · have hm : matExp M = 0 := by rw [hM]; ext; rfl
     have hc : HCond 0 M := by
       refine ⟨fun j => ?_, ?_⟩ <;> simp [rowSum, hM]
-    rw [if_pos hc, hm, if_pos rfl]
+    rw [ite_eq_left hc, hm, ite_eq_left rfl]
     simp [hCoeff, rowSum, hM]
   · have hm : matExp M ≠ 0 := by
       intro h
       apply hM
       funext i j
       exact congrArg (fun f => f (i, j)) h
-    rw [if_neg (Ne.symm hm), if_neg]
+    rw [ite_eq_right (Ne.symm hm), ite_eq_right]
     rintro ⟨-, h0⟩
     apply hM
     funext i j
@@ -157,7 +157,7 @@ theorem matExp_bump (M : Fin N → Fin N → ℕ) (a : Fin N) :
   simp only [matExp_apply, bump, Finsupp.add_apply, Finsupp.single_apply, Prod.ext_iff]
   by_cases h : i = a ∧ j = a
   · obtain ⟨rfl, rfl⟩ := h; simp
-  · rw [if_neg h, if_neg (by tauto)]
+  · rw [ite_eq_right h, ite_eq_right (by tauto)]
 
 theorem sum_ite_eq_single (a : Fin N) (j : Fin N) :
     (∑ i : Fin N, if i = a ∧ j = a then 1 else 0) = if j = a then 1 else 0 := by
@@ -182,16 +182,16 @@ theorem colSum_bump (M : Fin N → Fin N → ℕ) (a j : Fin N) :
 theorem hCond_bump (k : ℕ) (M : Fin N → Fin N → ℕ) (a : Fin N) :
     HCond (k + 1) (bump M a) ↔ HCond k M := by
   unfold HCond
-  simp only [rowSum_bump, colSum_bump, sum_add_distrib, sum_ite_eq', mem_univ, if_true,
+  simp only [rowSum_bump, colSum_bump, sum_add_distrib, sum_ite_eq', mem_univ, ite_true,
     add_left_inj]
 
 theorem prod_factorial_bump_vec (α : Fin N → ℕ) (a : Fin N) :
     (∏ i, (α i + if i = a then 1 else 0).factorial) = (α a + 1) * ∏ i, (α i).factorial := by
   rw [← mul_prod_erase univ _ (mem_univ a), ← mul_prod_erase univ (fun i => (α i).factorial)
-    (mem_univ a), if_pos rfl, Nat.factorial_succ, mul_assoc]
+    (mem_univ a), ite_eq_left rfl, Nat.factorial_succ, mul_assoc]
   congr 2
   refine prod_congr rfl fun i hi => ?_
-  rw [if_neg (ne_of_mem_erase hi), add_zero]
+  rw [ite_eq_right (ne_of_mem_erase hi), add_zero]
 
 theorem prod_factorial_bump (M : Fin N → Fin N → ℕ) (a : Fin N) :
     (∏ i, ∏ j, (bump M a i j).factorial) = (M a a + 1) * ∏ i, ∏ j, (M i j).factorial := by
@@ -200,17 +200,17 @@ theorem prod_factorial_bump (M : Fin N → Fin N → ℕ) (a : Fin N) :
     intro i
     by_cases hi : i = a
     · subst hi
-      rw [if_pos rfl, ← prod_factorial_bump_vec]
+      rw [ite_eq_left rfl, ← prod_factorial_bump_vec]
       refine prod_congr rfl fun j _ => ?_
       by_cases hj : j = i <;> simp [bump, hj]
-    · rw [if_neg hi]
+    · rw [ite_eq_right hi]
       refine prod_congr rfl fun j _ => ?_
       simp [bump, hi]
   simp_rw [h]
   rw [← mul_prod_erase univ _ (mem_univ a), ← mul_prod_erase univ
-    (fun i => ∏ j, (M i j).factorial) (mem_univ a), if_pos rfl, mul_assoc]
+    (fun i => ∏ j, (M i j).factorial) (mem_univ a), ite_eq_left rfl, mul_assoc]
   congr 2
-  exact prod_congr rfl fun i hi => if_neg (ne_of_mem_erase hi)
+  exact prod_congr rfl fun i hi => ite_eq_right (ne_of_mem_erase hi)
 
 theorem hCoeff_bump (M : Fin N → Fin N → ℕ) (a : Fin N) :
     hCoeff (rowSum (bump M a)) (bump M a) * ((M a a : ℚ) + 1)
@@ -298,7 +298,7 @@ theorem sum_det_updateRow_mul {n : Type*} [Fintype n] [DecidableEq n] (M Cm : Ma
     rw [sum_congr rfl fun l _ => h2 l]
     simp only [Matrix.adjugate_mul, Matrix.smul_apply, Matrix.one_apply, smul_eq_mul, mul_ite,
       mul_one, mul_zero]
-    rw [sum_ite_eq, if_pos (mem_univ _)]
+    rw [sum_ite_eq, ite_eq_left (mem_univ _)]
   simp_rw [h]
   rw [← sum_mul, Matrix.trace]
   rfl
@@ -317,11 +317,11 @@ theorem trD_hZ (z : ℤ) : trD N (hZ N z) = ((N : ℚ) + z - 1) • hZ N (z - 1)
   by_cases h0 : 0 ≤ z - 1
   · obtain ⟨k, hk⟩ : ∃ k : ℕ, z = k + 1 := ⟨(z - 1).toNat, by omega⟩
     subst hk
-    rw [if_pos (by omega), if_pos h0, show ((k : ℤ) + 1).toNat = k + 1 by omega,
+    rw [ite_eq_left (by omega), ite_eq_left h0, show ((k : ℤ) + 1).toNat = k + 1 by omega,
       show ((k : ℤ) + 1 - 1).toNat = k by omega, trD_hX]
     push_cast
     ring_nf
-  · rw [if_neg h0, smul_zero]
+  · rw [ite_eq_right h0, smul_zero]
     split_ifs with h1
     · rw [show z.toNat = 0 by omega, hX_zero, Derivation.map_one_eq_zero]
     · exact map_zero _
@@ -346,15 +346,15 @@ theorem shift_row_eq {l : ℕ} (lam : Fin l → ℤ) (i j : Fin l) :
   simp only [Matrix.of_apply, mul_ite, mul_zero]
   by_cases hj : (j : ℕ) = 0
   · rw [hj, Nat.cast_zero, zero_mul]
-    refine (sum_eq_zero fun a _ => if_neg (by omega)).symm
+    refine (sum_eq_zero fun a _ => ite_eq_right (by omega)).symm
   · have hlt : (j : ℕ) - 1 < l := by omega
     rw [sum_eq_single ⟨(j : ℕ) - 1, hlt⟩]
-    · rw [if_pos (by simp; omega), mul_comm]
+    · rw [ite_eq_left (by simp; omega), mul_comm]
       congr 2
       push_cast [Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hj)]
       ring
     · intro a _ ha
-      rw [if_neg]
+      rw [ite_eq_right]
       intro h
       apply ha
       ext
@@ -426,7 +426,7 @@ theorem sX_zero (l : ℕ) : sX N (fun _ : Fin l => (0 : ℤ)) = 1 := by
   · intro i j hij
     have : (j : ℕ) < i := hij
     simp only [Matrix.of_apply, hZ]
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
 
 /-- **Removing a box that is not a corner gives `0`**: the Jacobi–Trudi determinant of `λ − e_i`
 has two equal rows, or a zero last row. -/
@@ -442,7 +442,7 @@ theorem sX_removeBox_eq_zero {l : ℕ} {ν : Fin l → ℕ} (hν : Antitone ν) 
     have heq : ν i' = ν i := by
       rcases hi with h0 | h1
       · omega
-      · rw [dif_pos h] at h1
+      · rw [dite_eq_left h] at h1
         have : ¬ ν i' < ν i := by simpa using h1
         omega
     have hne : i ≠ i' := by simp [Fin.ext_iff, i']
@@ -454,10 +454,10 @@ theorem sX_removeBox_eq_zero {l : ℕ} {ν : Fin l → ℕ} (hν : Antitone ν) 
   · have h0 : ν i = 0 := by
       rcases hi with h0 | h1
       · omega
-      · rw [dif_neg h] at h1; simp at h1
+      · rw [dite_eq_right h] at h1; simp at h1
     refine Matrix.det_eq_zero_of_row_eq_zero i fun j => ?_
     simp only [Matrix.of_apply, Function.update_self, h0, hZ]
-    rw [if_neg (by have := j.isLt; omega)]
+    rw [ite_eq_right (by have := j.isLt; omega)]
 
 variable (N) in
 /-- The archimedean weight `∏_{(i, c)} (N + c − i)` of `ν`, rows of any length `l`. -/
@@ -488,12 +488,12 @@ theorem fischer_trX_pow_sX {l : ℕ} (m : ℕ) :
       have := single_le_sum (fun j _ => Nat.zero_le (ν j)) (mem_univ i); simp at this ⊢; omega
     subst h0
     simp only [pow_zero, Pi.zero_apply, Nat.cast_zero]
-    rw [sX_zero, fischer_one_one, fSYT, if_pos (by simp)]
+    rw [sX_zero, fischer_one_one, fSYT, ite_eq_left (by simp)]
     simp [wQ]
   | succ m ih =>
     intro ν hν hs
     classical
-    rw [pow_succ', fischer_trX_mul_sX, fSYT, if_neg (by omega), Nat.cast_sum, sum_mul, sum_filter]
+    rw [pow_succ', fischer_trX_mul_sX, fSYT, ite_eq_right (by omega), Nat.cast_sum, sum_mul, sum_filter]
     refine sum_congr rfl fun i _ => ?_
     split_ifs with hc
     · obtain ⟨hanti, hpos⟩ := removeBox_antitone hν hc

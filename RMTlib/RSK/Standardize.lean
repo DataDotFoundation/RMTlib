@@ -190,7 +190,7 @@ theorem stPos_eq {i k : Nat} (hk : k < (stSorted bs).length) (h : ((stSorted bs)
   obtain ⟨h1, e⟩ := stPos_spec bs hi
   have e' : (stSorted bs)[k] = (bs.getD i 0, i) := by
     have := mem_stSorted bs (List.getElem_mem hk); rw [h] at this; exact Prod.ext this.2 h
-  exact (List.getElem_inj (stSorted_nodup bs)).mp (e.trans e'.symm)
+  exact (List.Nodup.getElem_inj (stSorted_nodup bs)).mp (e.trans e'.symm)
 
 /-- The standardized word is a permutation of `0, …, n-1`. -/
 theorem standardize_perm : (standardize bs).Perm (List.range (standardize bs).length) := by
@@ -332,7 +332,7 @@ theorem insT_standardize (bs : List Nat) :
       rw [← hx] at e
       rw [List.getD_eq_getElem?_getD, List.getElem?_eq_getElem (by omega),
         List.getD_eq_getElem?_getD, List.getElem?_eq_getElem (by omega)] at e
-      have := (List.getElem_inj hnd).mp (by simpa using e.symm); omega
+      have := (List.Nodup.getElem_inj hnd).mp (by simpa using e.symm); omega
     have hcl : ∀ z ∈ (insT (standardize bs) i).flatten, f z = f (stPos bs i) → z < stPos bs i := by
       intro z hz e
       obtain ⟨k, hk, hkl, rfl⟩ := mem_take_getD (hP.mem_iff.mp hz)

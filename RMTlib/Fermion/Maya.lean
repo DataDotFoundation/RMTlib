@@ -117,7 +117,7 @@ theorem seaWeight_of_nonpos (φ : ℤ → G) {A : ℤ} (hA : A ≤ 0) :
 /-- Filling the site `A` multiplies the vacuum weight by `φ(A)`. -/
 theorem seaWeight_succ (φ : ℤ → G) (A : ℤ) : seaWeight φ (A + 1) = seaWeight φ A * φ A := by
   rcases le_or_gt 0 A with h | h
-  · rw [seaWeight, if_pos (by omega), seaWeight, if_pos h]
+  · rw [seaWeight, ite_eq_left (by omega), seaWeight, ite_eq_left h]
     have e : Ico 0 (A + 1) = insert A (Ico 0 A) := by
       ext x; simp only [mem_Ico, mem_insert]; omega
     rw [e, prod_insert (by simp), mul_comm]

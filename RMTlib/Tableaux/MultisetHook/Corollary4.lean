@@ -165,7 +165,7 @@ theorem rot_count {t s : ℕ} (hs : s ≤ t) (x : ℕ) (hx : x < t) :
     have : (range x).filter (fun y => y < s ∧ s ≤ x) = range s := by
       ext y; simp only [mem_filter, mem_range]; omega
     rw [this, card_range]
-  · exact sum_eq_zero fun y _ => if_neg (by omega)
+  · exact sum_eq_zero fun y _ => ite_eq_right (by omega)
 
 /-- **The rotation count is `[t ≡ 3 mod 4]` mod 2**: `∑_{y<x<t} [(y − s) mod t < (x − s) mod t]`
 with `s = ⌊t/2⌋` is `(t choose 2) − s(t − s)`. -/
@@ -191,7 +191,7 @@ theorem rot_parity (t : ℕ) :
   rw [h3]
   obtain ⟨m, hm | hm⟩ := Nat.even_or_odd' t
   · subst hm
-    rw [show 2 * m / 2 = m by omega, show 2 * m - m = m by omega, if_neg (by omega), sub_zero]
+    rw [show 2 * m / 2 = m by omega, show 2 * m - m = m by omega, ite_eq_right (by omega), sub_zero]
     have : ∑ x ∈ range (2 * m), (x : ℤ) - m * m = m * (m - 1) := by push_cast at h2; linarith
     rw [this]; exact Int.even_mul_pred_self m
   · subst hm
@@ -200,9 +200,9 @@ theorem rot_parity (t : ℕ) :
       push_cast at h2 ⊢; linarith
     rw [this]
     rcases Nat.even_or_odd m with hme | hmo
-    · rw [if_neg (by obtain ⟨k, hk⟩ := hme; omega), sub_zero]
+    · rw [ite_eq_right (by obtain ⟨k, hk⟩ := hme; omega), sub_zero]
       exact (Int.even_mul.mpr (Or.inl (by exact_mod_cast hme.natCast)))
-    · rw [if_pos (by obtain ⟨k, hk⟩ := hmo; omega)]
+    · rw [ite_eq_left (by obtain ⟨k, hk⟩ := hmo; omega)]
       obtain ⟨k, hk⟩ := hmo
       subst hk; push_cast
       exact ⟨2 * k * k + 2 * k, by ring⟩
@@ -220,9 +220,9 @@ theorem cntLt_pt (t : ℕ) (k : ℤ) : cntLt t (pt k) = if 1 ≤ k ∧ k < t the
 theorem cntLt_ray {t : ℕ} {r : ℤ} (h0 : 0 < r) (h1 : r < t) (n : ℕ) :
     cntLt t (ray t r (n + 1)) = 1 := by
   rw [ray, map_sum, sum_range_succ', sum_eq_zero, zero_add]
-  · rw [cntLt_pt, if_pos (by push_cast; omega)]
+  · rw [cntLt_pt, ite_eq_left (by push_cast; omega)]
   · intro j _
-    rw [cntLt_pt, if_neg]
+    rw [cntLt_pt, ite_eq_right]
     have : (0 : ℤ) ≤ t * j := by positivity
     rintro ⟨-, h⟩; push_cast at h; nlinarith
 
@@ -239,8 +239,8 @@ theorem sum_map_ite_one (H : Multiset ℤ) (p : ℤ → Prop) [DecidablePred p] 
   | cons a H ih =>
     rw [Multiset.map_cons, Multiset.sum_cons, ih, Multiset.filter_cons]
     by_cases hp : p a
-    · rw [if_pos hp, if_pos hp]; simp; ring
-    · rw [if_neg hp, if_neg hp]; simp
+    · rw [ite_eq_left hp, ite_eq_left hp]; simp; ring
+    · rw [ite_eq_right hp, ite_eq_right hp]; simp
 
 /-- **The hooks shorter than `t`**: one per ray, so `∑_{b<a in V} ⌊(a − b)/t⌋`. -/
 theorem card_hooks_lt {t : ℕ} (ht : 0 < t) {μ : YoungDiagram} (hs : Stable t μ) :
@@ -349,14 +349,14 @@ theorem sign_parity {t : ℕ} (ht : 0 < t) {μ : YoungDiagram} (hs : Stable t μ
       subst this; omega)
     simp only [K]
     rcases lt_or_gt_of_ne hne with hlt | hgt
-    · rw [min_eq_left hlt.le, max_eq_right hlt.le, if_pos hlt]
+    · rw [min_eq_left hlt.le, max_eq_right hlt.le, ite_eq_left hlt]
       by_cases h : (a % t - s) % t < (b % t - s) % t
-      · rw [if_pos h, if_neg (by omega)]; ring
-      · rw [if_neg h, if_pos (by omega)]; ring
-    · rw [min_eq_right hgt.le, max_eq_left hgt.le, if_neg (by omega)]
+      · rw [ite_eq_left h, ite_eq_right (by omega)]; ring
+      · rw [ite_eq_right h, ite_eq_left (by omega)]; ring
+    · rw [min_eq_right hgt.le, max_eq_left hgt.le, ite_eq_right (by omega)]
       by_cases h : (b % t - s) % t < (a % t - s) % t
-      · rw [if_pos h]; ring
-      · rw [if_neg h]; ring
+      · rw [ite_eq_left h]; ring
+      · rw [ite_eq_right h]; ring
   have hterm' : ∀ a ∈ V, ∀ b ∈ V.filter (· < a),
       (quo t (a - b) : ℤ) + (if cls t b < cls t a then 1 else 0) =
         ((a / t + b / t) + K (a % t) (b % t)) +

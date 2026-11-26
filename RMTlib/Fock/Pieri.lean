@@ -50,7 +50,7 @@ theorem jt_last_row {l : ℕ} (lam : Fin (l + 1) → ℤ) (hl : lam (Fin.last l)
   by_cases hj : j = Fin.last l
   · subst hj
     simp [hZ, hX_zero]
-  · rw [Pi.single_apply, if_neg hj, hZ, if_neg]
+  · rw [Pi.single_apply, ite_eq_right hj, hZ, ite_eq_right]
     have := Fin.val_lt_last hj
     simp only [Fin.val_last]
     omega
@@ -75,20 +75,20 @@ theorem trX_mul_sX {l : ℕ} (lam : Fin (l + 1) → ℤ) (hl : lam (Fin.last l) 
     · subst hj
       rw [sum_eq_zero fun a _ => by
         simp only [S, Matrix.of_apply]
-        rw [if_neg (by have := a.isLt; simp only [Fin.val_last]; omega), mul_zero]]
+        rw [ite_eq_right (by have := a.isLt; simp only [Fin.val_last]; omega), mul_zero]]
       simp only [Pi.single_eq_same, mul_one, zero_add, v, Fin.val_last]
       congr 1
       ring
     · have hlt : (j : ℕ) + 1 < l + 1 := by have := Fin.val_lt_last hj; omega
       rw [sum_eq_single ⟨(j : ℕ) + 1, hlt⟩]
-      · simp only [S, Matrix.of_apply, A, Pi.single_apply, if_neg hj, mul_zero, add_zero]
-        rw [if_pos trivial, mul_one]
+      · simp only [S, Matrix.of_apply, A, Pi.single_apply, ite_eq_right hj, mul_zero, add_zero]
+        rw [ite_eq_left trivial, mul_one]
         congr 1
         push_cast
         ring
       · intro a _ ha
         simp only [S, Matrix.of_apply]
-        rw [if_neg, mul_zero]
+        rw [ite_eq_right, mul_zero]
         intro h
         exact ha (Fin.ext h)
       · simp
@@ -126,7 +126,7 @@ theorem trX_mul_sX {l : ℕ} (lam : Fin (l + 1) → ℤ) (hl : lam (Fin.last l) 
   simp_rw [Matrix.det_updateRow_add]
   rw [sum_add_distrib, sum_det_updateRow_mul, hS, zero_mul, zero_add]
   simp_rw [hcorr]
-  rw [sum_ite_eq', if_pos (mem_univ _)]
+  rw [sum_ite_eq', ite_eq_left (mem_univ _)]
   rfl
 
 /-- Adding a box to row `i` of a partition when the row above has the same length gives two equal
@@ -138,7 +138,7 @@ theorem sX_addBox_eq_zero {l : ℕ} {ν : Fin l → ℕ} (hν : Antitone ν) {i 
   have hpos : 0 < (i : ℕ) := by
     by_contra h0
     simp [IsAddable, h0] at hi
-  simp only [IsAddable, dif_pos hpos, decide_eq_false_iff_not, not_lt] at hi
+  simp only [IsAddable, dite_eq_left hpos, decide_eq_false_iff_not, not_lt] at hi
   set i' : Fin l := ⟨(i : ℕ) - 1, by omega⟩
   have hne : i' ≠ i := by simp [Fin.ext_iff, i']; omega
   have heq : ν i' = ν i := le_antisymm hi (hν (Fin.le_def.mpr (by simp [i'])))

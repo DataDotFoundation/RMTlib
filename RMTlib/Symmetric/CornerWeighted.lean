@@ -76,25 +76,25 @@ theorem commutator_weighted_single {ν : Fin N → ℕ} (hν : Antitone ν) (r u
     rw [upW_single, one_smul, upVecW, map_sum]
     refine sum_congr rfl fun i _ => ?_
     by_cases hi : RMT.IsAddable ν i
-    · rw [if_pos hi, down_single, downVec, smul_sum]
+    · rw [ite_eq_left hi, down_single, downVec, smul_sum]
       refine sum_congr rfl fun j _ => ?_
       simp only [hT1, hi, Bool.true_and]
       split_ifs
       · rw [Finsupp.smul_single, smul_eq_mul]
       · rw [smul_zero]
-    · rw [if_neg hi, map_zero]
+    · rw [ite_eq_right hi, map_zero]
       exact (sum_eq_zero fun j _ => by simp [hT1, hi]).symm
   have h2 : upW N u (down N r (Finsupp.single ν 1)) = ∑ i, ∑ j, T2 i j := by
     rw [sum_comm, down_single, one_smul, downVec, map_sum]
     refine sum_congr rfl fun j _ => ?_
     by_cases hj : RMT.IsCorner ν j
-    · rw [if_pos hj, upW_single, upVecW, smul_sum]
+    · rw [ite_eq_left hj, upW_single, upVecW, smul_sum]
       refine sum_congr rfl fun i _ => ?_
       simp only [hT2, hj, Bool.true_and]
       split_ifs
       · rw [Finsupp.smul_single, smul_eq_mul]
       · rw [smul_zero]
-    · rw [if_neg hj, map_zero]
+    · rw [ite_eq_right hj, map_zero]
       exact (sum_eq_zero fun i _ => by simp [hT2, hj]).symm
   rw [h1, h2, ← sum_sub_distrib]
   simp_rw [← sum_sub_distrib]
@@ -121,18 +121,18 @@ theorem commutator_weighted_single {ν : Fin N → ℕ} (hν : Antitone ν) (r u
     have ha' := RMT.isAddable_removeBox hν hpos
     have eR : ((RMT.removeBox ν i i : ℕ) : ℤ) - i = (ν i : ℤ) - 1 - i := by
       simp [RMT.removeBox]; omega
-    simp only [ha, hc, hc', ha', Bool.true_and, if_true, RMT.removeBox_addBox,
+    simp only [ha, hc, hc', ha', Bool.true_and, ite_true, RMT.removeBox_addBox,
       RMT.addBox_removeBox hpos, eA, eR, ← Finsupp.single_sub]
     rw [Finsupp.smul_single_one]; congr 1; ring
   · have hc' := RMT.isCorner_addBox hν i
-    simp only [ha, hc, hc', Bool.true_and, Bool.false_and, if_true, RMT.removeBox_addBox,
-      if_false, Bool.false_eq_true, sub_zero, eA]
+    simp only [ha, hc, hc', Bool.true_and, Bool.false_and, ite_true, RMT.removeBox_addBox,
+      ite_false, Bool.false_eq_true, sub_zero, eA]
     rw [Finsupp.smul_single_one]; congr 1; ring
   · have hpos := (RMT.removeBox_antitone hν hc).2
     have ha' := RMT.isAddable_removeBox hν hpos
     have eR : ((RMT.removeBox ν i i : ℕ) : ℤ) - i = (ν i : ℤ) - 1 - i := by
       simp [RMT.removeBox]; omega
-    simp only [ha, hc, ha', Bool.true_and, Bool.false_and, if_true, if_false, Bool.false_eq_true,
+    simp only [ha, hc, ha', Bool.true_and, Bool.false_and, ite_true, ite_false, Bool.false_eq_true,
       RMT.addBox_removeBox hpos, zero_sub, eR]
     rw [neg_smul, Finsupp.smul_single_one]
   · simp [ha, hc]
@@ -144,7 +144,7 @@ theorem commutator_weighted_of_not_full {ν : Fin N → ℕ} (hν : Antitone ν)
     down N r (upW N u (Finsupp.single ν 1)) - upW N u (down N r (Finsupp.single ν 1)) =
       (r 0 * u 0) • Finsupp.single ν 1 := by
   rw [commutator_weighted_single hν,
-    sum_corners_affine (r := fun c => r c * u c) hν hru, if_neg hfull, sub_zero]
+    sum_corners_affine (r := fun c => r c * u c) hν hru, ite_eq_right hfull, sub_zero]
 
 /-! ## sl₂: two affine weights -/
 
@@ -167,7 +167,7 @@ theorem commutator_weighted_affine_affine {ν : Fin N → ℕ} (hν : Antitone �
       (b * b' + 2 * (a * a') * ∑ i, (ν i : R)) • Finsupp.single ν 1 := by
   have hM : ∀ i, ν i ≤ univ.sup ν := fun i => le_sup (mem_univ i)
   rw [commutator_weighted_single hν,
-    sum_corners_eq_sum_charge (g := fun c : ℤ => (a * c + b) * (a' * c + b')) hν hM, if_neg hfull,
+    sum_corners_eq_sum_charge (g := fun c : ℤ => (a * c + b) * (a' * c + b')) hν hM, ite_eq_right hfull,
     sub_zero]
   congr 1
   have h : ∀ c : ℤ, (charge ν c : R) * ((a * c + b) * (a' * c + b')) =

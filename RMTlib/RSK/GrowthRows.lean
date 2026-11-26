@@ -381,7 +381,7 @@ theorem back_eq (top right : Nat → Part) (n : Nat) : ∀ i j,
     · simp [h1]
     · by_cases h2 : n ≤ j
       · simp [h1, h2]
-      · simp only [h1, h2, if_false]
+      · simp only [h1, h2, ite_false]
         rw [back_eq top right n (i + 1) j, back_eq top right n i (j + 1),
           back_eq top right n (i + 1) (j + 1)]
 termination_by i j => (n - i, n - j)

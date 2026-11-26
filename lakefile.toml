@@ -5,6 +5,8 @@ description = "Lean 4 library for random matrix theory in an extended sense: RSK
 keywords = ["random matrix theory", "Keating-Snaith", "RSK", "Young tableaux", "symmetric functions", "Fock space"]
 defaultTargets = ["RMTlib"]
 testDriver = "RMTlibTests"
+# Mathlib is built for the module system and RMTlib is not (yet): silence the per-import warning.
+allowNonModules = true
 
 [leanOptions]
 autoImplicit = false

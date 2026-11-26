@@ -176,12 +176,12 @@ theorem unins_scan_descend :
     simp [scan, Nested.unins, hne]
   · -- bump: the rows below are restored by the `descend` invariant, then the row
     intro x pre y ys below hxy ih hs _ hpre hg
-    rw [scan, if_pos hxy]
+    rw [scan, ite_eq_left hxy]
     simp only [Nested.unins]
     rw [ih hg, rowUnins_prefix x y pre ys hpre hxy hs]
   · -- move right: the `scan` invariant at the next state
     intro x pre y ys below hxy ih hs _ hpre hg
-    rw [scan, if_neg hxy]
+    rw [scan, ite_eq_right hxy]
     have e : (y :: pre).reverse ++ ys = pre.reverse ++ y :: ys := by simp
     rw [← e]
     exact ih (by rw [e]; exact hs) (by simp) (fun p hp => by

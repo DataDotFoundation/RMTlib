@@ -171,7 +171,7 @@ theorem isSquareSYT_fillOf : IsSquareSYT k (fillOf w hw) := by
     rw [← e, hwt] at this
     exact h.ne this.symm
   have hA := hw.1 (t.val + 1) h.le
-  rw [cnt_succ, cnt_succ, hwt, if_pos rfl, if_neg h.ne', cnt_fillOf] at hA
+  rw [cnt_succ, cnt_succ, hwt, ite_eq_left rfl, ite_eq_right h.ne', cnt_fillOf] at hA
   have := cnt_mono w (Fin.lt_def.mp htu).le i
   rw [cnt_fillOf] at this
   omega

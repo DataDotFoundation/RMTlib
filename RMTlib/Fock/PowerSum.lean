@@ -86,7 +86,7 @@ theorem pathD_pderiv (n : ℕ) (a b : Fin N) (v : Fin N × Fin N) (f : MvPolynom
 theorem pathD_one (a b : Fin N) (f : MvPolynomial (Fin N × Fin N) ℚ) :
     pathD 1 a b f = pderiv (a, b) f := by
   rw [pathD_succ]
-  simp only [pathD_zero, apply_ite (pderiv _), map_zero, sum_ite_eq', mem_univ, if_true]
+  simp only [pathD_zero, apply_ite (pderiv _), map_zero, sum_ite_eq', mem_univ, ite_true]
 
 theorem fischer_zero_left {σ : Type*} (g : MvPolynomial σ ℚ) : fischer 0 g = 0 := by
   simp [fischer]
@@ -139,7 +139,7 @@ theorem matExp_addE (M : Fin N → Fin N → ℕ) (a b : Fin N) :
   simp only [matExp_apply, addE, Finsupp.add_apply, Finsupp.single_apply, Prod.ext_iff]
   by_cases h : i = a ∧ j = b
   · obtain ⟨rfl, rfl⟩ := h; simp
-  · rw [if_neg h, if_neg fun h' => h ⟨h'.1.symm, h'.2.symm⟩]
+  · rw [ite_eq_right h, ite_eq_right fun h' => h ⟨h'.1.symm, h'.2.symm⟩]
 
 theorem rowSum_addE (M : Fin N → Fin N → ℕ) (a b i : Fin N) :
     rowSum (addE M a b) i = rowSum M i + if i = a then 1 else 0 := by
@@ -166,17 +166,17 @@ theorem prod_factorial_addE (M : Fin N → Fin N → ℕ) (a b : Fin N) :
     intro i
     by_cases hi : i = a
     · subst hi
-      rw [if_pos rfl, ← prod_factorial_bump_vec]
+      rw [ite_eq_left rfl, ← prod_factorial_bump_vec]
       refine prod_congr rfl fun j _ => ?_
       by_cases hj : j = b <;> simp [addE, hj]
-    · rw [if_neg hi]
+    · rw [ite_eq_right hi]
       refine prod_congr rfl fun j _ => ?_
       simp [addE, hi]
   simp_rw [h]
   rw [← mul_prod_erase univ _ (mem_univ a), ← mul_prod_erase univ
-    (fun i => ∏ j, (M i j).factorial) (mem_univ a), if_pos rfl, mul_assoc]
+    (fun i => ∏ j, (M i j).factorial) (mem_univ a), ite_eq_left rfl, mul_assoc]
   congr 2
-  exact prod_congr rfl fun i hi => if_neg (ne_of_mem_erase hi)
+  exact prod_congr rfl fun i hi => ite_eq_right (ne_of_mem_erase hi)
 
 theorem hCoeff_addE (α : Fin N → ℕ) (M : Fin N → Fin N → ℕ) (a b : Fin N) :
     hCoeff α (addE M a b) * ((M a b : ℚ) + 1) = hCoeff α M := by
@@ -197,7 +197,7 @@ theorem hCoeff_bumpVec (α : Fin N → ℕ) (M : Fin N → Fin N → ℕ) (c : F
 theorem hCond_addE_addE (k : ℕ) (M : Fin N → Fin N → ℕ) (a b c : Fin N) :
     HCond (k + 2) (addE (addE M a c) c b) ↔ HCond (k + 1) (addE M a b) := by
   unfold HCond
-  simp only [rowSum_addE, colSum_addE, sum_add_distrib, sum_ite_eq', mem_univ, if_true]
+  simp only [rowSum_addE, colSum_addE, sum_add_distrib, sum_ite_eq', mem_univ, ite_true]
   constructor
   · rintro ⟨h1, h2⟩
     exact ⟨fun j => by have := h1 j; omega, by omega⟩

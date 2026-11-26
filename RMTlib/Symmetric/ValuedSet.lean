@@ -43,7 +43,7 @@ theorem support_coeff_mono_subset (w : A → ι →₀ ℕ) (d : ι →₀ ℕ) 
   intro a ha
   simp only [Function.mem_support, coeff_monomial] at ha
   by_contra h
-  exact ha (if_neg fun e => h e.symm)
+  exact ha (ite_eq_right fun e => h e.symm)
 
 /-- **Finite fibres give a summable family of monomials.** -/
 theorem summable_mono {w : A → ι →₀ ℕ} (hw : FiniteFibres w) :
@@ -69,7 +69,7 @@ theorem coeff_tsum_mono [T2Space R] {w : A → ι →₀ ℕ} (hw : FiniteFibres
   rw [this]
   have := hasSum_sum_of_ne_finset_zero (L := SummationFilter.unconditional A)
     (f := fun a => if a ∈ (hw d).toFinset then (1 : R) else 0)
-    (s := (hw d).toFinset) (fun a ha => if_neg ha)
+    (s := (hw d).toFinset) (fun a ha => ite_eq_right ha)
   rwa [Finset.sum_ite_of_true (fun _ h => h), Finset.sum_const, nsmul_one] at this
 
 /-- Finite fibres pass along injections. -/
@@ -196,7 +196,7 @@ theorem one_sub_mul_tsum_mono_smul {v : ι →₀ ℕ} (hv : v ≠ 0) :
     (1 - (mono v : MvPowerSeries ι R)) * ∑' t : ℕ, (mono (t • v) : MvPowerSeries ι R) = 1 := by
   classical
   have h : constantCoeff (mono v : MvPowerSeries ι R) = 0 := by
-    rw [← coeff_zero_eq_constantCoeff_apply, coeff_monomial, if_neg (Ne.symm hv)]
+    rw [← coeff_zero_eq_constantCoeff_apply, coeff_monomial, ite_eq_right (Ne.symm hv)]
   have := WithPiTopology.one_sub_mul_tsum_pow_of_constantCoeff_eq_zero h
   simpa only [monomial_pow, one_pow] using this
 

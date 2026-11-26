@@ -254,15 +254,15 @@ theorem rowN_eq_nil_iff (hcol : ColSums m ν) (t : ℕ) : rowN m t = [] ↔ nuN 
 theorem nuN_anti (hν : Antitone ν) {t t' : ℕ} (h : t ≤ t') : nuN ν t' ≤ nuN ν t := by
   unfold nuN
   by_cases h' : t' < n
-  · rw [dif_pos h', dif_pos (by omega)]; exact hν (show (⟨t, by omega⟩ : Fin n) ≤ ⟨t', h'⟩ from h)
-  · rw [dif_neg h']; exact Nat.zero_le _
+  · rw [dite_eq_left h', dite_eq_left (by omega)]; exact hν (show (⟨t, by omega⟩ : Fin n) ≤ ⟨t', h'⟩ from h)
+  · rw [dite_eq_right h']; exact Nat.zero_le _
 
 /-- Below an empty row, everything is empty. -/
 theorem tabFrom_eq_nil (hν : Antitone ν) (hcol : ColSums m ν) :
     ∀ d t, t + d = n → rowN m t = [] → tabFrom m t = []
   | 0, t, h, _ => (of_ge m ν (by omega)).2.2.2.1
   | d + 1, t, h, hr => by
-    rw [tabFrom_succ m (by omega), if_pos hr]
+    rw [tabFrom_succ m (by omega), ite_eq_left hr]
     apply tabFrom_eq_nil hν hcol d (t + 1) (by omega)
     rw [rowN_eq_nil_iff m ν hcol] at hr ⊢
     have := nuN_anti ν hν (Nat.le_add_right t 1); omega
@@ -273,8 +273,8 @@ theorem sh_tabFrom (hcol : ColSums m ν) : ∀ d t, t + d = n → sh (tabFrom m 
     rw [tabFrom_succ m (by omega), shNu_succ ν (by omega)]
     have ih := sh_tabFrom hcol d (t + 1) (by omega)
     by_cases hr : rowN m t = []
-    · rw [if_pos hr, if_pos ((rowN_eq_nil_iff m ν hcol t).mp hr), ih]
-    · rw [if_neg hr, if_neg (fun e => hr ((rowN_eq_nil_iff m ν hcol t).mpr e))]
+    · rw [ite_eq_left hr, ite_eq_left ((rowN_eq_nil_iff m ν hcol t).mp hr), ih]
+    · rw [ite_eq_right hr, ite_eq_right (fun e => hr ((rowN_eq_nil_iff m ν hcol t).mpr e))]
       simp only [sh, List.map_cons] at ih ⊢
       rw [ih, length_rowN_eq m ν hcol]
 
@@ -293,11 +293,11 @@ theorem blocks (hν : Antitone ν) (hcol : ColSums m ν) : ∀ d t, t + d = n �
     rw [botsFrom_succ m ht, insList_append, ih2, tabFrom_succ m ht, boxesNu_succ ν ht]
     simp only
     by_cases hr : rowN m t = []
-    · rw [if_pos hr, hr]
+    · rw [ite_eq_left hr, hr]
       have : nuN ν t = 0 := (rowN_eq_nil_iff m ν hcol t).mp hr
       rw [this]
       exact ⟨ih1, by simp [insList, colHeights]⟩
-    · rw [if_neg hr]
+    · rw [ite_eq_right hr]
       have hss : SSYT (rowN m t :: tabFrom m (t + 1)) := by
         refine ⟨?_, ?_⟩
         · intro r hr'
@@ -314,7 +314,7 @@ theorem blocks (hν : Antitone ν) (hcol : ColSums m ν) : ∀ d t, t + d = n �
             have hr1 : rowN m (t + 1) ≠ [] := fun e => by
               rw [tabFrom_eq_nil m ν hν hcol (d) (t + 1) (by omega) e] at htf; simp at htf
             have hs : s = rowN m (t + 1) := by
-              rw [tabFrom_succ m ht1, if_neg hr1] at htf; exact (List.cons.inj htf).1.symm
+              rw [tabFrom_succ m ht1, ite_eq_right hr1] at htf; exact (List.cons.inj htf).1.symm
             subst hs
             exact ⟨hC t (Nat.le_refl _) ht1, ih1.2⟩
       refine ⟨hss, ?_⟩
@@ -385,7 +385,7 @@ theorem colSums_superstandard (hnk : n ≤ k) : ColSums (superstandard (k := k) 
   have : ∀ a : Fin k, superstandard (k := k) ν (a, t) =
       if a = ⟨t.val, by omega⟩ then ν t else 0 := by
     intro a; simp [superstandard, Fin.ext_iff]
-  simp only [this, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [this, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
 
 theorem mem_rowN_superstandard {t x : ℕ} (hx : x ∈ rowN (superstandard (k := k) ν) t) :
     x = t + 1 := by
@@ -488,11 +488,11 @@ theorem converse (hν : Antitone ν) (hnk : n ≤ k) (hcol : ColSums m ν)
       (fun t' _ _ => col2_superstandard ν hν hnk t')
     rw [h, tabFrom_succ m₀ ht]
     by_cases hr : rowN m₀ t = []
-    · rw [if_pos hr, tabFrom_eq_nil m₀ ν hν hcol₀ (n - (t + 1)) (t + 1) (by omega)]
+    · rw [ite_eq_left hr, tabFrom_eq_nil m₀ ν hν hcol₀ (n - (t + 1)) (t + 1) (by omega)]
       · simp; exact ((rowN_eq_nil_iff m₀ ν hcol₀ t).mp hr).symm
       · rw [rowN_eq_nil_iff m₀ ν hcol₀] at hr ⊢
         have := nuN_anti ν hν (Nat.le_add_right t 1); omega
-    · rw [if_neg hr]; exact length_rowN_eq m₀ ν hcol₀ t
+    · rw [ite_eq_right hr]; exact length_rowN_eq m₀ ν hcol₀ t
   have hrow : ∀ t, t < n → ((insList [] (botsFrom m t)).1.headD []).length = nuN ν t := by
     intro t ht
     rw [← head_Q_count m ν hcol (Nat.le_of_lt ht), hQ, ← hQ₀, head_Q_count m₀ ν hcol₀ (Nat.le_of_lt ht)]
@@ -522,7 +522,7 @@ theorem converse (hν : Antitone ν) (hnk : n ≤ k) (hcol : ColSums m ν)
         intro e; obtain ⟨i, hi, -⟩ := hex; rw [e] at hi; simp at hi
       obtain ⟨-, hF⟩ := blocks m ν hν hcol d (t + 1) (by omega) ih'
       have htab : tabFrom m (t + 1) = v :: tabFrom m (t + 2) := by
-        rw [tabFrom_succ m ht'', if_neg hv]
+        rw [tabFrom_succ m ht'', ite_eq_right hv]
       have hins : (insList [] (botsFrom m t)).1 = (insList (v :: tabFrom m (t + 2)) u).1 := by
         rw [botsFrom_succ m (by omega), insList_append, hF, htab]
       obtain ⟨rest', hrest⟩ := insList_head u v (tabFrom m (t + 2))

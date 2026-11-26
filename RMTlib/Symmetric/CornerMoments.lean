@@ -242,13 +242,13 @@ theorem isAddable_zero {m : ℕ} (ν : Fin (m + 1) → ℕ) : RMT.IsAddable ν 0
 
 theorem isAddable_succ {m : ℕ} (ν : Fin (m + 1) → ℕ) (i : Fin m) :
     RMT.IsAddable ν i.succ = decide (ν i.succ < ν i.castSucc) := by
-  simp only [RMT.IsAddable, Fin.val_succ, Nat.succ_pos, dif_pos]
+  simp only [RMT.IsAddable, Fin.val_succ, Nat.succ_pos, dite_eq_left]
   congr 3
 
 theorem isCorner_castSucc {m : ℕ} (ν : Fin (m + 1) → ℕ) (i : Fin m) :
     RMT.IsCorner ν i.castSucc =
       (decide (0 < ν i.castSucc) && decide (ν i.succ < ν i.castSucc)) := by
-  simp only [RMT.IsCorner, Fin.val_castSucc, add_lt_add_iff_right, Fin.is_lt, dif_pos]
+  simp only [RMT.IsCorner, Fin.val_castSucc, add_lt_add_iff_right, Fin.is_lt, dite_eq_left]
   congr 3
 
 theorem isCorner_last {m : ℕ} (ν : Fin (m + 1) → ℕ) :
@@ -275,14 +275,14 @@ theorem sum_corners_eq_rows {ν : Fin N → ℕ} (hν : Antitone ν) (g : ℤ �
         ∑ i, g ((ν i : ℤ) - i) -
           ∑ i : Fin m, if ν i.succ = ν i.castSucc then g ((ν i.succ : ℤ) - i.succ) else 0 := by
       rw [Fin.sum_univ_succ, Fin.sum_univ_succ (fun i => g ((ν i : ℤ) - i)), isAddable_zero,
-        if_pos rfl, add_sub_assoc, ← sum_sub_distrib]
+        ite_eq_left rfl, add_sub_assoc, ← sum_sub_distrib]
       congr 1
       refine sum_congr rfl fun i _ => ?_
       have := hν (Fin.castSucc_le_succ i)
       rw [isAddable_succ]
       by_cases h : ν i.succ < ν i.castSucc
-      · rw [if_pos (by simpa using h), if_neg (by omega)]; ring
-      · rw [if_neg (by simpa using h), if_pos (by omega)]; ring
+      · rw [ite_eq_left (by simpa using h), ite_eq_right (by omega)]; ring
+      · rw [ite_eq_right (by simpa using h), ite_eq_left (by omega)]; ring
     have hR : (∑ i, if RMT.IsCorner ν i then g ((ν i : ℤ) - 1 - i) else 0) =
         ∑ i, g ((ν i : ℤ) - 1 - i) -
           (∑ i : Fin m, if ν i.succ = ν i.castSucc then g ((ν i.castSucc : ℤ) - 1 - i.castSucc)
@@ -298,12 +298,12 @@ theorem sum_corners_eq_rows {ν : Fin N → ℕ} (hν : Antitone ν) (g : ℤ �
         have := hν (Fin.castSucc_le_succ i)
         rw [isCorner_castSucc]
         by_cases h : 0 < ν i.castSucc ∧ ν i.succ < ν i.castSucc
-        · rw [if_pos (by simpa using h), if_neg (by omega)]; ring
-        · rw [if_neg (by simpa using h), if_pos (by omega)]; ring
+        · rw [ite_eq_left (by simpa using h), ite_eq_right (by omega)]; ring
+        · rw [ite_eq_right (by simpa using h), ite_eq_left (by omega)]; ring
       simp_rw [hsum, sum_sub_distrib]
       by_cases h : ν (Fin.last m) = 0
-      · rw [if_neg (by simp [h]), if_pos h, h]; simp only [Fin.val_last]; push_cast; ring_nf
-      · rw [if_pos (by simp; omega), if_neg h]; ring
+      · rw [ite_eq_right (by simp [h]), ite_eq_left h, h]; simp only [Fin.val_last]; push_cast; ring_nf
+      · rw [ite_eq_left (by simp; omega), ite_eq_right h]; ring
     have hmatch : (∑ i : Fin m, if ν i.succ = ν i.castSucc then g ((ν i.succ : ℤ) - i.succ) else 0)
         = ∑ i : Fin m, if ν i.succ = ν i.castSucc then
             g ((ν i.castSucc : ℤ) - 1 - i.castSucc) else 0 := by
@@ -316,8 +316,8 @@ theorem sum_corners_eq_rows {ν : Fin N → ℕ} (hν : Antitone ν) (g : ℤ �
     have hm' : ∀ i : Fin (m + 1), maya ν i = (ν i : ℤ) - 1 - i := fun i => by simp [maya]; ring
     simp_rw [hm, hm', sum_sub_distrib]
     by_cases h : ν (Fin.last m) = 0
-    · rw [if_pos h, if_neg (show ¬ Full ν by rw [full_iff_last hν]; omega)]; ring
-    · rw [if_neg h, if_pos ((full_iff_last hν).mpr (by omega))]; ring
+    · rw [ite_eq_left h, ite_eq_right (show ¬ Full ν by rw [full_iff_last hν]; omega)]; ring
+    · rw [ite_eq_right h, ite_eq_left ((full_iff_last hν).mpr (by omega))]; ring
 
 /-- **The genuine corners against the charge**:
 `Σ_add g − Σ_rem g = Σ_u charge(u) g(u) − [ν full] g(−N)`. -/
@@ -383,7 +383,7 @@ theorem addable_corner_iff {ν : Fin N → ℕ} (hν : Antitone ν) {i j : Fin N
     have e1 : (⟨(i : ℕ) - 1, by omega⟩ : Fin N) = j := Fin.ext (by simp; omega)
     have e2 : (⟨(j : ℕ) + 1, hj⟩ : Fin N) = i := Fin.ext (by simp; omega)
     have a := hν (show j ≤ i from Fin.le_def.mpr (by omega))
-    simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dif_pos hi, dif_pos hj,
+    simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dite_eq_left hi, dite_eq_left hj,
       e1, e2, Function.update_self, Function.update_of_ne hij, Function.update_of_ne (Ne.symm hij),
       Bool.and_eq_true, decide_eq_true_eq]
     omega
@@ -393,25 +393,25 @@ theorem addable_corner_iff {ν : Fin N → ℕ} (hν : Antitone ν) {i j : Fin N
         have := congrArg Fin.val h; simp at this; omega)
       have n2 : (⟨(j : ℕ) + 1, hj⟩ : Fin N) ≠ i := fun h => hadj (by
         have := congrArg Fin.val h; simpa using this)
-      simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dif_pos hi, dif_pos hj,
+      simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dite_eq_left hi, dite_eq_left hj,
         Function.update_of_ne hij, Function.update_of_ne (Ne.symm hij),
         Function.update_of_ne n1, Function.update_of_ne n2,
         Bool.and_eq_true, decide_eq_true_eq]
       tauto
     · have n1 : (⟨(i : ℕ) - 1, by omega⟩ : Fin N) ≠ j := fun h => hadj (by
         have := congrArg Fin.val h; simp at this; omega)
-      simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dif_pos hi, dif_neg hj,
+      simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dite_eq_left hi, dite_eq_right hj,
         Function.update_of_ne hij, Function.update_of_ne (Ne.symm hij),
         Function.update_of_ne n1,
         Bool.and_eq_true, decide_eq_true_eq]
       tauto
     · have n2 : (⟨(j : ℕ) + 1, hj⟩ : Fin N) ≠ i := fun h => hadj (by
         have := congrArg Fin.val h; simpa using this)
-      simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dif_neg hi, dif_pos hj,
+      simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dite_eq_right hi, dite_eq_left hj,
         Function.update_of_ne hij, Function.update_of_ne (Ne.symm hij),
         Function.update_of_ne n2, Bool.and_eq_true, decide_eq_true_eq]
       tauto
-    · simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dif_neg hi, dif_neg hj,
+    · simp only [RMT.IsAddable, RMT.IsCorner, RMT.addBox, RMT.removeBox, dite_eq_right hi, dite_eq_right hj,
         Function.update_of_ne hij, Function.update_of_ne (Ne.symm hij),
         Bool.and_eq_true, decide_eq_true_eq]
       tauto
@@ -442,33 +442,33 @@ theorem commutator_single {ν : Fin N → ℕ} (hν : Antitone ν) (r : ℤ → 
     rw [up_single, upVec, map_sum]
     refine sum_congr rfl fun i _ => ?_
     by_cases hi : RMT.IsAddable ν i
-    · rw [if_pos hi, down_single, one_smul, downVec]
+    · rw [ite_eq_left hi, down_single, one_smul, downVec]
       refine sum_congr rfl fun j _ => ?_
       simp only [hT1, hi, Bool.true_and]
       split_ifs with hj hij
       · subst hij; congr 1; simp [RMT.addBox]
       · congr 1; simp [RMT.addBox, Function.update_of_ne (Ne.symm hij)]
       · rfl
-    · rw [if_neg hi, map_zero]
+    · rw [ite_eq_right hi, map_zero]
       exact (sum_eq_zero fun j _ => by simp [hT1, hi]).symm
   have h2 : up N R (down N r (Finsupp.single ν 1)) = ∑ i, ∑ j, T2 i j := by
     rw [sum_comm, down_single, one_smul, downVec, map_sum]
     refine sum_congr rfl fun j _ => ?_
     by_cases hj : RMT.IsCorner ν j
-    · rw [if_pos hj, ← Finsupp.smul_single_one, map_smul, up_single, upVec, smul_sum]
+    · rw [ite_eq_left hj, ← Finsupp.smul_single_one, map_smul, up_single, upVec, smul_sum]
       refine sum_congr rfl fun i _ => ?_
       simp only [hT2, hj, Bool.true_and]
       split_ifs
       · rw [Finsupp.smul_single, smul_eq_mul, mul_one]
       · rw [smul_zero]
-    · rw [if_neg hj, map_zero]
+    · rw [ite_eq_right hj, map_zero]
       exact (sum_eq_zero fun i _ => by simp [hT2, hj]).symm
   rw [h1, h2, ← sum_sub_distrib]
   simp_rw [← sum_sub_distrib]
   have hdiag : ∀ i, ∑ j, (T1 i j - T2 i j) = T1 i i - T2 i i := by
     intro i
     refine sum_eq_single i (fun j _ hji => ?_) (by simp)
-    simp only [hT1, hT2, if_neg (Ne.symm hji), add_zero, addable_corner_iff hν (Ne.symm hji),
+    simp only [hT1, hT2, ite_eq_right (Ne.symm hji), add_zero, addable_corner_iff hν (Ne.symm hji),
       removeBox_addBox_comm (Ne.symm hji)]
     exact sub_self _
   simp_rw [hdiag]
@@ -478,16 +478,16 @@ theorem commutator_single {ν : Fin N → ℕ} (hν : Antitone ν) (r : ℤ → 
   by_cases ha : RMT.IsAddable ν i <;> by_cases hc : RMT.IsCorner ν i
   · have hc' := RMT.isCorner_addBox hν i
     have ha' := RMT.isAddable_removeBox hν (RMT.removeBox_antitone hν hc).2
-    simp only [ha, hc, hc', ha', Bool.true_and, if_true, RMT.removeBox_addBox,
+    simp only [ha, hc, hc', ha', Bool.true_and, ite_true, RMT.removeBox_addBox,
       RMT.addBox_removeBox (RMT.removeBox_antitone hν hc).2,
       ← Finsupp.single_sub]
     rw [Finsupp.smul_single_one]; congr 1; ring
   · have hc' := RMT.isCorner_addBox hν i
-    simp only [ha, hc, hc', Bool.true_and, Bool.false_and, if_true, RMT.removeBox_addBox,
-      if_false, Bool.false_eq_true, sub_zero]
+    simp only [ha, hc, hc', Bool.true_and, Bool.false_and, ite_true, RMT.removeBox_addBox,
+      ite_false, Bool.false_eq_true, sub_zero]
     rw [Finsupp.smul_single_one]; congr 1; ring
   · have ha' := RMT.isAddable_removeBox hν (RMT.removeBox_antitone hν hc).2
-    simp only [ha, hc, ha', Bool.true_and, Bool.false_and, if_true, if_false, Bool.false_eq_true,
+    simp only [ha, hc, ha', Bool.true_and, Bool.false_and, ite_true, ite_false, Bool.false_eq_true,
       RMT.addBox_removeBox (RMT.removeBox_antitone hν hc).2,
       zero_sub]
     rw [neg_smul, Finsupp.smul_single_one]
@@ -506,7 +506,7 @@ theorem commutator_single_of_not_full {ν : Fin N → ℕ} (hν : Antitone ν) (
     {r : ℤ → R} (hr : IsAffine r) :
     down N r (up N R (Finsupp.single ν 1)) - up N R (down N r (Finsupp.single ν 1)) =
       r 0 • Finsupp.single ν 1 := by
-  rw [commutator_single_affine hν hr, if_neg hfull, sub_zero]
+  rw [commutator_single_affine hν hr, ite_eq_right hfull, sub_zero]
 
 /-- **An exact window**: when `r(−N) = 0` (as for `r = N + c`), `[D_r, U] = r(0)` on every
 `ν : Fin N → ℕ`, full or not. -/
@@ -542,7 +542,7 @@ theorem commutator_eq_iff_affine [Nontrivial R] (r : ℤ → R) :
     intro N ν hν hf
     have := congrArg (fun f => f ν) ((commutator_single hν r).symm.trans (h N ν hν hf))
     simp only [Finsupp.smul_apply, Finsupp.single_eq_same, smul_eq_mul, mul_one] at this
-    rwa [sum_corners_eq_rows hν, if_neg hf] at this
+    rwa [sum_corners_eq_rows hν, ite_eq_right hf] at this
   refine affine_of_row_column r (fun k => ?_) (fun m => ?_)
   · have hanti : Antitone (![k, 0] : Fin 2 → ℕ) := by
       intro a b hab
@@ -553,8 +553,8 @@ theorem commutator_eq_iff_affine [Nontrivial R] (r : ℤ → R) :
     ring_nf
   · have := hc (m + 1) _ (paddedColumn_antitone m) (paddedColumn_not_full m)
     rw [← this, Fin.sum_univ_castSucc, ← sum_column_dipoles]
-    simp only [paddedColumn, maya, Fin.val_castSucc, Fin.is_lt, if_true, Fin.val_last,
-      lt_irrefl, if_false]
+    simp only [paddedColumn, maya, Fin.val_castSucc, Fin.is_lt, ite_true, Fin.val_last,
+      lt_irrefl, ite_false]
     push_cast
     ring_nf
 

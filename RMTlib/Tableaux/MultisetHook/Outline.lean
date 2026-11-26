@@ -194,10 +194,10 @@ theorem fold_hooks (t : ℕ) (H : Multiset ℤ) (hH : ∀ h ∈ H, 1 ≤ h ∧ h
         pt (h - t) - pt |h - t| := by
       rcases lt_or_gt_of_ne hh.2 with hlt | hgt
       · rw [sum_eq_single_of_mem (t - h).toNat (by rw [mem_Ico]; omega)]
-        · rw [if_pos (by omega), one_smul, abs_of_neg (by omega)]
+        · rw [ite_eq_left (by omega), one_smul, abs_of_neg (by omega)]
           congr 2 <;> omega
-        · intro i _ hi; rw [if_neg (by omega), zero_smul]
-      · rw [sum_eq_zero fun i hi => by rw [mem_Ico] at hi; rw [if_neg (by omega), zero_smul],
+        · intro i _ hi; rw [ite_eq_right (by omega), zero_smul]
+      · rw [sum_eq_zero fun i hi => by rw [mem_Ico] at hi; rw [ite_eq_right (by omega), zero_smul],
           abs_of_pos (by omega), sub_self]
     rw [single]
     abel

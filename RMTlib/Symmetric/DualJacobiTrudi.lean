@@ -108,7 +108,7 @@ theorem eZ_zero_eq_hE (a : ℕ → R) : eZ a 0 = hE a 0 := by
   · obtain ⟨k, rfl⟩ : ∃ k' : ℕ, k = ((k' + 1 : ℕ) : ℤ) := ⟨k.toNat - 1, by omega⟩
     rw [eZ_natCast, eV_eq_zero_of_lt a (by omega)]
     simp only [hE]
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
 
 /-- `e_k(a₀, …, a_{n−1}) = 0` for `k > n`. -/
 theorem eZ_eq_zero_of_lt (a : ℕ → R) {n : ℕ} {k : ℤ} (h : (n : ℤ) < k) : eZ a n k = 0 := by
@@ -233,11 +233,11 @@ theorem eDet_eq_zero_of_not_isVStrip (a : ℕ → R) (m : ℕ) {lam : Fin N → 
   rcases key with ⟨i, i', hii', hi, hi', heq⟩ | ⟨i, hN, hi, h0⟩
   · refine det_zero_of_row_eq (i := i) (j := i') (fun h => by rw [h] at hii'; omega) ?_
     funext j
-    simp only [of_apply, Pi.sub_apply, indZ, hi, hi', if_true, if_false, heq]
+    simp only [of_apply, Pi.sub_apply, indZ, hi, hi', ite_true, ite_false, heq]
     congr 1
     omega
   · refine det_eq_zero_of_row_eq_zero i fun j => ?_
-    simp only [of_apply, Pi.sub_apply, indZ, hi, if_true, h0]
+    simp only [of_apply, Pi.sub_apply, indZ, hi, ite_true, h0]
     exact eZ_neg a m (by have := j.2; push_cast; omega)
 
 /-! ## The conjugate partition -/

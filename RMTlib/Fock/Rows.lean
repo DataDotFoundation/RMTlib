@@ -68,14 +68,14 @@ theorem sum_prod_multinomial (a b : Fin N → ℕ) (hab : ∑ i, b i = ∑ i, a 
   simp_rw [sum_X_pow, prod_univ_sum, ← monomial_sum_prod, coeff_sum, coeff_monomial] at key
   rw [sum_ite, sum_const_zero, add_zero] at key
   rw [sum_eq_single_of_mem b (by simpa [Nat.mem_antidiagonalTuple] using hab)] at key
-  · rw [if_pos rfl] at key
+  · rw [ite_eq_left rfl] at key
     rw [← key]
     refine sum_congr (filter_congr ?_) fun _ _ => rfl
     intro M _
     rw [Finsupp.ext_iff]
     simp [Finset.sum_apply]
   · intro v _ hv
-    rw [if_neg]
+    rw [ite_eq_right]
     exact fun h => hv (Finsupp.equivFunOnFinite.symm.injective h)
 
 
@@ -183,7 +183,7 @@ theorem fischer_hX_eq_neg_eX (k : ℕ) :
       = ∏ i ∈ range k, (-(N : ℤ) - i) := by
     rw [RMT.Symmetric.contentProdP, List.length_replicate]
     refine prod_congr rfl fun i hi => ?_
-    rw [List.getD_eq_getElem?_getD, List.getElem?_replicate, if_pos (mem_range.mp hi)]
+    rw [List.getD_eq_getElem?_getD, List.getElem?_replicate, ite_eq_left (mem_range.mp hi)]
     simp [sub_eq_add_neg]
   have hrow : RMT.Symmetric.contentProdP (fun z : ℤ => (N : ℤ) + z) [k]
       = ∏ j ∈ range k, ((N : ℤ) + j) := by

@@ -37,9 +37,9 @@ theorem eP_zero : eP 0 = 1 := by rw [eP]
 theorem sum_antidiagonal_lt {M : Type*} [AddCommMonoid M] (n : ℕ) (f : ℕ → ℕ → M) :
     ∑ a ∈ antidiagonal n with a.1 < n, f a.1 a.2 = ∑ i : Fin n, f i (n - i) := by
   rw [Finset.sum_filter, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.sum_range_succ,
-    if_neg (lt_irrefl n), add_zero, ← Finset.sum_range (fun i => f i (n - i))]
+    ite_eq_right (lt_irrefl n), add_zero, ← Finset.sum_range (fun i => f i (n - i))]
   refine Finset.sum_congr rfl fun i hi => ?_
-  rw [if_pos (Finset.mem_range.mp hi)]
+  rw [ite_eq_left (Finset.mem_range.mp hi)]
 
 /-- **In `N` variables `eP` is `esymm`**, by Newton's identities. -/
 theorem ev_eP (N : ℕ) (k : ℕ) : ev N (eP k) = esymm (Fin N) ℚ k := by
@@ -166,7 +166,7 @@ theorem L1_eP (a : ℚ) (k : ℕ) : L1 a (eP (k + 1)) = (a - k) • eP k := by
       refine Finset.sum_congr rfl fun j hj => ?_
       have hjk := Finset.mem_range.mp hj
       rw [show k + 1 - j = (k - j - 1) + 2 by omega, L1_X]
-      simp only [show k - j - 1 + 2 ≠ 0 by omega, if_false, pc,
+      simp only [show k - j - 1 + 2 ≠ 0 by omega, ite_false, pc,
         show k - j - 1 + 2 - 1 = k - j by omega, show k - j ≠ 0 by omega]
       rw [mul_smul_comm, smul_smul, show k - j = (k - 1 - j) + 1 by omega, pow_succ]
       congr 1
@@ -203,15 +203,15 @@ theorem L1_eP (a : ℚ) (k : ℕ) : L1 a (eP (k + 1)) = (a - k) • eP k := by
 /-- `L_1^{(a)} e_k = (a − k + 1) e_{k−1}` for every integer `k`. -/
 theorem L1_eZP (a : ℚ) (k : ℤ) : L1 a (eZP k) = (a - k + 1) • eZP (k - 1) := by
   rcases lt_trichotomy k 0 with hk | rfl | hk
-  · have h1 : eZP k = 0 := by rw [eZP, if_neg (by omega)]
-    have h2 : eZP (k - 1) = 0 := by rw [eZP, if_neg (by omega)]
+  · have h1 : eZP k = 0 := by rw [eZP, ite_eq_right (by omega)]
+    have h2 : eZP (k - 1) = 0 := by rw [eZP, ite_eq_right (by omega)]
     rw [h1, h2, map_zero, smul_zero]
   · have h1 : eZP 0 = 1 := by simp [eZP, eP_zero]
     have h2 : eZP (0 - 1) = 0 := by simp [eZP]
     rw [h1, h2, Derivation.map_one_eq_zero, smul_zero]
   · obtain ⟨n, rfl⟩ : ∃ n : ℕ, k = (n : ℤ) + 1 := ⟨(k - 1).toNat, by omega⟩
     have h1 : eZP ((n : ℤ) + 1) = eP (n + 1) := by
-      simp only [eZP, show (0 : ℤ) ≤ n + 1 by omega, if_true]
+      simp only [eZP, show (0 : ℤ) ≤ n + 1 by omega, ite_true]
       congr 1
     have h2 : eZP ((n : ℤ) + 1 - 1) = eP n := by simp [eZP]
     rw [h1, h2, L1_eP]
@@ -229,15 +229,15 @@ theorem shiftP_row_eq {l : ℕ} (x : Fin l → ℤ) (i j : Fin l) :
   simp only [Matrix.of_apply, mul_ite, mul_zero]
   by_cases hj : (j : ℕ) = 0
   · rw [hj, Nat.cast_zero, zero_mul]
-    refine (sum_eq_zero fun a _ => if_neg (by omega)).symm
+    refine (sum_eq_zero fun a _ => ite_eq_right (by omega)).symm
   · have hlt : (j : ℕ) - 1 < l := by omega
     rw [sum_eq_single ⟨(j : ℕ) - 1, hlt⟩]
-    · rw [if_pos (by simp; omega), mul_comm]
+    · rw [ite_eq_left (by simp; omega), mul_comm]
       congr 2
       push_cast [Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hj)]
       ring
     · intro a _ ha
-      rw [if_neg]
+      rw [ite_eq_right]
       intro h
       apply ha
       ext

@@ -520,7 +520,7 @@ theorem perm_partialPerm (π : List Nat) (h : π.Nodup) : PartialPerm (perm π) 
   · simp only [perm, beq_iff_eq] at h'
     obtain ⟨hi, e⟩ := List.getElem?_eq_some_iff.mp hij
     obtain ⟨hi', e'⟩ := List.getElem?_eq_some_iff.mp h'
-    exact (List.getElem_inj h).mp (e'.trans e.symm)
+    exact (List.Nodup.getElem_inj h).mp (e'.trans e.symm)
 
 theorem find?_congr {α} (p q : α → Bool) : ∀ l : List α, (∀ x ∈ l, p x = q x) →
     l.find? p = l.find? q

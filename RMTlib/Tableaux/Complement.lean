@@ -188,7 +188,7 @@ theorem lemma6 (k : ℕ) (kap lam : Fin k → ℕ) (hk : Antitone kap) (hl : Ant
       have e1 : Set.range (fun j : Fin k => rowSeq k kap (Fin.rev j)) = Set.range (rowSeq k kap) :=
         Fin.rev_surjective.range_comp (rowSeq k kap)
       rw [e1, ← Set.image_univ, ← Set.image_univ, ← coe_univ, ← coe_image, ← coe_image, hAC]
-    have hfun := ((rowSeq_rev_strictMono k kap hk).range_inj (colSeq_strictMono k lam)).mp hrange
+    have hfun := ((rowSeq_rev_strictMono k kap hk).range_inj_of_wellFoundedLT (colSeq_strictMono k lam)).mp hrange
     intro j
     exact (hcol j).mp (congrFun hfun j)
 

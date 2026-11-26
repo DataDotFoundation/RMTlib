@@ -98,14 +98,14 @@ theorem card_isYam (n : ℕ) :
   | zero =>
     intro ν hν hs
     have h0 : ∀ i, ν i = 0 := fun i => (sum_eq_zero_iff.mp hs) i (mem_univ _)
-    simp only [fSYT, hs, if_true]
+    simp only [fSYT, hs, ite_true]
     rw [Nat.card_eq_one_iff_unique]
     refine ⟨inferInstance, ⟨⟨Fin.elim0, fun t i j _ => by simp [cnt], ?_⟩⟩⟩
     funext i
     simp [cnt, h0]
   | succ n ih =>
     intro ν hν hs
-    rw [fSYT, if_neg (by omega), sum_filter]
+    rw [fSYT, ite_eq_right (by omega), sum_filter]
     rw [← Nat.card_congr ((Fin.snocEquiv fun _ => Fin N).subtypeEquiv
       (p := fun x => IsYam ν ((Fin.snocEquiv fun _ => Fin N) x)) fun _ => Iff.rfl),
       Nat.card_congr (Equiv.subtypeEquivRight

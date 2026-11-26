@@ -59,7 +59,7 @@ theorem det_staircase {n : ℕ} (r : Fin n → ℕ) (hr : Monotone r) :
     · intro i j hij
       have : (j : ℕ) < i := hij
       simp only [of_apply, h i]
-      rw [if_neg (by omega)]
+      rw [ite_eq_right (by omega)]
   · by_contra hdet
     have hinj : Function.Injective r := by
       intro i i' hii'
@@ -70,7 +70,7 @@ theorem det_staircase {n : ℕ} (r : Fin n → ℕ) (hr : Monotone r) :
       by_contra hge
       push Not at hge
       exact hdet (det_eq_zero_of_row_eq_zero i fun j => by
-        simp only [of_apply]; rw [if_neg (by have := j.isLt; omega)])
+        simp only [of_apply]; rw [ite_eq_right (by have := j.isLt; omega)])
     exact h (eq_self_of_strictMono_lt r (hr.strictMono_of_injective hinj) hlt)
 
 /-- A down-closed subset of `Fin n` is the initial segment of its cardinality. -/
@@ -118,8 +118,8 @@ theorem jacobiTrudi_one_variable {n : ℕ} (lam mu : Fin n → ℕ) (hl : Antito
     rw [hmem] at h1
     rw [hOne_one]
     by_cases h : r i ≤ (j : ℕ)
-    · rw [if_pos h, if_pos (by omega)]
-    · rw [if_neg h, if_neg (by omega)]
+    · rw [ite_eq_left h, ite_eq_left (by omega)]
+    · rw [ite_eq_right h, ite_eq_right (by omega)]
   have hr : Monotone r := fun i i' h => card_le_card fun j hj => by
     rw [hmem] at hj ⊢
     have := hl h
@@ -157,8 +157,8 @@ theorem jacobiTrudi_one_variable {n : ℕ} (lam mu : Fin n → ℕ) (hl : Antito
       of fun i j : Fin n => if r i ≤ j then (1 : ℚ) else 0 from by ext i j; simp only [of_apply, hentry],
     det_staircase r hr]
   by_cases hg : Weyl.GTStep lam mu
-  · rw [if_pos (key.mpr hg), if_pos hg]
-  · rw [if_neg (fun h => hg (key.mp h)), if_neg hg]
+  · rw [ite_eq_left (key.mpr hg), ite_eq_left hg]
+  · rw [ite_eq_right (fun h => hg (key.mp h)), ite_eq_right hg]
 
 /-! ### Jacobi–Trudi at `1^n` -/
 
@@ -240,7 +240,7 @@ theorem jacobiTrudiOne_eq_gtCount (n : ℕ) (ν : Fin n → ℕ) (hν : Antitone
     · intro i j hij
       have : (j : ℕ) < i := hij
       simp only [of_apply, Pi.zero_apply, Nat.cast_zero, hOne]
-      rw [if_neg (by omega)]
+      rw [ite_eq_right (by omega)]
   rw [hJT] at h0
   rw [gtCount_eq_binDet n ν hν, hB, hB, mul_div_mul_left _ _ hc, hJT]
   change s * K * vand (ellQ ν) = vand (ellQ ν) / vand (ellQ 0)

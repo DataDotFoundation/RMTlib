@@ -102,7 +102,7 @@ theorem polar_trX (a b : Fin N) : polar a b (trX N) = X (a, b) := by
   classical
   rw [polar, Fintype.sum_eq_single b fun j hj => by
     rw [trX, map_sum, Fintype.sum_eq_zero _ fun c => by
-      rw [pderiv_X, Pi.single_apply, if_neg (by
+      rw [pderiv_X, Pi.single_apply, ite_eq_right (by
         simp only [Prod.mk.injEq, not_and]
         exact fun h1 h2 => hj (h2.symm.trans h1))], mul_zero]]
   rw [pderiv_trX, mul_one]
@@ -112,18 +112,18 @@ theorem polar_X (a b : Fin N) (v : Fin N × Fin N) :
     polar a b (X v) = if v.1 = b then X (a, v.2) else 0 := by
   classical
   rw [polar, Fintype.sum_eq_single v.2 fun j hj => by
-    rw [pderiv_X, Pi.single_apply, if_neg (by simp [Prod.ext_iff]; tauto), mul_zero]]
+    rw [pderiv_X, Pi.single_apply, ite_eq_right (by simp [Prod.ext_iff]; tauto), mul_zero]]
   rw [pderiv_X, Pi.single_apply]
   by_cases h : v.1 = b
-  · rw [if_pos (by ext <;> simp [h]), if_pos h, mul_one]
-  · rw [if_neg (by simp [Prod.ext_iff]; tauto), if_neg h, mul_zero]
+  · rw [ite_eq_left (by ext <;> simp [h]), ite_eq_left h, mul_one]
+  · rw [ite_eq_right (by simp [Prod.ext_iff]; tauto), ite_eq_right h, mul_zero]
 
 /-- **`C (tr X) = N tr X`**: `e((1)) = N`. -/
 theorem cas_trX : cas N (trX N) = (N : ℚ) • trX N := by
   classical
   have h : ∀ a b : Fin N, polar a b (polar b a (trX N)) = X (a, a) := by
     intro a b
-    rw [polar_trX, polar_X, if_pos rfl]
+    rw [polar_trX, polar_X, ite_eq_left rfl]
   rw [cas]
   simp only [h, sum_const, card_univ, Fintype.card_fin, nsmul_eq_mul]
   rw [trX, smul_sum]

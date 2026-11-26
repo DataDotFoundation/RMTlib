@@ -54,10 +54,10 @@ theorem fischer_sum_monomial [DecidableEq σ] {ι : Type*} (I : Finset ι) (e : 
   rw [fischer_sum_left]
   refine sum_congr rfl fun i hi => ?_
   rw [fischer_sum_right, sum_eq_single i]
-  · rw [fischer_monomial_monomial, if_pos rfl]
+  · rw [fischer_monomial_monomial, ite_eq_left rfl]
     ring
   · intro j hj hji
-    rw [fischer_monomial_monomial, if_neg]
+    rw [fischer_monomial_monomial, ite_eq_right]
     intro h
     exact hji (he hi hj h).symm
   · intro h
@@ -100,13 +100,13 @@ theorem expo_apply (S : Finset (Fin N)) (π : Equiv.Perm S) (a b : Fin N) :
     rw [Fintype.sum_eq_single ⟨b, h⟩]
     · simp [Prod.ext_iff]
     · intro i hi
-      rw [if_neg]
+      rw [ite_eq_right]
       intro he
       apply hi
       exact Subtype.ext (Prod.ext_iff.mp he).2
   · rename_i h
     refine Finset.sum_eq_zero fun i _ => ?_
-    rw [if_neg]
+    rw [ite_eq_right]
     intro he
     have hb : i.1 = b := (Prod.ext_iff.mp he).2
     exact h (hb ▸ i.2)
@@ -129,21 +129,21 @@ theorem expo_injective (k : ℕ) :
     constructor
     · intro hb
       have h1 := congrArg (fun f => f ((π ⟨b, hb⟩).1, b)) h
-      simp only [expo_apply, dif_pos hb] at h1
+      simp only [expo_apply, dite_eq_left hb] at h1
       by_contra hbT
-      rw [dif_neg hbT] at h1
+      rw [dite_eq_right hbT] at h1
       exact one_ne_zero h1
     · intro hb
       have h1 := congrArg (fun f => f ((ρ ⟨b, hb⟩).1, b)) h
-      simp only [expo_apply, dif_pos hb] at h1
+      simp only [expo_apply, dite_eq_left hb] at h1
       by_contra hbS
-      rw [dif_neg hbS] at h1
+      rw [dite_eq_right hbS] at h1
       exact zero_ne_one h1
   subst hST
   congr 1
   ext i
   have h1 := congrArg (fun f => f ((π i).1, i.1)) h
-  simp only [expo_apply, dif_pos i.2, Subtype.coe_eta, ite_true] at h1
+  simp only [expo_apply, dite_eq_left i.2, Subtype.coe_eta, ite_true] at h1
   by_contra hne
   split_ifs at h1 with hh
   exact hne (congrArg (fun x : S => ((x : Fin N) : ℕ)) (by simpa using hh.symm))
@@ -190,7 +190,7 @@ theorem fischer_eX_contentProd (k : ℕ) :
       = ∏ i ∈ range k, ((N : ℤ) - i) := by
     rw [RMT.Symmetric.contentProdP, List.length_replicate]
     refine prod_congr rfl fun i hi => ?_
-    rw [List.getD_eq_getElem?_getD, List.getElem?_replicate, if_pos (mem_range.mp hi)]
+    rw [List.getD_eq_getElem?_getD, List.getElem?_replicate, ite_eq_left (mem_range.mp hi)]
     simp [sub_eq_add_neg]
   rw [hc, Nat.descFactorial_eq_prod_range]
   rcases le_or_gt k N with hk | hk

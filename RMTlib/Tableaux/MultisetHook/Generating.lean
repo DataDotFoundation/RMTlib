@@ -94,7 +94,7 @@ def lwBuild {r : ℕ} (hr : 0 < r) (x : YoungDiagram × (Fin r → YoungDiagram)
 theorem lwBuild_spec {r : ℕ} (hr : 0 < r) {x : YoungDiagram × (Fin r → YoungDiagram)}
     (h : IsTCore r x.1) :
     core r (lwBuild hr x) = x.1 ∧ ∀ ρ < r, quot r (lwBuild hr x) ρ = extTuple x.2 ρ := by
-  unfold lwBuild; rw [dif_pos h]
+  unfold lwBuild; rw [dite_eq_left h]
   exact Classical.choose_spec (littlewood hr x.1 h (extTuple x.2)).exists
 
 theorem multiset_prod_sum {R : Type*} [CommMonoid R] {ι : Type*} (s : Finset ι)
@@ -140,7 +140,7 @@ theorem hanJi_comb {r : ℕ} (hr : 0 < r) (n : ℕ) {R : Type*} [CommRing R] (x 
       at hsize
     simp only [hc] at hsize
     have : ∀ ρ : Fin r, quot r (lwBuild hr (κ, q)) ρ = q ρ := fun ρ => by
-      rw [hq ρ ρ.isLt, extTuple, dif_pos ρ.isLt]
+      rw [hq ρ ρ.isLt, extTuple, dite_eq_left ρ.isLt]
     simp only [this] at hsize
     have : ((lwBuild hr (κ, q)).cells.card : ℤ) = n := by rw [hsize]; exact_mod_cast hn
     exact_mod_cast this
@@ -148,14 +148,14 @@ theorem hanJi_comb {r : ℕ} (hr : 0 < r) (n : ℕ) {R : Type*} [CommRing R] (x 
     have hκ := core_isTCore hr μ
     obtain ⟨hc, hq⟩ := lwBuild_spec hr (x := (core r μ, fun ρ : Fin r => quot r μ ρ)) hκ
     exact ((littlewood hr (core r μ) hκ (quot r μ)).unique ⟨hc, fun ρ hρ => by
-      rw [hq ρ hρ, extTuple, dif_pos hρ]⟩ ⟨rfl, fun _ _ => rfl⟩)
+      rw [hq ρ hρ, extTuple, dite_eq_left hρ]⟩ ⟨rfl, fun _ _ => rfl⟩)
   · rintro ⟨κ, q⟩ hy
     simp only [lwIndex, mem_filter, mem_product] at hy
     obtain ⟨⟨⟨-, hκ⟩, -⟩, -⟩ := hy
     obtain ⟨hc, hq⟩ := lwBuild_spec hr (x := (κ, q)) hκ
     simp only [Prod.mk.injEq]
     refine ⟨hc, funext fun ρ => ?_⟩
-    rw [hq ρ ρ.isLt, extTuple, dif_pos ρ.isLt]
+    rw [hq ρ ρ.isLt, extTuple, dite_eq_left ρ.isLt]
   · intro μ _
     rw [hooks_dvd hr μ, Multiset.card_sum, multiset_prod_sum, ← Fin.sum_univ_eq_sum_range
       (fun ρ => Multiset.card ((hooks (quot r μ ρ)).map ((r : ℤ) * ·))),
@@ -181,7 +181,7 @@ def tauU (w : F) (hw : ∀ k : ℤ, k ≠ 0 → w ^ k ≠ w ^ (-k)) (k : ℤ) : 
 
 theorem tauU_val (hw : ∀ k : ℤ, k ≠ 0 → w ^ k ≠ w ^ (-k)) {k : ℤ} (hk : k ≠ 0) :
     ((tauU w hw k : Fˣ) : F) = tauW w k := by
-  rw [tauU, dif_neg hk]; rfl
+  rw [tauU, dite_eq_right hk]; rfl
 
 theorem val_mprod (m : Multiset ℤ) (f : ℤ → Fˣ) :
     (((m.map f).prod : Fˣ) : F) = (m.map fun h => (f h : F)).prod := by
@@ -213,8 +213,8 @@ theorem lemma13_iff_macdonald {t' : ℕ} (hw : ∀ k : ℤ, k ≠ 0 → w ^ k �
   have hC : (((if True ∧ t % 4 = 3 then -1 else 1 : Fˣ)) : F) = C := by
     simp only [true_and, C]
     rcases Nat.even_or_odd t' with ⟨k, hk⟩ | ⟨k, hk⟩
-    · rw [if_neg (by omega), hk, ← two_mul, pow_mul]; simp
-    · rw [if_pos (by omega), hk, pow_add, pow_mul]; simp
+    · rw [ite_eq_right (by omega), hk, ← two_mul, pow_mul]; simp
+    · rw [ite_eq_left (by omega), hk, pow_add, pow_mul]; simp
   have hCC : C * C = 1 := by rw [← pow_add, ← two_mul, pow_mul]; simp
   -- one core at a time: Corollary 4 with `τ = w^k − w^{−k}` (odd)
   have hcore : ∀ μ, IsTCore t μ →

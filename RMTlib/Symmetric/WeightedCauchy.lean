@@ -281,7 +281,7 @@ theorem contentProdP_rowsOf {N : ℕ} {μ : YoungDiagram} (hμ : RowsLE N μ) (f
     rw [YoungDiagram.mem_cells, mem_iff_of_rowsLE hμ, Finset.mem_range, Finset.mem_range]),
     contentProdP, length_rowsOf]
   refine Finset.prod_congr rfl (fun i hi => ?_)
-  rw [getD_rowsOf, if_pos (Finset.mem_range.mp hi)]
+  rw [getD_rowsOf, ite_eq_left (Finset.mem_range.mp hi)]
   rfl
 
 theorem contentProdP_const (T : R) (lam : Part) :

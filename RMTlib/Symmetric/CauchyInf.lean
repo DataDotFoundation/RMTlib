@@ -57,7 +57,7 @@ theorem coeff_keep (V : Set ι) (F : MvPowerSeries ι R) (e : ι →₀ ℕ) :
 theorem coeff_keep_of_subset (V : Set ι) (F : MvPowerSeries ι R) {e : ι →₀ ℕ}
     (he : ↑e.support ⊆ V) : coeff e (keep V F) = coeff e F := by
   classical
-  rw [coeff_keep, if_pos he]
+  rw [coeff_keep, ite_eq_left he]
 
 /-- `keep V` as an additive map. -/
 noncomputable def keepHom (V : Set ι) : MvPowerSeries ι R →+ MvPowerSeries ι R where
@@ -89,12 +89,12 @@ theorem keep_mono (V : Set ι) (w : ι →₀ ℕ) :
   ext e
   rw [coeff_keep, coeff_monomial]
   by_cases hw : ↑w.support ⊆ V
-  · rw [if_pos hw]
+  · rw [ite_eq_left hw]
     by_cases he : e = w
     · subst he
       simp [hw]
     · simp [he, coeff_monomial]
-  · rw [if_neg hw]
+  · rw [ite_eq_right hw]
     by_cases he : e = w
     · subst he
       simp [hw]
@@ -134,8 +134,8 @@ theorem keep_mul (V : Set ι) (F G : MvPowerSeries ι R) :
         by_cases h : p.1 i = 0
         · exact h2 (by simp only [Finset.mem_coe, Finsupp.mem_support_iff]; omega)
         · exact h1 (by simp only [Finset.mem_coe, Finsupp.mem_support_iff]; exact h)
-      · rw [if_neg h2, mul_zero]
-    · rw [if_neg h1, zero_mul]
+      · rw [ite_eq_right h2, mul_zero]
+    · rw [ite_eq_right h1, zero_mul]
 
 /-- `keep V` commutes with summable sums. -/
 theorem keep_tsum [TopologicalSpace R] [T2Space R] {A : Type*} {f : A → MvPowerSeries ι R}
@@ -278,9 +278,9 @@ theorem keep_schurInf {x : ℕ → ι} (hx : Function.Injective x) {V : Set ι} 
     ∀ i j, (i, j) ∈ μ → T i j < M} (fun T => (mono (ssytWt x T) : MvPowerSeries ι R))).symm
   refine tsum_congr (fun T => ?_)
   by_cases h : ∀ i j, (i, j) ∈ μ → T i j < M
-  · rw [if_pos ((hiff T).2 h), Set.indicator_of_mem (show T ∈ {T : SemistandardYoungTableau μ |
+  · rw [ite_eq_left ((hiff T).2 h), Set.indicator_of_mem (show T ∈ {T : SemistandardYoungTableau μ |
       ∀ i j, (i, j) ∈ μ → T i j < M} from h)]
-  · rw [if_neg (fun h' => h ((hiff T).1 h')), Set.indicator_of_notMem (show T ∉
+  · rw [ite_eq_right (fun h' => h ((hiff T).1 h')), Set.indicator_of_notMem (show T ∉
       {T : SemistandardYoungTableau μ | ∀ i j, (i, j) ∈ μ → T i j < M} from h)]
 
 end Keep
@@ -436,8 +436,8 @@ theorem keep_tsum_matWtInf {x y : ℕ → ι} (hx : Function.Injective x)
     rw [tsum_subtype S (fun A => (mono (matWtInf x y A) : MvPowerSeries ι R))]
     refine tsum_congr (fun A => ?_)
     by_cases h : A ∈ S
-    · rw [if_pos ((hiff A).2 h), Set.indicator_of_mem h]
-    · rw [if_neg (fun h' => h ((hiff A).1 h')), Set.indicator_of_notMem h]
+    · rw [ite_eq_left ((hiff A).2 h), Set.indicator_of_mem h]
+    · rw [ite_eq_right (fun h' => h ((hiff A).1 h')), Set.indicator_of_notMem h]
   rw [e1]
   refine Eq.trans (((boxEquiv M : (Fin M → Fin M → ℕ) ≃ S)).tsum_eq
     (fun A : S => (mono (matWtInf x y A.1) : MvPowerSeries ι R))).symm ?_
