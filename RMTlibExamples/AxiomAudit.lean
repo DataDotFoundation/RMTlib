@@ -378,4 +378,6 @@ import RMTlib
 #print axioms RMT.StringInsertion.translation_le_step
 #print axioms RMT.Fock.Virasoro.ev_Lm2
 #print axioms RMT.Fock.Virasoro.ev_one_L2_s11
+#print axioms RMT.Fock.Virasoro.evS_Lm2
+#print axioms RMT.Fock.Virasoro.evS_one_L2_s2
 #print axioms RMT.Transfer.sum_log_mul_padicValInt_le
