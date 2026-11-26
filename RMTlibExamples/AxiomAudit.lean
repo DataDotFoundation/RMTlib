@@ -396,3 +396,5 @@ import RMTlib
 #print axioms RMT.Moments.OtherFamilies.symplectic_boson_fermion
 #print axioms RMT.Moments.OtherFamilies.orthogonal_boson_fermion
 #print axioms RMT.Moments.OtherFamilies.mayaSet_sympShape_addBox
+#print axioms RMT.Moments.OtherFamilies.sl2_commutator_sympShape
+#print axioms RMT.Moments.OtherFamilies.two_mul_sum_stair_succ
