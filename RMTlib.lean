@@ -64,6 +64,7 @@ import RMTlib.Symmetric.Cauchy
 import RMTlib.Symmetric.SSYT
 import RMTlib.Symmetric.CauchyInf
 import RMTlib.Symmetric.JacobiTrudi
+import RMTlib.Symmetric.InterlacingDet
 import RMTlib.Symmetric.Specialise
 import RMTlib.Symmetric.WeightedCauchy
 import RMTlib.Symmetric.OmegaCovariant

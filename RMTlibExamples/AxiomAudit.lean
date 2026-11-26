@@ -418,3 +418,5 @@ import RMTlib
 #print axioms RMT.Places.Bertrand.prod_content_one_row
 #print axioms RMT.RSK.Growth.grow_transpose
 #print axioms RMT.Transfer.sum_padicValNat_mul_log_le
+#print axioms RMT.Symmetric.det_interlacing_indicator
+#print axioms RMT.Symmetric.det_staircase_gtStep_of_interlacing
