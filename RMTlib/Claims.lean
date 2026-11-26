@@ -270,7 +270,7 @@ def growthGoursat : Claim where
   declared := .proved
   statements := [``RMT.RSK.Growth.back_grow]
   square := some ("shape", "shape", "shape", "shape")
-  tiles := [[``fominSquare, ``fominSquare], [``fominSquare, ``fominSquare]]
+  tiling := some ``fominSquare
   determined := true
 
 end RMT.Claims
