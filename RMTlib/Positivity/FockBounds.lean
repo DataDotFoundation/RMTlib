@@ -27,7 +27,7 @@ variable {σ : Type*} [DecidableEq σ]
 
 /-- The number operator `X_v ∂_v` scales the coefficient of `x^m` by `m_v`. -/
 theorem coeff_X_mul_pderiv (v : σ) (P : MvPolynomial σ ℚ) (m : σ →₀ ℕ) :
-    coeff m (X v * pderiv v P) = (m v : ℚ) * coeff m P := by
+    (X v * pderiv v P).coeff m = (m v : ℚ) * P.coeff m := by
   rw [coeff_X_mul']
   split_ifs with h
   · rw [coeff_pderiv]

@@ -532,7 +532,7 @@ theorem eq_zero_of_fischer_self {σ : Type*} {f : MvPolynomial σ ℚ} (h : fisc
     have : (0 : ℚ) ≤ f.coeff m * f.coeff m := mul_self_nonneg _
     positivity] at h
   ext m
-  rw [coeff_zero]
+  rw [AddMonoidAlgebra.coeff_zero, Finsupp.zero_apply]
   by_contra hm
   have h1 := h m (mem_support_iff.mpr hm)
   have h2 : ((∏ k ∈ m.support, (m k).factorial : ℕ) : ℚ) ≠ 0 := by positivity

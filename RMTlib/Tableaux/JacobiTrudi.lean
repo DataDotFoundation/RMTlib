@@ -186,7 +186,7 @@ theorem eval_matrix_eq_vandermonde_mul {n : ℕ} (v : Fin n → ℚ) (p : Fin n 
   simp_rw [mul_apply, eval, of_apply, eval₂_eq_sum]
   simp only [vandermonde]
   have : (p j).support ⊆ range n := supp_subset_range (h_deg j)
-  rw [sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this, ← Fin.sum_univ_eq_sum_range]
+  rw [Polynomial.sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this, ← Fin.sum_univ_eq_sum_range]
   congr
   ext k
   rw [mul_comm, of_apply, RingHom.id_apply]

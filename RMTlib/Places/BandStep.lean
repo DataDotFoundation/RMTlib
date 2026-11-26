@@ -160,7 +160,7 @@ theorem hset_drain {L : Finset ℕ} {Δ ℓ : ℕ} (hΔ : 1 ≤ Δ) (hℓ : ∀ 
     positivity
   have hBA : ∏ x ∈ L, (Nat.dist (x + Δ) ℓ : ℚ) ≤
       ∏ x ∈ L, ((x + Δ).factorial : ℚ) / x.factorial := by
-    refine prod_le_prod (fun x _ => by positivity) fun x hx => ?_
+    refine prod_le_prod₀ (fun x _ => by positivity) fun x hx => ?_
     have h1 : Nat.dist (x + Δ) ℓ ≤ x + Δ := by
       have := hℓ x hx
       rw [Nat.dist_comm, Nat.dist_eq_sub_of_le (by omega)]; omega
@@ -294,7 +294,7 @@ theorem pow_le_ascFactorial_sq (x Δ : ℕ) : (x + Δ) ^ Δ ≤ ((x + 1).ascFact
   rw [← prod_mul_distrib]
   calc (x + Δ) ^ Δ = ∏ _u ∈ range Δ, (x + Δ) := by rw [prod_const, card_range]
     _ ≤ ∏ u ∈ range Δ, ((x + 1 + u) * (x + 1 + (Δ - 1 - u))) := by
-        refine prod_le_prod' fun u hu => ?_
+        refine prod_le_prod fun u hu => ?_
         have hu := mem_range.mp hu
         have h1 : x + 1 + (Δ - 1 - u) = x + Δ - u := by omega
         rw [h1]

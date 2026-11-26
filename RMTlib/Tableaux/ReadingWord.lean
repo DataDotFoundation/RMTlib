@@ -161,7 +161,6 @@ theorem interlacedAt_iff {t : ℕ} (h : t + 1 < n) :
     InterlacedAt ⟨t, by omega⟩ ⟨t + 1, h⟩ m ↔ Col2 (rowN m t) (rowN m (t + 1)) := by
   have e1 : ∀ a : Fin k, ∑ b : Fin k with b ≤ a, m (b, ⟨t + 1, h⟩) = cnt (rowN m (t + 1)) (a.val + 1) := by
     intro a; rw [cnt_rowN m h]; congr 1
-    apply Finset.filter_congr; intro b _; rw [Fin.le_iff_val_le_val]; omega
   have e2 : ∀ a : Fin k, ∑ b : Fin k with b < a, m (b, ⟨t, by omega⟩) = cnt (rowN m t) a.val := by
     intro a; rw [cnt_rowN m (by omega)]; rfl
   unfold InterlacedAt

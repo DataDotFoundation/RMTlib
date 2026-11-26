@@ -111,7 +111,7 @@ theorem hookProd_le_prod_factorial_mul_pow (ν : Fin N → ℕ) (hν : Antitone 
       _ = _ := hF
   refine hle.trans ?_
   rw [← prod_pow_eq_pow_sum, ← prod_mul_distrib]
-  refine prod_le_prod' fun i _ => factorial_add_le_mul_pow ?_
+  refine prod_le_prod fun i _ => factorial_add_le_mul_pow ?_
   have := hν (show (⟨0, h0⟩ : Fin N) ≤ i from Fin.mk_le_mk.mpr (Nat.zero_le _))
   have := i.isLt
   omega

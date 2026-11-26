@@ -192,14 +192,14 @@ theorem le_hook {ν : Fin N → ℕ} (hν : Antitone ν) {i : Fin N} {c : ℕ} (
 /-- `∏ ν_i! ≤ H(ν)`: each hook is at least its arm plus one. -/
 theorem prod_factorial_le_hookProd (ν : Fin N → ℕ) (hν : Antitone ν) :
     ∏ i, (ν i)! ≤ hookProd ν := by
-  refine prod_le_prod' fun i _ => ?_
+  refine prod_le_prod fun i _ => ?_
   calc (ν i)! = ∏ c ∈ range (ν i), (ν i - c) := by
         rw [← prod_range_add_one_eq_factorial, ← prod_range_reflect]
         refine prod_congr rfl fun c hc => ?_
         have := mem_range.mp hc
         omega
     _ ≤ ∏ c ∈ range (ν i), hook ν i c :=
-        prod_le_prod' fun c hc => le_hook hν (mem_range.mp hc)
+        prod_le_prod fun c hc => le_hook hν (mem_range.mp hc)
 
 theorem factorial_add_le (a m : ℕ) : (a + m)! ≤ a ! * (a + m) ^ m := by
   induction m with
@@ -233,7 +233,7 @@ theorem hookProd_le (ν : Fin N → ℕ) (hν : Antitone ν) (hN : 0 < N) :
       _ = _ := hF
   refine h1.trans ?_
   rw [← sum_fin_sub_one_sub, ← prod_pow_eq_pow_sum, ← prod_mul_distrib]
-  refine prod_le_prod' fun i _ => ?_
+  refine prod_le_prod fun i _ => ?_
   calc (ν i + (N - 1 - i))! ≤ (ν i)! * (ν i + (N - 1 - i)) ^ (N - 1 - i) := factorial_add_le _ _
     _ ≤ (ν i)! * (ν ⟨0, hN⟩ + N) ^ (N - 1 - i) := by
         refine Nat.mul_le_mul_left _ (Nat.pow_le_pow_left ?_ _)
