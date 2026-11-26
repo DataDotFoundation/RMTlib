@@ -84,12 +84,12 @@ theorem num_mul (n : ℕ) (g : Λ) : (n : Λ) * g = (n : ℚ) • g := by
 theorem L2_Lm2 (a : ℚ) : L2 a * Lm2 a - Lm2 a * L2 a = (4 : ℚ) • L0 a + (1 / 2 : ℚ) • 1 := by
   refine LinearMap.ext fun f => ?_
   have hF := congrArg (fun D : Der => D f) (down2_up2 a)
-  simp only [Derivation.commutator_apply, Derivation.sub_apply, Derivation.smul_apply,
+  simp only [Derivation.commutator_apply, sub_apply, smul_apply,
     smul_eq_mul] at hF
   have hC' : pderiv 1 (pderiv 1 (up2 f)) = up2 (pderiv 1 (pderiv 1 f)) := by
     have h1 := congrArg (fun D : Der => D f) pd1_up2
     have h2 := congrArg (fun D : Der => D (pderiv 1 f)) pd1_up2
-    simp only [Derivation.commutator_apply, Derivation.zero_apply] at h1 h2
+    simp only [Derivation.commutator_apply, zero_apply] at h1 h2
     rw [sub_eq_zero.mp h1, sub_eq_zero.mp h2]
   have hA : pderiv 1 (pderiv 1 (X 1 * X 1 * f)) =
       X 1 * X 1 * pderiv 1 (pderiv 1 f) + (4 : ℚ) • (X 1 * pderiv 1 f) + (2 : ℚ) • f := by
@@ -107,9 +107,9 @@ theorem L2_Lm2 (a : ℚ) : L2 a * Lm2 a - Lm2 a * L2 a = (4 : ℚ) • L0 a + (1
     rw [show f * ((2 : ℚ) • C a) = (2 * a) • f by
       rw [mul_smul_comm, mul_comm, ← smul_eq_C_mul, smul_smul, mul_comm]]
     rw [add_comm]
-  simp only [L2, Lm2, L0, D1, LinearMap.sub_apply, LinearMap.add_apply, Module.End.mul_apply,
+  simp only [L2, Lm2, L0, D1, LinearMap.sub_apply, LinearMap.add_apply, mul_apply_eq_comp,
     LinearMap.smul_apply, LinearMap.mulLeft_apply, Derivation.coeFn_coe, map_add, map_smul,
-    Module.End.one_apply, hA, hB, hC', hD, hE]
+    one_apply_eq_self, hA, hB, hC', hD, hE]
   linear_combination (norm := module) hF
 
 /-! ## `L_0` grades `L_{±2}` -/
@@ -118,7 +118,7 @@ theorem deg_pd1 : ⁅deg, (pderiv 1 : Der)⁆ = -(pderiv 1 : Der) := by
   apply MvPolynomial.derivation_ext
   intro k
   rw [Derivation.commutator_apply, deg_X, pderiv_X, Derivation.map_smul, pderiv_X]
-  simp only [Pi.single_apply, Derivation.neg_apply]
+  simp only [Pi.single_apply, neg_apply]
   split_ifs with h <;> simp [h]
 
 theorem deg_down2 (a : ℚ) : ⁅deg, down2 a⁆ = (-2 : ℚ) • down2 a := by
@@ -137,7 +137,7 @@ theorem deg_up2 : ⁅deg, up2⁆ = (2 : ℚ) • up2 := by
   intro k
   rw [Derivation.commutator_apply, up2_X, deg_X, Derivation.map_smul, Derivation.map_smul, deg_X,
     up2_X]
-  simp only [Derivation.smul_apply, up2_X, smul_smul]
+  simp only [smul_apply, up2_X, smul_smul]
   push_cast; module
 
 /-- **`[L_0, L_2] = −2 L_2`**. -/
@@ -145,19 +145,19 @@ theorem L0_L2 (a : ℚ) : L0 a * L2 a - L2 a * L0 a = (-2 : ℚ) • L2 a := by
   refine LinearMap.ext fun f => ?_
   have h1 : ∀ g, deg (pderiv 1 g) = pderiv 1 (deg g) - pderiv 1 g := fun g => by
     have := congrArg (fun D : Der => D g) deg_pd1
-    simp only [Derivation.commutator_apply, Derivation.neg_apply] at this
+    simp only [Derivation.commutator_apply, neg_apply] at this
     rw [sub_eq_iff_eq_add] at this; rw [this]; abel
   have h2 := congrArg (fun D : Der => D f) (deg_down2 a)
-  simp only [Derivation.commutator_apply, Derivation.smul_apply] at h2
-  simp only [L0, L2, D1, LinearMap.sub_apply, LinearMap.add_apply, Module.End.mul_apply,
-    LinearMap.smul_apply, Module.End.one_apply, Derivation.coeFn_coe, map_add, map_smul, h1, map_sub]
+  simp only [Derivation.commutator_apply, smul_apply] at h2
+  simp only [L0, L2, D1, LinearMap.sub_apply, LinearMap.add_apply, mul_apply_eq_comp,
+    LinearMap.smul_apply, one_apply_eq_self, Derivation.coeFn_coe, map_add, map_smul, h1, map_sub]
   linear_combination (norm := module) h2
 
 /-- **`[L_0, L_{−2}] = 2 L_{−2}`**. -/
 theorem L0_Lm2 (a : ℚ) : L0 a * Lm2 a - Lm2 a * L0 a = (2 : ℚ) • Lm2 a := by
   refine LinearMap.ext fun f => ?_
   have h2 := congrArg (fun D : Der => D f) deg_up2
-  simp only [Derivation.commutator_apply, Derivation.smul_apply] at h2
+  simp only [Derivation.commutator_apply, smul_apply] at h2
   have e1 : deg (X 1 * X 1 * f) = X 1 * X 1 * deg f + (2 : ℚ) • (X 1 * X 1 * f) := by
     simp only [Derivation.leibniz, deg_X, smul_eq_mul, smul_eq_C_mul, Nat.cast_one, C_1]
     rw [show (C (2 : ℚ) : Λ) = 2 from map_ofNat C 2]
@@ -166,8 +166,8 @@ theorem L0_Lm2 (a : ℚ) : L0 a * Lm2 a - Lm2 a * L0 a = (2 : ℚ) • Lm2 a := 
     simp only [Derivation.leibniz, deg_X, smul_eq_mul, smul_eq_C_mul, Nat.cast_ofNat]
     rw [show (C (2 : ℚ) : Λ) = 2 from map_ofNat C 2]
     ring
-  simp only [L0, Lm2, LinearMap.sub_apply, LinearMap.add_apply, Module.End.mul_apply,
-    LinearMap.smul_apply, LinearMap.mulLeft_apply, Module.End.one_apply, Derivation.coeFn_coe, map_add,
+  simp only [L0, Lm2, LinearMap.sub_apply, LinearMap.add_apply, mul_apply_eq_comp,
+    LinearMap.smul_apply, LinearMap.mulLeft_apply, one_apply_eq_self, Derivation.coeFn_coe, map_add,
     map_smul, e1, e2]
   linear_combination (norm := module) h2
 
@@ -195,7 +195,7 @@ theorem omega_up2 (f : Λ) : omega (up2 f) = up2 (omega f) := by
 
 /-- **`ω L_2^{(a)} = L_2^{(−a)} ω`**. -/
 theorem omega_L2 (a : ℚ) (f : Λ) : omega (L2 a f) = L2 (-a) (omega f) := by
-  simp only [L2, D1, LinearMap.add_apply, LinearMap.smul_apply, Module.End.mul_apply,
+  simp only [L2, D1, LinearMap.add_apply, LinearMap.smul_apply, mul_apply_eq_comp,
     Derivation.coeFn_coe, map_add, map_smul, omega_pd1, omega_down2]
 
 /-- **`ω L_{−2}^{(a)} = L_{−2}^{(−a)} ω`**. -/
@@ -248,7 +248,7 @@ theorem ev_one_s11 : ev 1 ((X 1 : Λ) ^ 2 - X 2) = 0 := by
 the one-row window although `p_1² − p_2` is in `ker (ev 1)`. The `N`-row window at `∞` is an `sl₂`
 statement (`L_{±1}`, `L_{−2}`), not a Virasoro one. -/
 theorem L2_one_s11 : L2 1 ((X 1 : Λ) ^ 2 - X 2) = -1 := by
-  simp only [L2, D1, LinearMap.add_apply, LinearMap.smul_apply, Module.End.mul_apply, map_sub]
+  simp only [L2, D1, LinearMap.add_apply, LinearMap.smul_apply, mul_apply_eq_comp, map_sub]
   simp [pow_two, Derivation.leibniz, down2_X, pc, pderiv_X]
   module
 

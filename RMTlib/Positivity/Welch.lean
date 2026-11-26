@@ -31,7 +31,7 @@ theorem trace_sq_le_card_mul_trace_mul_self {D : ℕ} (Q : Matrix (Fin D) (Fin D
   have hdiag : ∑ i, Q i i ^ 2 ≤ trace (Q * Q) := by
     rw [trace]
     refine Finset.sum_le_sum fun i _ => ?_
-    simp only [diag_apply, mul_apply]
+    simp only [diag_apply, Matrix.mul_apply]
     have hsym : ∀ j, Q i j * Q j i = Q i j ^ 2 := fun j => by
       have h := congrFun (congrFun hQ i) j
       rw [transpose_apply] at h

@@ -142,7 +142,7 @@ theorem ker_automorphic (ω : G × H →* Module.End ℂ S) (read : S → ℂ) (
     (hΦ : Φ ∈ A) (g : G) (h : H) :
     (ofEnd ω read).ker Φ (γ.1 * g) (γ.2 * h) = (ofEnd ω read).ker Φ g h := by
   simp only [ker_ofEnd]
-  rw [show ((γ.1 * g, γ.2 * h) : G × H) = γ * (g, h) from rfl, map_mul, Module.End.mul_apply]
+  rw [show ((γ.1 * g, γ.2 * h) : G × H) = γ * (g, h) from rfl, map_mul, mul_apply_eq_comp]
   exact hread γ hγ _ (hA _ _ hΦ)
 
 /-- The lift of an automorphic kernel is unchanged by translating `h` by the second component of

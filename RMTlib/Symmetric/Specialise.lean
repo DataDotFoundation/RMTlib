@@ -490,7 +490,9 @@ theorem oneRow_cauchy_two_of
       omega
     · intro l hl
       have := (hmem l).mp hl
-      funext t; fin_cases t <;> (simp; try omega)
+      funext t; fin_cases t
+      · simp; omega
+      · simp
     · rintro ⟨u, w⟩ huw
       simp only [Finset.mem_filter, Finset.HasAntidiagonal.mem_antidiagonal] at huw
       obtain ⟨huw, ⟨r, rfl⟩⟩ := huw

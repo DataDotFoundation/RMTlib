@@ -51,10 +51,10 @@ theorem pderiv_comm {σ : Type*} (i j : σ) (f : MvPolynomial σ ℚ) :
     apply MvPolynomial.derivation_ext
     intro k
     rw [Derivation.commutator_apply, pderiv_X, pderiv_X]
-    simp only [Pi.single_apply, Derivation.zero_apply]
+    simp only [Pi.single_apply, zero_apply]
     split_ifs <;> simp
   have h2 := congrArg (fun D : Derivation ℚ (MvPolynomial σ ℚ) (MvPolynomial σ ℚ) => D f) h
-  simp only [Derivation.commutator_apply, Derivation.zero_apply] at h2
+  simp only [Derivation.commutator_apply, zero_apply] at h2
   exact sub_eq_zero.mp h2
 
 variable {N : ℕ}
@@ -215,7 +215,7 @@ theorem sqD_hX (k : ℕ) (a b : Fin N) :
   ext m
   rw [← matExp_toMat m]
   set M : Fin N → Fin N → ℕ := fun i j => m (i, j)
-  rw [coeff_sum, coeff_smul]
+  rw [coeff_sum, AddMonoidAlgebra.coeff_smul_apply]
   simp_rw [coeff_pderiv]
   simp_rw [← matExp_addE, coeff_hX, matExp_apply, hCond_addE_addE, smul_eq_mul]
   split_ifs with hc

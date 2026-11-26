@@ -508,7 +508,7 @@ theorem hookProd_corners (hν : Antitone ν) (hM : ∀ i, ν i ≤ M) :
     prod_pos fun u _ => prod_pos fun v _ => zpow_pos (hpos u v) _
   have key : (RMT.hookProd ν : ℝ) = ∏ u ∈ window N M, ∏ v ∈ (window N M).filter (u < ·),
       ((barnesG (1 + |u - v|).toNat : ℕ) : ℝ) ^ (charge ν u * charge ν v) := by
-    apply Real.log_injOn_pos hH hR
+    refine Real.log_injOn_pos (Set.mem_Ioi.mpr hH) (Set.mem_Ioi.mpr hR) ?_
     rw [hlog, Real.log_prod (fun u _ => (prod_pos fun v _ => zpow_pos (hpos u v) _).ne')]
     refine sum_congr rfl fun u _ => ?_
     rw [Real.log_prod (fun v _ => (zpow_pos (hpos u v) _).ne')]

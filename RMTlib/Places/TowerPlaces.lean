@@ -41,6 +41,7 @@ theorem padicValRat_hset (L : Finset ℕ) :
   unfold hset
   rw [padicValRat.div (by exact_mod_cast (fac_pos L).ne') (by exact_mod_cast (vd_pos L).ne'),
     padicValRat.of_nat, padicValRat.of_nat]
+  simp only [Nat.padicValNat_def]
 
 /-- **The step law at a prime `p`**: the same split as at `∞` (`log_hset_step`). -/
 theorem padicValRat_hset_step {L : Finset ℕ} {Δ ℓ : ℕ} (hℓ : ℓ ∉ shift L Δ) :
@@ -63,6 +64,7 @@ theorem padicValRat_hset_step {L : Finset ℕ} {Δ ℓ : ℕ} (hℓ : ℓ ∉ sh
     padicValRat.mul (mul_ne_zero hH (prod_ne_zero_iff.mpr hT)) hS,
     padicValRat.mul hH (prod_ne_zero_iff.mpr hT), padicValRat_prod hT, padicValRat_prod hd,
     padicValRat.of_nat]
+  simp only [Nat.padicValNat_def]
   congr 2
   · congr 1
     refine sum_congr rfl fun x _ => ?_
@@ -80,7 +82,7 @@ theorem log_eq_sum_of_subset {Q : ℕ} (hQ : Q ≠ 0) {S : Finset ℕ} (hS : Q.p
   refine sum_subset hS fun q hqS hq => ?_
   have hqp := hprime q hqS
   have : ¬ q ∣ Q := fun hdvd => hq (Nat.mem_primeFactors.mpr ⟨hqp, hdvd, hQ⟩)
-  rw [padicValNat.eq_zero_of_not_dvd this]
+  rw [Nat.padicValNat_def, multiplicity_eq_zero_of_not_dvd this]
   simp
 
 omit hp in

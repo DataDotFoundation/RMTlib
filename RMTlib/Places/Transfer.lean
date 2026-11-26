@@ -40,7 +40,8 @@ theorem padicValNat_add (p : ℕ) [Fact p.Prime] {Q S G : ℕ} (h : Q * S = G) (
     padicValNat p Q + padicValNat p S = padicValNat p G := by
   have hQ : Q ≠ 0 := fun h0 => hG (by rw [← h, h0, zero_mul])
   have hS : S ≠ 0 := fun h0 => hG (by rw [← h, h0, mul_zero])
-  rw [← h, padicValNat.mul hQ hS]
+  simp only [Nat.padicValNat_def]
+  rw [← h, Nat.multiplicity_mul hQ hS]
 
 /-- **Transfer 1, size at `∞`**: `Q · S = G ≠ 0 ⇒ Q ≤ G`. -/
 @[frame_transfer value_bound (key := h)]
@@ -57,7 +58,8 @@ theorem log_eq_sum {Q : ℕ} (hQ : Q ≠ 0) :
   conv_lhs => rw [← Nat.prod_factorization_pow_eq_self hQ]
   rw [Finsupp.prod, Nat.cast_prod, Real.log_prod]
   · refine sum_congr rfl fun p hp => ?_
-    rw [Nat.cast_pow, Real.log_pow, Nat.factorization_def Q (Nat.prime_of_mem_primeFactors hp)]
+    rw [Nat.cast_pow, Real.log_pow, Nat.factorization_def Q (Nat.prime_of_mem_primeFactors hp),
+      Nat.padicValNat_def]
   · intro p hp
     have := (Nat.prime_of_mem_primeFactors hp).pos
     positivity
@@ -79,7 +81,8 @@ theorem sum_log_mul_padicValNat_le {Q : ℕ} (hQ : Q ≠ 0) (Ls : Finset Nat.Pri
     obtain ⟨hxL, hxQ⟩ := mem_filter.mp hx
     obtain ⟨ℓ, -, rfl⟩ := mem_map.mp hxL
     have : ¬ (ℓ : ℕ) ∣ Q := fun hd => hxQ (Nat.mem_primeFactors.mpr ⟨ℓ.2, hd, hQ⟩)
-    have h0 : padicValNat (e ℓ) Q = 0 := padicValNat.eq_zero_of_not_dvd this
+    have h0 : padicValNat (e ℓ) Q = 0 := by
+      rw [Nat.padicValNat_def]; exact multiplicity_eq_zero_of_not_dvd this
     rw [h0, Nat.cast_zero, mul_zero]
   rw [hzero, add_zero]
   calc _ ≤ ∑ p ∈ Q.primeFactors, Real.log p * (padicValNat p Q : ℝ) := by
@@ -110,10 +113,10 @@ theorem sum_log_le_of_two_aux {a : ℕ → ℝ} {c : ℝ} (hc : 0 ≤ c) {p p' :
     have hbound : a ℓ ≤ c * padicValNat ℓ n.natAbs + c * padicValNat ℓ n'.natAbs := by
       by_cases hp : (ℓ : ℕ) = p
       · have := h' ℓ ℓ.2 (hp ▸ hne)
-        simp only [padicValInt] at this
+        simp only [padicValInt, ← Nat.padicValNat_def] at this
         nlinarith [mul_nonneg hc hv]
       · have := h ℓ ℓ.2 hp
-        simp only [padicValInt] at this
+        simp only [padicValInt, ← Nat.padicValNat_def] at this
         nlinarith [mul_nonneg hc hv']
     nlinarith [mul_le_mul_of_nonneg_left hbound hlog]
   calc ∑ ℓ ∈ Ls, Real.log (ℓ : ℕ) * a ℓ
@@ -131,7 +134,8 @@ theorem sum_log_le_of_two_aux {a : ℕ → ℝ} {c : ℝ} (hc : 0 ≤ c) {p p' :
 
 /-- **Folding `padicValInt`** (MeaningLib#68 R3): `v_p` of an integer is `v_p` of its absolute value. -/
 theorem padicValInt_eq_padicValNat_natAbs (p : ℕ) (n : ℤ) :
-    padicValInt p n = padicValNat p n.natAbs := rfl
+    padicValInt p n = padicValNat p n.natAbs := by
+  rw [padicValInt, Nat.padicValNat_def]
 
 /-- **The truncated product formula over `ℤ`** (MeaningLib#68 R3), in the form the proof states it:
 over any set of primes, `Σ log ℓ · v_ℓ(n) ≤ log |n|` for `n ≠ 0`. -/

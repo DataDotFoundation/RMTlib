@@ -219,7 +219,7 @@ noncomputable def cMat (a : ℕ → R) (n : ℕ) : Matrix (Fin n) (Fin n) R :=
 theorem alt_eq_mul (a : ℕ → R) (n : ℕ) (l : Fin n → ℕ) :
     (of fun i j : Fin n => a i ^ (l + stair n) j) = cMat a n * (jtMat a n l)ᵀ := by
   ext i j
-  rw [mul_apply, of_apply, ← sum_coeff_Q_mul_hE a i.2, ← sum_range_reflect,
+  rw [Matrix.mul_apply, of_apply, ← sum_coeff_Q_mul_hE a i.2, ← sum_range_reflect,
     ← Fin.sum_univ_eq_sum_range (fun r => (Qpoly a n i).coeff (n - 1 - r)
       * hE a n ((((l + stair n) j : ℕ) : ℤ) - ((n - 1 - r : ℕ) : ℤ)))]
   refine Fintype.sum_congr _ _ fun k => ?_

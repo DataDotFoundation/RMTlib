@@ -55,7 +55,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
     have h12 : (X.submatrix finSumFinEquiv finSumFinEquiv).toBlocks₁₂ = 0 := by
       ext i j
       simp only [toBlocks₁₂, of_apply, submatrix_apply, finSumFinEquiv_apply_left,
-        finSumFinEquiv_apply_right, X, Fin.val_castAdd, i.2, ite_true, zero_apply]
+        finSumFinEquiv_apply_right, X, Fin.val_castAdd, i.2, ite_true, Matrix.zero_apply]
       rw [one_apply_ne]
       intro h
       have := congrArg Fin.val h
@@ -77,10 +77,10 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
   have hY : X * A = of fun (i j : Fin (n + 2)) => if (i : ℕ) < n then A i j
       else (A.det • (1 : Matrix (Fin (n + 2)) (Fin (n + 2)) R)) i j := by
     ext i j
-    simp only [mul_apply, X, of_apply]
+    simp only [Matrix.mul_apply, X, of_apply]
     split_ifs
-    · rw [← mul_apply, one_mul]
-    · rw [← mul_apply, adjugate_mul]
+    · rw [← Matrix.mul_apply, one_mul]
+    · rw [← Matrix.mul_apply, adjugate_mul]
   have hdY : det (X * A) = det (A.submatrix (Fin.castAdd 2) (Fin.castAdd 2)) * det A ^ 2 := by
     rw [hY, ← det_submatrix_equiv_self finSumFinEquiv,
       ← fromBlocks_toBlocks (submatrix _ finSumFinEquiv finSumFinEquiv)]
@@ -89,7 +89,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
           finSumFinEquiv finSumFinEquiv).toBlocks₂₁ = 0 := by
       ext i j
       simp only [toBlocks₂₁, of_apply, submatrix_apply, finSumFinEquiv_apply_left,
-        finSumFinEquiv_apply_right, Fin.val_natAdd, zero_apply, smul_apply, smul_eq_mul]
+        finSumFinEquiv_apply_right, Fin.val_natAdd, Matrix.zero_apply, Matrix.smul_apply, smul_eq_mul]
       rw [ite_eq_right (by omega), one_apply_ne, mul_zero]
       intro h
       have := congrArg Fin.val h
@@ -105,7 +105,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
             finSumFinEquiv finSumFinEquiv).toBlocks₂₂ = A.det • (1 : Matrix (Fin 2) (Fin 2) R) := by
         ext i j
         simp only [toBlocks₂₂, of_apply, submatrix_apply, finSumFinEquiv_apply_right,
-          Fin.val_natAdd, smul_apply, smul_eq_mul]
+          Fin.val_natAdd, Matrix.smul_apply, smul_eq_mul]
         rw [ite_eq_right (by omega)]
         by_cases h : i = j
         · subst h; simp

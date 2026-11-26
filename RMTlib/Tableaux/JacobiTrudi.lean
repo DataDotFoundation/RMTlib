@@ -183,7 +183,7 @@ theorem eval_matrix_eq_vandermonde_mul {n : ℕ} (v : Fin n → ℚ) (p : Fin n 
     of (fun i j => (p j).eval (v i)) =
       vandermonde v * of (fun (i j : Fin n) => (p j).coeff i) := by
   ext i j
-  simp_rw [mul_apply, eval, of_apply, eval₂_eq_sum]
+  simp_rw [Matrix.mul_apply, eval, of_apply, eval₂_eq_sum]
   simp only [vandermonde]
   have : (p j).support ⊆ range n := supp_subset_range (h_deg j)
   rw [Polynomial.sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this, ← Fin.sum_univ_eq_sum_range]

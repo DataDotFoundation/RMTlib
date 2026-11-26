@@ -89,7 +89,7 @@ theorem deltaK_stable {F : Λ₂} {K : ℕ} (h : bound F ≤ K) : deltaK K F = d
   induction K, h using Nat.le_induction with
   | base => rfl
   | succ K hK ih =>
-    rw [deltaK_succ, LinearMap.add_apply, ih, LinearMap.smul_apply, Module.End.mul_apply,
+    rw [deltaK_succ, LinearMap.add_apply, ih, LinearMap.smul_apply, mul_apply_eq_comp,
       dR_of_bound_le hK, map_zero, smul_zero, add_zero]
 
 /-- Dehaye's `δ = Σ_k k ∂_{p_k} ∂_{p̃_k}`: the truncation at any `K ≥ bound F` (`delta_eq`). -/
@@ -124,7 +124,7 @@ theorem dL_dR_comm (k l : ℕ) (G : Λ₂) : dL k (dR l G) = dR l (dL k G) := by
       rw [Derivation.commutator_apply, pderiv_X, pderiv_X]
       simp only [Pi.single_apply]; split_ifs <;> simp
   have h2 := congrArg (fun D : Derivation ℚ Λ₂ Λ₂ => D G) h
-  simp only [Derivation.commutator_apply, Derivation.zero_apply, sub_eq_zero] at h2
+  simp only [Derivation.commutator_apply, zero_apply, sub_eq_zero] at h2
   exact h2
 
 theorem term_mul_left (k j : ℕ) (G : Λ₂) :
@@ -144,7 +144,7 @@ theorem deltaK_mul_aux (K : ℕ) (v : ℕ ⊕ ℕ) (D : ℕ → End₂)
   | zero => simp [deltaK]
   | succ K ih =>
     rw [deltaK_succ, LinearMap.add_apply, ih, LinearMap.add_apply, LinearMap.smul_apply,
-      Module.End.mul_apply, hterm, LinearMap.smul_apply, Module.End.mul_apply, mul_add, mul_smul_comm]
+      mul_apply_eq_comp, hterm, LinearMap.smul_apply, mul_apply_eq_comp, mul_add, mul_smul_comm]
     rcases lt_trichotomy (idx v) K with h | h | h
     · simp only [ite_eq_left h, ite_eq_left (Nat.lt_succ_of_lt h), ite_eq_right (Nat.ne_of_gt h)]; module
     · subst h; simp only [lt_irrefl, ite_false, ite_true, Nat.lt_succ_self]; module
@@ -232,7 +232,7 @@ theorem der_comm (D E : Derivation ℚ Λ₂ Λ₂) :
 theorem der_comm_mul (D : Derivation ℚ Λ₂ Λ₂) (g : Λ₂) :
     (D : End₂) * mulL g - mulL g * D = mulL (D g) := by
   refine LinearMap.ext fun F => ?_
-  simp only [mulL, LinearMap.sub_apply, Module.End.mul_apply, LinearMap.mulLeft_apply,
+  simp only [mulL, LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.mulLeft_apply,
     Derivation.coeFn_coe, Derivation.leibniz, smul_eq_mul]
   ring
 
@@ -299,7 +299,7 @@ theorem dR_upR (k : ℕ) :
     rintro (m | m)
     · simp [upR]
     · simp only [upR, mkDerivation_X, Sum.elim_inr, Derivation.map_smul, pderiv_X,
-        Derivation.smul_apply, Pi.single_apply, Sum.inr.injEq]
+        smul_apply, Pi.single_apply, Sum.inr.injEq]
       by_cases h : m + 1 = k
       · subst h; simp
       · rw [ite_eq_right h]
@@ -314,7 +314,7 @@ theorem dL_upL (k : ℕ) :
   have := pderiv_comm_eq (Sum.inl k) upL (((k - 1 : ℕ) : ℚ) • pderiv (Sum.inl (k - 1))) (by
     rintro (m | m)
     · simp only [upL, mkDerivation_X, Sum.elim_inl, Derivation.map_smul, pderiv_X,
-        Derivation.smul_apply, Pi.single_apply, Sum.inl.injEq]
+        smul_apply, Pi.single_apply, Sum.inl.injEq]
       by_cases h : m + 1 = k
       · subst h; simp
       · rw [ite_eq_right h]
@@ -359,7 +359,7 @@ theorem dL_degL (k : ℕ) : dL k * (degL : End₂) - (degL : End₂) * dL k = (k
   have := pderiv_comm_eq (Sum.inl k) degL ((k : ℚ) • pderiv (Sum.inl k)) (by
     rintro (m | m)
     · simp only [degL, mkDerivation_X, Sum.elim_inl, Derivation.map_smul, pderiv_X,
-        Derivation.smul_apply, Pi.single_apply, Sum.inl.injEq]
+        smul_apply, Pi.single_apply, Sum.inl.injEq]
       by_cases h : m = k
       · subst h; simp
       · simp [h]
@@ -371,7 +371,7 @@ theorem dR_degR (k : ℕ) : dR k * (degR : End₂) - (degR : End₂) * dR k = (k
     rintro (m | m)
     · simp [degR]
     · simp only [degR, mkDerivation_X, Sum.elim_inr, Derivation.map_smul, pderiv_X,
-        Derivation.smul_apply, Pi.single_apply, Sum.inr.injEq]
+        smul_apply, Pi.single_apply, Sum.inr.injEq]
       by_cases h : m = k
       · subst h; simp
       · simp [h])
@@ -460,7 +460,7 @@ theorem delta_X1 (a b : ℚ) (F : Λ₂) : delta (X1 a b F) - X1 a b (delta F) =
   set K := max (max (bound F + 1) (bound (X1 a b F))) 2
   rw [delta_eq (K := K) (by omega), delta_eq (K := K) (by omega)]
   have h := congrArg (fun T : End₂ => T F) (deltaK_X1 a b K)
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, LinearMap.add_apply,
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.add_apply,
     LinearMap.smul_apply] at h
   rw [h, ite_eq_left (by omega), dR_of_bound_le (by omega), map_zero, smul_zero, add_zero]
   rfl
@@ -527,7 +527,7 @@ theorem delta_Xm1 (a b : ℚ) (F : Λ₂) : delta (Xm1 a b F) - Xm1 a b (delta F
   set K := max (max (bound F) (bound (Xm1 a b F))) 2
   rw [delta_eq (K := K) (by omega), delta_eq (K := K) (by omega)]
   have h := congrArg (fun T : End₂ => T F) (deltaK_Xm1 a b K)
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, 
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, 
     LinearMap.smul_apply] at h
   rw [h, ite_eq_left (by omega), dR_of_bound_le (by omega), map_zero, smul_zero, sub_zero]
   rfl
@@ -630,7 +630,7 @@ theorem intertwine₂ (φ : Λ₂ →ₐ[ℚ] Λ₂) (D D' : Derivation ℚ Λ�
 theorem omega2_pderiv (v : ℕ ⊕ ℕ) (F : Λ₂) :
     omega2 (pderiv v F) = (sgn (idx v) • pderiv v : Derivation ℚ Λ₂ Λ₂) (omega2 F) := by
   refine intertwine₂ omega2 _ _ (fun w => ?_) F
-  simp only [omega2, aeval_X, Derivation.smul_apply, Derivation.map_smul, pderiv_X, Pi.single_apply]
+  simp only [omega2, aeval_X, smul_apply, Derivation.map_smul, pderiv_X, Pi.single_apply]
   split_ifs with h
   · subst h; simp [smul_smul, sgn_mul_self]
   · simp
@@ -640,26 +640,26 @@ theorem omegaL_pderiv (v : ℕ ⊕ ℕ) (F : Λ₂) :
       (Sum.elim (fun k => sgn k) (fun _ => (1 : ℚ)) v • pderiv v : Derivation ℚ Λ₂ Λ₂) (omegaL F) := by
   refine intertwine₂ omegaL _ _ (fun w => ?_) F
   rcases v with k | k <;> rcases w with m | m <;>
-    simp only [omegaL, aeval_X, Sum.elim_inl, Sum.elim_inr, Derivation.smul_apply,
+    simp only [omegaL, aeval_X, Sum.elim_inl, Sum.elim_inr, smul_apply,
       Derivation.map_smul, pderiv_X, Pi.single_apply, Sum.inl.injEq, Sum.inr.injEq, reduceCtorEq,
-      ite_false, one_smul, map_zero, smul_zero] <;> (try split_ifs with h) <;>
+      ite_false, one_smul, map_zero, smul_zero] <;> split_ifs with h <;>
       simp_all [smul_smul, sgn_mul_self]
 
 theorem omega2_dLdR (k : ℕ) (F : Λ₂) : omega2 (dL k (dR k F)) = dL k (dR k (omega2 F)) := by
-  simp only [dL, dR, Derivation.coeFn_coe, omega2_pderiv, Derivation.smul_apply, Derivation.map_smul,
+  simp only [dL, dR, Derivation.coeFn_coe, omega2_pderiv, smul_apply, Derivation.map_smul,
     smul_smul, idx, Sum.elim_inl, Sum.elim_inr, id, sgn_mul_self, one_smul]
 
 theorem omegaL_dLdR (k : ℕ) (F : Λ₂) : omegaL (dL k (dR k F)) = sgn k • dL k (dR k (omegaL F)) := by
-  simp only [dL, dR, Derivation.coeFn_coe, omegaL_pderiv, Derivation.smul_apply, 
+  simp only [dL, dR, Derivation.coeFn_coe, omegaL_pderiv, smul_apply, 
     Sum.elim_inl, Sum.elim_inr, one_smul]
 
 theorem omega2_deltaK (K : ℕ) (F : Λ₂) : omega2 (deltaK K F) = deltaK K (omega2 F) := by
   simp only [deltaK, LinearMap.sum_apply, map_sum, LinearMap.smul_apply,
-    Module.End.mul_apply, map_smul, omega2_dLdR]
+    mul_apply_eq_comp, map_smul, omega2_dLdR]
 
 theorem omegaL_deltaK (K : ℕ) (F : Λ₂) : omegaL (deltaK K F) = deltaOmK K (omegaL F) := by
   simp only [deltaK, deltaOmK, LinearMap.sum_apply, map_sum, LinearMap.smul_apply,
-    Module.End.mul_apply, map_smul, omegaL_dLdR, smul_smul, mul_comm]
+    mul_apply_eq_comp, map_smul, omegaL_dLdR, smul_smul, mul_comm]
 
 /-- **`ω ⊗ ω` fixes `δ`**: `(ω⊗ω) δ = δ (ω⊗ω)`. The Cauchy kernel `Σ s_ν s̃_ν` is `ω ⊗ ω`-invariant. -/
 theorem omega2_delta (F : Λ₂) : omega2 (delta F) = delta (omega2 F) := by

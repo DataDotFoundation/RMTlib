@@ -41,12 +41,12 @@ theorem down_up_pow_succ (D U : Module.End R M) (v : M) (hv : D v = 0) (h : ℕ 
   induction n with
   | zero =>
     have := hc 0 le_rfl
-    simp only [pow_zero, Module.End.one_apply, hv, map_zero, sub_zero] at this
+    simp only [pow_zero, one_apply_eq_self, hv, map_zero, sub_zero] at this
     simp [pow_one, this]
   | succ n ih =>
     have h1 := hc (n + 1) le_rfl
-    rw [pow_succ', Module.End.mul_apply, sub_eq_iff_eq_add.mp h1,
-      ih fun m hm => hc m (by omega), map_smul, ← Module.End.mul_apply, ← pow_succ']
+    rw [pow_succ', mul_apply_eq_comp, sub_eq_iff_eq_add.mp h1,
+      ih fun m hm => hc m (by omega), map_smul, ← mul_apply_eq_comp, ← pow_succ']
     simp only [sum_range_succ, add_smul]
     abel
 
@@ -57,7 +57,7 @@ theorem down_pow_up_pow (D U : Module.End R M) (v : M) (hv : D v = 0) (h : ℕ �
   induction n with
   | zero => simp
   | succ n ih =>
-    rw [pow_succ, Module.End.mul_apply,
+    rw [pow_succ, mul_apply_eq_comp,
       down_up_pow_succ D U v hv h n fun m hm => hc m (by omega), map_smul,
       ih fun m hm => hc m (by omega), smul_smul, prod_range_succ, mul_comm]
 
@@ -135,7 +135,7 @@ theorem upW_pow_vacuum_mem (u : ℤ → R) (m : ℕ) :
   induction m with
   | zero => simpa using vacuum_mem_level
   | succ m ih =>
-    rw [pow_succ', Module.End.mul_apply]
+    rw [pow_succ', mul_apply_eq_comp]
     exact upW_mem_level u ih
 
 /-- A linear map acting by `c` on every basis vector of a set acts by `c` on everything supported

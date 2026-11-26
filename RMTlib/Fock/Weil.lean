@@ -53,7 +53,7 @@ noncomputable def D (i : σ) : Module.End ℚ (MvPolynomial σ ℚ) :=
 
 theorem D_mul (i : σ) (g : MvPolynomial σ ℚ) : D i * mul g = mul g * D i + mul (pderiv i g) := by
   refine LinearMap.ext fun f => ?_
-  simp only [D, mul, Module.End.mul_apply, LinearMap.add_apply, LinearMap.mulLeft_apply,
+  simp only [D, mul, mul_apply_eq_comp, LinearMap.add_apply, LinearMap.mulLeft_apply,
     Derivation.coeFn_coe, Derivation.leibniz, smul_eq_mul]
   ring
 
@@ -254,7 +254,7 @@ theorem real_H_harmonic {h : MvPolynomial (Fin m) ℚ} {j : ℕ} (hh : h.IsHomog
   refine ⟨hF, ?_⟩
   have e : euler m h = ∑ i, X i * pderiv i h := by
     simp [euler, mul, D]
-  simp only [H, LinearMap.add_apply, LinearMap.smul_apply, Module.End.one_apply, e,
+  simp only [H, LinearMap.add_apply, LinearMap.smul_apply, one_apply_eq_self, e,
     hh.sum_X_mul_pderiv, ← Nat.cast_smul_eq_nsmul ℚ, add_smul]
 
 /-- **The `E`-tower over a weight vector**: `H (E^k h) = (w + 2k) E^k h` if `H h = w h`. -/
@@ -264,8 +264,8 @@ theorem real_H_E_pow {h : MvPolynomial (Fin m) ℚ} {w : ℚ} (hh : H m h = w �
   | zero => simpa using hh
   | succ k ih =>
     have hHE := congrArg (· ((E m ^ k) h)) (real_HE m)
-    simp only [LinearMap.sub_apply, Module.End.mul_apply, LinearMap.smul_apply] at hHE
-    rw [pow_succ', Module.End.mul_apply, sub_eq_iff_eq_add.mp hHE, ih, map_smul]
+    simp only [LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.smul_apply] at hHE
+    rw [pow_succ', mul_apply_eq_comp, sub_eq_iff_eq_add.mp hHE, ih, map_smul]
     push_cast
     module
 
@@ -429,7 +429,7 @@ theorem ferm_key (S : Finset (Fin m)) (i j : Fin m) :
 theorem ferm_FE : fF m * fE m - fE m * fF m = fH m := by
   apply ext_single
   intro S
-  rw [LinearMap.sub_apply, Module.End.mul_apply, Module.End.mul_apply, fF_fE, fE_fF, fH_single,
+  rw [LinearMap.sub_apply, mul_apply_eq_comp, mul_apply_eq_comp, fF_fE, fE_fF, fH_single,
     neg_sub_neg, ← Finset.sum_sub_distrib]
   simp only [← Finset.sum_sub_distrib, ferm_key, Finset.sum_ite_eq, Finset.mem_univ, ite_true,
     ← Finset.sum_smul]
@@ -449,7 +449,7 @@ theorem ferm_FE : fF m * fE m - fE m * fF m = fH m := by
 theorem ferm_HE : fH m * fE m - fE m * fH m = (2 : ℚ) • fE m := by
   apply ext_single
   intro S
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, LinearMap.smul_apply, fE_single, map_sum,
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.smul_apply, fE_single, map_sum,
     fH_single, map_smul, Finset.smul_sum, ← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl fun i _ => ?_
   split_ifs with hi
@@ -462,7 +462,7 @@ theorem ferm_HE : fH m * fE m - fE m * fH m = (2 : ℚ) • fE m := by
 theorem ferm_HF : fH m * fF m - fF m * fH m = (-2 : ℚ) • fF m := by
   apply ext_single
   intro S
-  simp only [LinearMap.sub_apply, Module.End.mul_apply, LinearMap.smul_apply, fF_single, map_neg,
+  simp only [LinearMap.sub_apply, mul_apply_eq_comp, LinearMap.smul_apply, fF_single, map_neg,
     map_sum, fH_single, map_smul, Finset.smul_sum, smul_neg, ← Finset.sum_sub_distrib,
     ← Finset.sum_neg_distrib, neg_sub_neg]
   refine Finset.sum_congr rfl fun i _ => ?_
