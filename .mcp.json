@@ -1,0 +1,2 @@
+{"mcpServers": {"meaninglib": {"command": "python3",
+  "args": ["-I", ".lake/packages/MeaningLib/scripts/mcp/meaninglib_mcp.py", "--project", "."]}}}
