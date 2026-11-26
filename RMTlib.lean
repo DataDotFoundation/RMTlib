@@ -68,6 +68,7 @@ import RMTlib.Symmetric.OmegaCovariantInstances
 import RMTlib.Symmetric.LiftChain
 import RMTlib.Symmetric.Corners
 import RMTlib.Symmetric.CornerMoments
+import RMTlib.Symmetric.FominMaya
 import RMTlib.Symmetric.CornerWeighted
 import RMTlib.Symmetric.FominPaths
 import RMTlib.Symmetric.GTSum

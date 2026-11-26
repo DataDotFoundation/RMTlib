@@ -10,7 +10,7 @@ The counts are pinned here; the full table is `#involution_laws RMT.Frames.omega
 -/
 
 /--
-info: involution ω, spec RMT.Frames.omegaSpec, on RMT: 77 rows, 11 laws, 7 not recorded
+info: involution ω, spec RMT.Frames.omegaSpec, on RMT: 78 rows, 11 laws, 7 not recorded
   id: 2
   ¬: 2
   out g: 4
@@ -20,8 +20,8 @@ info: involution ω, spec RMT.Frames.omegaSpec, on RMT: 77 rows, 11 laws, 7 not 
   involutive: 2
   operator: 22
   other involution: 7
-  unknown: 35
-name hits: 63; laws with a name hit: 11; laws without one: 0
+  unknown: 36
+name hits: 64; laws with a name hit: 11; laws without one: 0
 -/
 #guard_msgs (whitespace := lax) in
 #involution_laws RMT.Frames.omegaSpec in RMT summary
