@@ -202,14 +202,14 @@ def toSSYT (hμ : RowsLE N μ) (T : Tab N m) (hT : T.shape = rowsOf N μ) :
   entry r col := if (r, col) ∈ μ then toEntry T.1 m r col else 0
   row_weak' := by
     intro r j1 j2 hj hcell
-    rw [if_pos hcell, if_pos (μ.up_left_mem (Nat.le_refl _) hj.le hcell)]
+    rw [ite_eq_left hcell, ite_eq_left (μ.up_left_mem (Nat.le_refl _) hj.le hcell)]
     apply Finset.card_le_card
     intro j
     simp only [Finset.mem_filter]
     exact fun ⟨a, b⟩ => ⟨a, by omega⟩
   col_strict' := by
     intro r1 r2 col hr hcell
-    rw [if_pos hcell, if_pos (μ.up_left_mem hr.le (Nat.le_refl _) hcell)]
+    rw [ite_eq_left hcell, ite_eq_left (μ.up_left_mem hr.le (Nat.le_refl _) hcell)]
     induction r2, hr using Nat.le_induction with
     | base =>
       apply toEntry_lt_succ_row T.2.1
@@ -222,12 +222,12 @@ def toSSYT (hμ : RowsLE N μ) (T : Tab N m) (hT : T.shape = rowsOf N μ) :
       exact YoungDiagram.mem_iff_lt_rowLen.mp hcell
   zeros' := by
     intro r col h
-    exact if_neg h
+    exact ite_eq_right h
 
 theorem toSSYT_lt (hμ : RowsLE N μ) (T : Tab N m) (hT : T.shape = rowsOf N μ) (r col : ℕ)
     (hc : (r, col) ∈ μ) : toSSYT hμ T hT r col < m := by
   show (if (r, col) ∈ μ then toEntry T.1 m r col else 0) < m
-  rw [if_pos hc, toEntry_lt_iff T.2.1 (Nat.le_refl m), getD_shape hμ T hT]
+  rw [ite_eq_left hc, toEntry_lt_iff T.2.1 (Nat.le_refl m), getD_shape hμ T hT]
   exact YoungDiagram.mem_iff_lt_rowLen.mp hc
 
 /-- The number of boxes of row `r` holding an entry `< j`. -/
@@ -277,7 +277,7 @@ theorem isHChain_ofChain (T : SemistandardYoungTableau μ) (m : ℕ) :
       · exact Nat.le_refl _
     · rw [getD_ofChain, getD_ofChain]
       split
-      · rw [if_pos (by omega)]
+      · rw [ite_eq_left (by omega)]
         apply Finset.card_le_card
         intro col
         simp only [Finset.mem_filter, Finset.mem_range]
@@ -321,7 +321,7 @@ def tabEquiv (hμ : RowsLE N μ) : {T : Tab N m // T.shape = rowsOf N μ} ≃
         intro col hcol
         have hc : (r, col) ∈ μ := YoungDiagram.mem_iff_lt_rowLen.mpr (Finset.mem_range.mp hcol)
         show (if (r, col) ∈ μ then toEntry T.1 m r col else 0) < j ↔ _
-        rw [if_pos hc, toEntry_lt_iff T.2.1 hj]
+        rw [ite_eq_left hc, toEntry_lt_iff T.2.1 hj]
       rw [this, card_filter_lt]
       have := chain_mono T.2.1 r hj (Nat.le_refl m)
       rw [getD_shape hμ T hT] at this
@@ -344,7 +344,7 @@ def tabEquiv (hμ : RowsLE N μ) : {T : Tab N m // T.shape = rowsOf N μ} ≃
         intro j hj
         have hj' := Finset.mem_range.mp hj
         simp only [freeze, Nat.min_eq_left (show j + 1 ≤ m by omega)]
-        rw [getD_ofChain, if_pos hr.1]
+        rw [getD_ofChain, ite_eq_left hr.1]
         unfold rowCount
         have hP : ∀ x y, x ≤ y → y < μ.rowLen r → T r y < j + 1 → T r x < j + 1 :=
           fun x y hxy hy h => lt_of_le_of_lt (T.row_weak_of_le hxy
@@ -404,7 +404,7 @@ theorem wt_ofSSYT {ι : Type*} (x : ℕ → ι) (hμ : RowsLE N μ) (T : Semista
   refine Finset.sum_congr rfl (fun r _ => ?_)
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl (fun col hcol => ?_)
-  rw [Finset.sum_ite_eq, if_pos]
+  rw [Finset.sum_ite_eq, ite_eq_left]
   exact Finset.mem_range.mpr
     (hT r col (YoungDiagram.mem_iff_lt_rowLen.mpr (Finset.mem_range.mp hcol)))
 
@@ -483,7 +483,7 @@ theorem rowsOf_injective {N : ℕ} {μ ν : YoungDiagram} (hμ : RowsLE N μ) (h
     intro r
     by_cases hrN : r < N
     · have := congrArg (fun l => l.getD r 0) h
-      simp only [getD_rowsOf, if_pos hrN] at this
+      simp only [getD_rowsOf, ite_eq_left hrN] at this
       exact this
     · rw [hμ r (by omega), hν r (by omega)]
   apply YoungDiagram.ext

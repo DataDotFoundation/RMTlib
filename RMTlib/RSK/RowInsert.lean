@@ -170,7 +170,7 @@ theorem rowFold_take {r s : Row} (hr : Sorted r) : ∀ j, j ≤ s.length → j �
     have e : rowIns (r.getD j 0) (r.take j ++ s.drop j) =
         (r.take j ++ r.getD j 0 :: s.drop (j + 1), some (s.getD j 0)) := by
       rw [Zipper.rowIns_prefix _ _ _ (sorted_take_le hr (by omega)), drop_getD s (by omega)]
-      simp only [rowIns, if_pos (h j (by omega))]
+      simp only [rowIns, ite_eq_left (h j (by omega))]
     simp only [rowFold, e, take_succ_getD s (show j < s.length by omega)]
     simp
 
@@ -303,12 +303,12 @@ theorem insList_row : ∀ (T : Tab) (r : Row), SSYT (r :: T) →
         by_cases hjs : j < s.length
         · have hlt : r.getD j 0 < s.getD j 0 := by
             have := hcol.2 j hjs
-            rwa [getD_of_lt (by omega), getD_of_lt hjs] at this ⊢
+            rw [getD_of_lt (by omega), getD_of_lt hjs] at this ⊢ <;> assumption
           have erow : rowIns (r.getD j 0) (r.take j ++ s.drop j) =
               (r.take (j + 1) ++ s.drop (j + 1), some (s.getD j 0)) := by
             rw [Zipper.rowIns_prefix _ _ _ (sorted_take_le hr hjr), drop_getD s hjs,
               take_succ_getD r hjr]
-            simp only [rowIns, if_pos hlt, List.append_assoc, List.singleton_append]
+            simp only [rowIns, ite_eq_left hlt, List.append_assoc, List.singleton_append]
           rw [ins_cons_some erow]
           have estate : (ins (s.getD j 0) (insList rest (s.take j)).1).1 =
               (insList rest (s.take (j + 1))).1 := by

@@ -146,10 +146,10 @@ theorem deltaK_mul_aux (K : ℕ) (v : ℕ ⊕ ℕ) (D : ℕ → End₂)
     rw [deltaK_succ, LinearMap.add_apply, ih, LinearMap.add_apply, LinearMap.smul_apply,
       Module.End.mul_apply, hterm, LinearMap.smul_apply, Module.End.mul_apply, mul_add, mul_smul_comm]
     rcases lt_trichotomy (idx v) K with h | h | h
-    · simp only [if_pos h, if_pos (Nat.lt_succ_of_lt h), if_neg (Nat.ne_of_gt h)]; module
-    · subst h; simp only [lt_irrefl, if_false, if_true, Nat.lt_succ_self]; module
-    · simp only [if_neg (by omega : ¬ idx v < K), if_neg (by omega : ¬ idx v < K + 1),
-        if_neg (Nat.ne_of_lt h)]; module
+    · simp only [ite_eq_left h, ite_eq_left (Nat.lt_succ_of_lt h), ite_eq_right (Nat.ne_of_gt h)]; module
+    · subst h; simp only [lt_irrefl, ite_false, ite_true, Nat.lt_succ_self]; module
+    · simp only [ite_eq_right (by omega : ¬ idx v < K), ite_eq_right (by omega : ¬ idx v < K + 1),
+        ite_eq_right (Nat.ne_of_lt h)]; module
 
 theorem deltaK_mul_left (K j : ℕ) (G : Λ₂) :
     deltaK K (X (Sum.inl j) * G) =
@@ -166,14 +166,14 @@ theorem delta_mul_left (j : ℕ) (F : Λ₂) :
     delta (X (Sum.inl j) * F) = X (Sum.inl j) * delta F + (j : ℚ) • dR j F := by
   set K := max (max (bound F) (bound (X (Sum.inl j) * F))) (j + 1)
   rw [delta_eq (K := K) (by omega), delta_eq (K := K) (by omega), deltaK_mul_left,
-    if_pos (by omega)]
+    ite_eq_left (by omega)]
 
 /-- **`[δ, p̃_j] = α_j`**: `δ(p̃_j F) = p̃_j δF + j ∂_{p_j} F`. -/
 theorem delta_mul_right (j : ℕ) (F : Λ₂) :
     delta (X (Sum.inr j) * F) = X (Sum.inr j) * delta F + (j : ℚ) • dL j F := by
   set K := max (max (bound F) (bound (X (Sum.inr j) * F))) (j + 1)
   rw [delta_eq (K := K) (by omega), delta_eq (K := K) (by omega), deltaK_mul_right,
-    if_pos (by omega)]
+    ite_eq_left (by omega)]
 
 /-! ## The twisted-diagonal `sl_2`
 
@@ -302,7 +302,7 @@ theorem dR_upR (k : ℕ) :
         Derivation.smul_apply, Pi.single_apply, Sum.inr.injEq]
       by_cases h : m + 1 = k
       · subst h; simp
-      · rw [if_neg h]
+      · rw [ite_eq_right h]
         by_cases h' : m = k - 1
         · have hk : k = 0 := by omega
           subst hk; simp
@@ -317,7 +317,7 @@ theorem dL_upL (k : ℕ) :
         Derivation.smul_apply, Pi.single_apply, Sum.inl.injEq]
       by_cases h : m + 1 = k
       · subst h; simp
-      · rw [if_neg h]
+      · rw [ite_eq_right h]
         by_cases h' : m = k - 1
         · have hk : k = 0 := by omega
           subst hk; simp
@@ -462,7 +462,7 @@ theorem delta_X1 (a b : ℚ) (F : Λ₂) : delta (X1 a b F) - X1 a b (delta F) =
   have h := congrArg (fun T : End₂ => T F) (deltaK_X1 a b K)
   simp only [LinearMap.sub_apply, Module.End.mul_apply, LinearMap.add_apply,
     LinearMap.smul_apply] at h
-  rw [h, if_pos (by omega), dR_of_bound_le (by omega), map_zero, smul_zero, add_zero]
+  rw [h, ite_eq_left (by omega), dR_of_bound_le (by omega), map_zero, smul_zero, add_zero]
   rfl
 
 /-- `[∂_{p_k}, X_{−1}] = a [k = 1] + (k − 1) ∂_{p_{k−1}}`. -/
@@ -529,7 +529,7 @@ theorem delta_Xm1 (a b : ℚ) (F : Λ₂) : delta (Xm1 a b F) - Xm1 a b (delta F
   have h := congrArg (fun T : End₂ => T F) (deltaK_Xm1 a b K)
   simp only [LinearMap.sub_apply, Module.End.mul_apply, 
     LinearMap.smul_apply] at h
-  rw [h, if_pos (by omega), dR_of_bound_le (by omega), map_zero, smul_zero, sub_zero]
+  rw [h, ite_eq_left (by omega), dR_of_bound_le (by omega), map_zero, smul_zero, sub_zero]
   rfl
 
 theorem deltaK_X0 (K : ℕ) : deltaK K * X0 - X0 * deltaK K = 0 := by
@@ -642,7 +642,7 @@ theorem omegaL_pderiv (v : ℕ ⊕ ℕ) (F : Λ₂) :
   rcases v with k | k <;> rcases w with m | m <;>
     simp only [omegaL, aeval_X, Sum.elim_inl, Sum.elim_inr, Derivation.smul_apply,
       Derivation.map_smul, pderiv_X, Pi.single_apply, Sum.inl.injEq, Sum.inr.injEq, reduceCtorEq,
-      if_false, one_smul, map_zero, smul_zero] <;> (try split_ifs with h) <;>
+      ite_false, one_smul, map_zero, smul_zero] <;> (try split_ifs with h) <;>
       simp_all [smul_smul, sgn_mul_self]
 
 theorem omega2_dLdR (k : ℕ) (F : Λ₂) : omega2 (dL k (dR k F)) = dL k (dR k (omega2 F)) := by

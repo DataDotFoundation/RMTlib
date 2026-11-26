@@ -66,7 +66,7 @@ theorem ins_ssyt (x : Nat) : ∀ (t : Tab), SSYT t →
     obtain ⟨hp1, hp2, hp3, hp4, hp5⟩ := hp
     by_cases hpl : p < r.length
     · -- `y = r[p]` is bumped into the rows below
-      rw [if_pos hpl] at hb
+      rw [ite_eq_left hpl] at hb
       have e : ins x (r :: rs) = ((rowIns x r).1 :: (ins (r.getD p 0) rs).1,
           (ins (r.getD p 0) rs).2 + 1) := by
         simp only [ins]; rw [show rowIns x r = ((rowIns x r).1, some (r.getD p 0)) from
@@ -109,18 +109,18 @@ theorem ins_ssyt (x : Nat) : ∀ (t : Tab), SSYT t →
           rw [hp5 k, hq5 k]
           by_cases hkq : k = q
           · subst hkq
-            rw [if_pos rfl]
+            rw [ite_eq_left rfl]
             by_cases hkp : k = p
-            · subst hkp; rw [if_pos rfl]; exact hp3 hpl
-            · rw [if_neg hkp]; have := hp2 k (by omega); have := hp3 hpl; omega
-          · rw [if_neg hkq]
+            · subst hkp; rw [ite_eq_left rfl]; exact hp3 hpl
+            · rw [ite_eq_right hkp]; have := hp2 k (by omega); have := hp3 hpl; omega
+          · rw [ite_eq_right hkq]
             have hks : k < (rs.headD []).length := by rw [hq4] at hk; omega
             have := hcol k hks
             by_cases hkp : k = p
-            · subst hkp; rw [if_pos rfl]; have := hp3 hpl; omega
-            · rw [if_neg hkp]; omega
+            · subst hkp; rw [ite_eq_left rfl]; have := hp3 hpl; omega
+            · rw [ite_eq_right hkp]; omega
     · -- `x` is appended to the top row
-      rw [if_neg hpl] at hb
+      rw [ite_eq_right hpl] at hb
       have happ : (rowIns x r).1 = r ++ [x] := rowIns_none x r hb
       have e : ins x (r :: rs) = ((rowIns x r).1 :: rs, 0) := by
         simp only [ins]; rw [show rowIns x r = ((rowIns x r).1, none) from Prod.ext rfl hb]

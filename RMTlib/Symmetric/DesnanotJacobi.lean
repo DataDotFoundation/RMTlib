@@ -55,7 +55,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
     have h12 : (X.submatrix finSumFinEquiv finSumFinEquiv).toBlocks₁₂ = 0 := by
       ext i j
       simp only [toBlocks₁₂, of_apply, submatrix_apply, finSumFinEquiv_apply_left,
-        finSumFinEquiv_apply_right, X, Fin.val_castAdd, i.2, if_true, zero_apply]
+        finSumFinEquiv_apply_right, X, Fin.val_castAdd, i.2, ite_true, zero_apply]
       rw [one_apply_ne]
       intro h
       have := congrArg Fin.val h
@@ -64,7 +64,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
     have h11 : (X.submatrix finSumFinEquiv finSumFinEquiv).toBlocks₁₁ = 1 := by
       ext i j
       simp only [toBlocks₁₁, of_apply, submatrix_apply, finSumFinEquiv_apply_left, X,
-        Fin.val_castAdd, i.2, if_true]
+        Fin.val_castAdd, i.2, ite_true]
       by_cases h : i = j
       · subst h; simp
       · rw [one_apply_ne, one_apply_ne h]
@@ -90,7 +90,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
       ext i j
       simp only [toBlocks₂₁, of_apply, submatrix_apply, finSumFinEquiv_apply_left,
         finSumFinEquiv_apply_right, Fin.val_natAdd, zero_apply, smul_apply, smul_eq_mul]
-      rw [if_neg (by omega), one_apply_ne, mul_zero]
+      rw [ite_eq_right (by omega), one_apply_ne, mul_zero]
       intro h
       have := congrArg Fin.val h
       simp at this
@@ -106,7 +106,7 @@ theorem det_mul_det_adjugate_trailing_aux (A : Matrix (Fin (n + 2)) (Fin (n + 2)
         ext i j
         simp only [toBlocks₂₂, of_apply, submatrix_apply, finSumFinEquiv_apply_right,
           Fin.val_natAdd, smul_apply, smul_eq_mul]
-        rw [if_neg (by omega)]
+        rw [ite_eq_right (by omega)]
         by_cases h : i = j
         · subst h; simp
         · rw [one_apply_ne h, one_apply_ne (fun h' => h (Fin.natAdd_injective _ _ h'))]

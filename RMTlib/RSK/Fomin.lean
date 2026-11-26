@@ -454,10 +454,10 @@ theorem localRule_res (P : Tab) (hP : SSYT P) (hnd : P.flatten.Nodup) (x : Nat)
       have hsl : (ins x (res j P)).2 ≤ (sh (res j P)).length := by simpa [sh] using hs
       have hrl : r ≤ (sh (res j P)).length := by simpa [sh] using hr
       by_cases hsr : (ins x (res j P)).2 = r
-      · rw [if_pos hsr]
+      · rw [ite_eq_left hsr]
         simp only [sh_tabAdd, hsh, hsr]
         simp [localRule, addRow_ne, diffRow_addRow _ _ hrl]
-      · rw [if_neg hsr]
+      · rw [ite_eq_right hsr]
         simp only [sh_tabAdd, hsh]
         have hne : addRow (sh (res j P)) r ≠ addRow (sh (res j P)) (ins x (res j P)).2 :=
           fun h => hsr (addRow_inj _ _ _ hsl hrl h.symm)
@@ -560,7 +560,7 @@ theorem row_eq (w : List Nat) (hw : w.Perm (List.range w.length)) :
       rw [List.getD_eq_getElem?_getD, List.getElem?_eq_getElem hi, Option.getD_some] at hm'
       obtain ⟨k, hk, e⟩ := List.getElem_of_mem hm'
       rw [List.getElem_take] at e
-      have := (List.getElem_inj hnd).mp e
+      have := (List.Nodup.getElem_inj hnd).mp e
       simp at hk; omega
     simp only [row]
     rw [ih]; simp only [List.range_eq_range']

@@ -128,13 +128,13 @@ theorem exists_of_maya (M : ℤ → Prop) (L U : ℤ) (hL : ∀ x < L, M x) (hU 
     intro i j hij
     simp only [w]
     by_cases hj : j < n
-    · rw [dif_pos hj, dif_pos (by omega)]
+    · rw [dite_eq_left hj, dite_eq_left (by omega)]
       have := StrictAnti.add_le hp (i := ⟨i, by omega⟩) (j := ⟨j, hj⟩) (Fin.le_iff_val_le_val.mpr hij)
       simp only at this
       have h1 := hrow ⟨j, hj⟩
       omega
-    · rw [dif_neg hj]; exact Nat.zero_le _
-  have hN : ∀ i, n ≤ i → w i = 0 := fun i hi => by simp only [w]; rw [dif_neg (by omega)]
+    · rw [dite_eq_right hj]; exact Nat.zero_le _
+  have hN : ∀ i, n ≤ i → w i = 0 := fun i hi => by simp only [w]; rw [dite_eq_right (by omega)]
   refine ⟨ofRows w hw n, c, fun x => ?_⟩
   have hsite : ∀ i, site (ofRows w hw n) i = if h : i < n then p ⟨i, h⟩ - c else -i - 1 := by
     intro i
@@ -156,10 +156,10 @@ theorem exists_of_maya (M : ℤ → Prop) (L U : ℤ) (hL : ∀ x < L, M x) (hU 
       have : x + c ∈ Set.range e := by rw [range_orderEmbOfFin]; exact hS
       obtain ⟨j, hj⟩ := this
       refine ⟨j.rev, ?_⟩
-      rw [hsite, dif_pos j.rev.isLt]
+      rw [hsite, dite_eq_left j.rev.isLt]
       simp only [p, Fin.eta, Fin.rev_rev, hj]; ring
     · refine ⟨(-x - 1).toNat, ?_⟩
-      rw [hsite, dif_neg (by simp only [c] at hxL; omega)]
+      rw [hsite, dite_eq_right (by simp only [c] at hxL; omega)]
       omega
 
 /-! ### Injectivity -/

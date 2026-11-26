@@ -163,11 +163,11 @@ theorem det_isHomogeneous {r : ℕ} (M : Matrix (Fin r) (Fin r) (P k p q))
   · rw [h, Units.neg_smul, one_smul]; exact hprod.neg
 
 theorem xMinor_isHomogeneous (r : ℕ) (h : r ≤ k ∧ r ≤ p) : (xMinor r : P k p q).IsHomogeneous r := by
-  rw [xMinor, dif_pos h]
+  rw [xMinor, dite_eq_left h]
   exact det_isHomogeneous _ fun _ _ => isHomogeneous_X _ _
 
 theorem yMinor_isHomogeneous (r : ℕ) (h : r ≤ k ∧ r ≤ q) : (yMinor r : P k p q).IsHomogeneous r := by
-  rw [yMinor, dif_pos h]
+  rw [yMinor, dite_eq_left h]
   exact det_isHomogeneous _ fun _ _ => isHomogeneous_X _ _
 
 theorem sum_telescope (l : ℕ → ℕ) (hl : Antitone l) (A : ℕ) :
@@ -213,9 +213,9 @@ theorem lap_E (i : Fin p) (j : Fin q) (f : P k p q) :
         ∑ l : Fin k, X (Sum.inr (l, j)) * pderiv (Sum.inr (l, j)) f := by
   classical
   simp only [lap, E, Finset.sum_mul, Finset.mul_sum, map_sum, Derivation.leibniz, smul_eq_mul, pderiv_X,
-    Pi.single_apply, Sum.inl.injEq, Sum.inr.injEq, Prod.mk.injEq, reduceCtorEq, and_true, if_false,
+    Pi.single_apply, Sum.inl.injEq, Sum.inr.injEq, Prod.mk.injEq, reduceCtorEq, and_true, ite_false,
     map_add, mul_zero, add_zero, zero_add, mul_ite, mul_one]
-  simp only [Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   have h3 : ∀ x : Fin k, (∑ x_1 : Fin k, pderiv (Sum.inl (x, i))
       (if x_1 = x then f * X (Sum.inl (x_1, i)) else 0)) = f + X (Sum.inl (x, i)) * pderiv (Sum.inl (x, i)) f := by
     intro x
@@ -266,7 +266,7 @@ theorem kill_row {r : ℕ} (D : Derivation ℚ (P k p q) (P k p q)) (M : Matrix 
     (h : ∀ a b, D (M a b) = if a = a0 then c * M a1 b else 0) : D M.det = 0 := by
   refine der_det_eq_zero D M fun a => ?_
   by_cases ha : a = a0
-  · subst ha; simp only [h, if_true]; exact det_updateRow_smul_row M hne c
+  · subst ha; simp only [h, ite_true]; exact det_updateRow_smul_row M hne c
   · exact Matrix.det_eq_zero_of_row_eq_zero a fun b => by simp [h, ha]
 
 theorem kill_col {r : ℕ} (D : Derivation ℚ (P k p q) (P k p q)) (M : Matrix (Fin r) (Fin r) (P k p q))
@@ -327,7 +327,7 @@ theorem colRaiseX_xMinor (c c' : Fin p) (hc : (c' : ℕ) = c + 1) (r : ℕ) :
       split_ifs <;> rfl
     · exact kill_zero _ _ fun a b => by
         simp only [Matrix.of_apply, colRaiseX_inl, Fin.ext_iff, Fin.val_castLE]
-        rw [if_neg (by omega)]
+        rw [ite_eq_right (by omega)]
   · simp
 
 theorem colRaiseY_xMinor (c c' : Fin q) (r : ℕ) : colRaiseY c c' (xMinor r : P k p q) = 0 := by
@@ -347,7 +347,7 @@ theorem rowRaise_xMinor (a a' : Fin k) (ha : (a' : ℕ) = a + 1) (r : ℕ) :
       split_ifs <;> rfl
     · exact kill_zero _ _ fun i b => by
         simp only [Matrix.of_apply, rowRaise_inl, Fin.ext_iff, Fin.val_castLE]
-        rw [if_neg (by omega)]
+        rw [ite_eq_right (by omega)]
   · simp
 
 theorem colRaiseX_yMinor (c c' : Fin p) (r : ℕ) : colRaiseX c c' (yMinor r : P k p q) = 0 := by
@@ -366,7 +366,7 @@ theorem colRaiseY_yMinor (c c' : Fin q) (hc : (c' : ℕ) = c + 1) (r : ℕ) :
       split_ifs <;> rfl
     · exact kill_zero _ _ fun a b => by
         simp only [Matrix.of_apply, colRaiseY_inr, Fin.ext_iff, Fin.val_castLE]
-        rw [if_neg (by omega)]
+        rw [ite_eq_right (by omega)]
   · simp
 
 theorem rowRaise_yMinor (a a' : Fin k) (ha : (a' : ℕ) = a + 1) (r : ℕ) :
@@ -377,12 +377,12 @@ theorem rowRaise_yMinor (a a' : Fin k) (ha : (a' : ℕ) = a + 1) (r : ℕ) :
     · refine kill_row _ _ (a0 := ⟨a - (k - r), by omega⟩) (a1 := ⟨a - (k - r) + 1, by omega⟩)
         (by simp [Fin.ext_iff]) (-1) fun i b => ?_
       simp only [Matrix.of_apply, rowRaise_inr, Fin.ext_iff]
-      split_ifs <;> first | (exfalso; omega) | skip
+      split_ifs <;> try (exfalso; omega)
       · rw [neg_one_mul]; congr 3; refine Prod.ext ?_ rfl; ext; simp; omega
       · rfl
     · exact kill_zero _ _ fun i b => by
         simp only [Matrix.of_apply, rowRaise_inr, Fin.ext_iff]
-        rw [if_neg (by omega)]
+        rw [ite_eq_right (by omega)]
   · simp
 
 theorem der_hvec (D : Derivation ℚ (P k p q) (P k p q)) (hx : ∀ r, D (xMinor r : P k p q) = 0)

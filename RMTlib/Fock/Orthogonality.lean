@@ -36,7 +36,7 @@ theorem fischer_monomial_left (t : σ →₀ ℕ) (c : ℚ) (g : MvPolynomial σ
     fischer (monomial t c) g = c * g.coeff t * ((∏ k ∈ t.support, (t k).factorial : ℕ) : ℚ) := by
   classical
   rw [fischer_eq_sum_of_subset _ _ {t} support_monomial_subset, sum_singleton, coeff_monomial,
-    if_pos rfl]
+    ite_eq_left rfl]
 
 /-- `e_k(X)` as a sum of permutation monomials, over pairs (subset `S`, permutation of `S`). -/
 theorem eX_eq_sum (k : ℕ) :
@@ -68,9 +68,9 @@ theorem sum_permMat_col (S : Finset (Fin N)) (π : Equiv.Perm S) (j : Fin N) :
   unfold permMat indic
   simp_rw [expo_apply]
   by_cases hj : j ∈ S
-  · simp only [dif_pos hj, if_pos hj]
-    rw [Fintype.sum_eq_single (π ⟨j, hj⟩).1 fun i hi => if_neg (Ne.symm hi), if_pos rfl]
-  · simp [dif_neg hj, if_neg hj]
+  · simp only [dite_eq_left hj, ite_eq_left hj]
+    rw [Fintype.sum_eq_single (π ⟨j, hj⟩).1 fun i hi => ite_eq_right (Ne.symm hi), ite_eq_left rfl]
+  · simp [dite_eq_right hj, ite_eq_right hj]
 
 /-- Row sums of the permutation matrix: `π` is a bijection of `S`. -/
 theorem sum_permMat_row (S : Finset (Fin N)) (π : Equiv.Perm S) (i : Fin N) :
@@ -79,8 +79,8 @@ theorem sum_permMat_row (S : Finset (Fin N)) (π : Equiv.Perm S) (i : Fin N) :
   unfold permMat indic
   simp_rw [expo_apply]
   by_cases hi : i ∈ S
-  · rw [if_pos hi, Fintype.sum_eq_single (π.symm ⟨i, hi⟩).1]
-    · rw [dif_pos (π.symm ⟨i, hi⟩).2]
+  · rw [ite_eq_left hi, Fintype.sum_eq_single (π.symm ⟨i, hi⟩).1]
+    · rw [dite_eq_left (π.symm ⟨i, hi⟩).2]
       simp
     · intro j hj
       split_ifs with h1 h2
@@ -90,7 +90,7 @@ theorem sum_permMat_row (S : Finset (Fin N)) (π : Equiv.Perm S) (i : Fin N) :
         rw [← this, Equiv.symm_apply_apply]
       · rfl
       · rfl
-  · rw [if_neg hi]
+  · rw [ite_eq_right hi]
     refine sum_eq_zero fun j _ => ?_
     split_ifs with h1 h2
     · exact absurd (h2 ▸ (π ⟨j, h1⟩).2) hi
@@ -121,9 +121,9 @@ theorem coeff_hX_expo {k : ℕ} {S : Finset (Fin N)} (hS : #S = k) (π : Equiv.P
     refine mem_sigma.mpr ⟨Nat.mem_antidiagonalTuple.mpr (by rw [sum_indic, hS]), ?_⟩
     exact mem_margins.mpr ⟨sum_permMat_row S π, sum_permMat_col S π⟩
   rw [hsum, coeff_sum, sum_eq_single_of_mem _ hmem]
-  · rw [coeff_monomial, matExp_permMat, if_pos rfl, hCoeff_permMat]
+  · rw [coeff_monomial, matExp_permMat, ite_eq_left rfl, hCoeff_permMat]
   · rintro ⟨α, M⟩ hp hne
-    rw [coeff_monomial, if_neg]
+    rw [coeff_monomial, ite_eq_right]
     intro h
     apply hne
     rw [← matExp_permMat] at h

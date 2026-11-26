@@ -143,7 +143,7 @@ def qcharge (r : ℕ) (μ : YoungDiagram) (ρ : ℕ) : ℤ :=
 
 theorem quot_spec {r : ℕ} (hr : 0 < r) (μ : YoungDiagram) (ρ : ℕ) (m : ℤ) :
     Occ (quot r μ ρ) m ↔ Occ μ (r * (m + qcharge r μ ρ) + ρ) := by
-  unfold quot qcharge; rw [dif_pos hr, dif_pos hr]
+  unfold quot qcharge; rw [dite_eq_left hr, dite_eq_left hr]
   exact Classical.choose_spec (Classical.choose_spec (runner_exists hr μ ρ)) m
 
 /-- The runner `ρ` of `λ` is the quotient partition shifted by its charge. -/
@@ -410,7 +410,7 @@ def core (r : ℕ) (μ : YoungDiagram) : YoungDiagram :=
 
 theorem core_spec {r : ℕ} (hr : 0 < r) (μ : YoungDiagram) (x : ℤ) :
     Occ (core r μ) x ↔ coreSet r μ x := by
-  unfold core; rw [dif_pos hr]
+  unfold core; rw [dite_eq_left hr]
   exact Classical.choose_spec (exists_of_runners hr (coreSet r μ) (fun _ => ⊥) (qcharge r μ)
     (fun _ hρ m => coreSet_runner hr μ hρ m) (sum_qcharge hr μ)) x
 

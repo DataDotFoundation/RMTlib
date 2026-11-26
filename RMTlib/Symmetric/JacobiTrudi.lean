@@ -120,15 +120,15 @@ theorem hstrip_ofFn_iff (lam mu : Fin N → ℕ) :
   · intro h
     refine ⟨fun l j hj => ?_, fun t => ?_⟩
     · have := (h l).2
-      rw [dif_pos (by omega), dif_pos l.2] at this
+      rw [dite_eq_left (by omega), dite_eq_left l.2] at this
       convert this using 2
       exact Fin.ext hj
     · have := (h t).1
-      rwa [dif_pos t.2, dif_pos t.2] at this
+      rwa [dite_eq_left t.2, dite_eq_left t.2] at this
   · rintro ⟨h1, h2⟩ r
     by_cases hr : r < N
-    · refine ⟨by rw [dif_pos hr, dif_pos hr]; exact h2 _, ?_⟩
-      rw [dif_pos hr]
+    · refine ⟨by rw [dite_eq_left hr, dite_eq_left hr]; exact h2 _, ?_⟩
+      rw [dite_eq_left hr]
       split_ifs with hr'
       · exact h1 ⟨r, hr⟩ ⟨r + 1, hr'⟩ rfl
       · exact Nat.zero_le _
@@ -154,7 +154,7 @@ theorem isHChain_extendChain (T : Tab N m) {L : Part} (h : HStrip (T.1 m) L) :
     IsHChain N (m + 1) (extendChain T L) := by
   refine ⟨by simpa [extendChain] using T.2.1.1, fun j hj => ?_⟩
   rcases Nat.lt_or_ge j m with hjm | hjm
-  · simp only [extendChain, if_pos hjm.le, if_pos (show j + 1 ≤ m by omega)]
+  · simp only [extendChain, ite_eq_left hjm.le, ite_eq_left (show j + 1 ≤ m by omega)]
     exact T.2.1.2 j hjm
   · obtain rfl : j = m := by omega
     simpa [extendChain] using h
@@ -210,12 +210,12 @@ theorem evalMono_extendTab {R : Type*} [CommRing R] (a : ℕ → R) (lam : Fin N
       = a m ^ (∑ i, lam i - ∑ i, x.1.1 i) * evalMono a (x.2.1.wt id) := by
   rw [evalMono_wt, evalMono_wt, Finset.prod_range_succ, mul_comm]
   congr 1
-  · simp only [extendTab, extendChain, le_refl, if_true, show ¬ m + 1 ≤ m by omega, if_false]
+  · simp only [extendTab, extendChain, le_refl, ite_true, show ¬ m + 1 ≤ m by omega, ite_false]
     rw [show x.2.1.1 m = List.ofFn x.1.1 from x.2.2]
     simp [size, List.sum_ofFn]
   · refine Finset.prod_congr rfl fun j hj => ?_
     have hj := Finset.mem_range.mp hj
-    simp only [extendTab, extendChain, if_pos hj.le, if_pos (show j + 1 ≤ m by omega)]
+    simp only [extendTab, extendChain, ite_eq_left hj.le, ite_eq_left (show j + 1 ≤ m by omega)]
 
 /-- **Branching rule**: removing the boxes holding the largest entry `m`,
 `s_λ(a₀, …, a_m) = Σ_{μ interlacing λ} a_m ^ (|λ| − |μ|) s_μ(a₀, …, a_{m−1})`. -/
@@ -280,7 +280,7 @@ theorem strictAnti_range_inj {N : ℕ} {W : Type*} [LinearOrder W] {f g : Fin N 
     (hf : StrictAnti f) (hg : StrictAnti g) (h : Set.range f = Set.range g) : f = g := by
   have hf' : StrictMono (f ∘ Fin.rev) := hf.comp Fin.rev_strictAnti
   have hg' : StrictMono (g ∘ Fin.rev) := hg.comp Fin.rev_strictAnti
-  have : f ∘ Fin.rev = g ∘ Fin.rev := (hf'.range_inj hg').mp (by
+  have : f ∘ Fin.rev = g ∘ Fin.rev := (hf'.range_inj_of_wellFoundedLT hg').mp (by
     rw [Set.range_comp, Set.range_comp, Fin.rev_surjective.range_eq, Set.image_univ,
       Set.image_univ, h])
   funext i
@@ -402,7 +402,7 @@ theorem det_pow_staircase {N : ℕ} (t : R) (u v : Fin N → ℤ) :
   congr 1
   simp only [of_apply]
   by_cases h : ∀ k, v k ≤ u (σ k)
-  · simp only [h, if_true, Finset.prod_const_one, mul_one, Finset.prod_pow_eq_pow_sum]
+  · simp only [h, ite_true, Finset.prod_const_one, mul_one, Finset.prod_pow_eq_pow_sum]
     congr 1
     rw [sum_toNat _ (fun k => by have := h k; omega), Finset.sum_sub_distrib,
       Equiv.sum_comp σ u]
@@ -515,7 +515,7 @@ theorem det_jtMat_succ (a : ℕ → R) (m : ℕ) (lam : Fin N → ℕ) (hl : Ant
       = det (A.submatrix id (iμ mu hmu).1) * det (B.submatrix (iμ mu hmu).1 id) := by
     intro mu hmu
     have hg := mem_interl.mp hmu
-    rw [hdetA, det_staircase_gtStep lam mu hl (antitone_of_gtStep hl hg), if_pos hg, mul_one]
+    rw [hdetA, det_staircase_gtStep lam mu hl (antitone_of_gtStep hl hg), ite_eq_left hg, mul_one]
     congr 2
     have hle : ∑ i, mu i ≤ ∑ i, lam i := Finset.sum_le_sum fun i _ => hg.2 i
     have : (∑ i, ((lam i : ℤ) - i) - ∑ k, ((iμ mu hmu).1 k : ℤ))
@@ -566,7 +566,7 @@ theorem det_jtMat_succ (a : ℕ → R) (m : ℕ) (lam : Fin N → ℕ) (hl : Ant
       apply hA
       rw [hdetA]
       have := det_staircase_gtStep (R := R) lam mu hl hmuA
-      rw [if_neg hng] at this
+      rw [ite_eq_right hng] at this
       rw [show (of fun i k => if (f.1 k : ℤ) ≤ (lam i : ℤ) - i then (1 : R) else 0)
         = of fun i k : Fin N => if (mu k : ℤ) - k ≤ (lam i : ℤ) - i then (1 : R) else 0 from by
           ext i k; simp only [of_apply, hmuf], this, mul_zero]
@@ -594,7 +594,7 @@ theorem det_jtMat_zero (a : ℕ → R) (lam : Fin N → ℕ) (hl : Antitone lam)
     intro j
     have := hl (show (⟨0, h0⟩ : Fin N) ≤ i from Fin.mk_le_mk.mpr (Nat.zero_le _))
     simp only [jtMat, hE, of_apply]
-    rw [if_neg (by push_cast; omega)]
+    rw [ite_eq_right (by push_cast; omega)]
 
 /-- **The Jacobi–Trudi identity for semistandard tableaux**: for an antitone `λ : Fin N → ℕ`,
 the evaluated Schur polynomial `s_λ(a₀, …, a_{m−1})` (total weight of the semistandard tableaux

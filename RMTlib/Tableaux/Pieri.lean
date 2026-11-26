@@ -99,7 +99,7 @@ theorem addBox_antitone {ν : Fin N → ℕ} (hν : Antitone ν) {k : Fin N}
   · omega
   · have hab' : (a : ℕ) < k := Fin.lt_def.mp (lt_of_le_of_ne (hb ▸ hab) ha)
     have hpos : 0 < (k : ℕ) := by omega
-    simp only [IsAddable, dif_pos hpos, decide_eq_true_eq] at hk
+    simp only [IsAddable, dite_eq_left hpos, decide_eq_true_eq] at hk
     have := hν (show a ≤ ⟨k.val - 1, by omega⟩ from Fin.le_def.mpr (by simp; omega))
     omega
   · rw [ha] at this; omega
@@ -123,7 +123,7 @@ theorem pieri_gtCount (μ : Fin N → ℕ) (hμ : Antitone μ) :
     have hpos : 0 < (i : ℕ) := by
       by_contra h0
       simp [IsAddable, h0] at hi
-    simp only [IsAddable, dif_pos hpos, decide_eq_false_iff_not, not_lt] at hi
+    simp only [IsAddable, dite_eq_left hpos, decide_eq_false_iff_not, not_lt] at hi
     have hle := hμ (show (⟨i.val - 1, by omega⟩ : Fin N) ≤ i from Fin.le_def.mpr (by simp))
     refine prod_eq_zero (i := ⟨i.val - 1, by omega⟩)
       (mem_erase.mpr ⟨by simp [Fin.ext_iff]; omega, mem_univ _⟩) ?_
@@ -205,7 +205,7 @@ theorem sum_parts_succ (g : (Fin N → ℕ) → ℚ) (m : ℕ) :
       ∑ i ∈ univ.filter (fun i => IsCorner ν i), (fSYT m (removeBox ν i) : ℚ) * g ν := by
     intro ν hν
     rw [mem_parts] at hν
-    rw [fSYT, if_neg (by omega), Nat.cast_sum, sum_mul]
+    rw [fSYT, ite_eq_right (by omega), Nat.cast_sum, sum_mul]
   rw [sum_congr rfl hL, sum_congr rfl fun μ _ => mul_sum _ _ _, sum_sigma', sum_sigma']
   refine sum_bij' (fun x _ => ⟨removeBox x.1 x.2, x.2⟩) (fun y _ => ⟨addBox y.1 y.2, y.2⟩)
     ?_ ?_ ?_ ?_ ?_

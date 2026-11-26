@@ -324,7 +324,7 @@ theorem back_congr' (B : Nat → Nat → S → S → S → S × E) (n m : Nat)
   | case2 i j h₁ h₂ => rw [back]; simp [h₁, h₂, hr i hi]
   | case3 i j h₁ h₂ ih1 ih2 ih3 =>
     rw [back.eq_def B top' right' n m i j]
-    simp only [h₁, h₂, if_false]
+    simp only [h₁, h₂, ite_false]
     rw [ih1 (by omega) hj, ih2 hi (by omega), ih3 (by omega) (by omega)]
 
 example : @RMT.RSK.GrowthGeneric.back_congr.{u, v} = @back_congr'.{u, v} := rfl

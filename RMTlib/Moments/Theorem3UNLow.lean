@@ -275,7 +275,7 @@ theorem S_single (n : ℕ) : S (n + 1) (Pi.single 0 1) = removeBox (sq (n + 1)) 
     intro i; rw [Fin.rev_eq_iff, Fin.rev_zero]
   by_cases hj : j = Fin.last n
   · subst hj
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     have : (univ.filter fun i : Fin (n + 1) =>
         ((Fin.last n : Fin (n + 1)) : ℕ) < n + 1 - (Pi.single 0 1 : Fin (n + 1) → ℕ) (Fin.rev i))
         = univ.erase (Fin.last n) := by
@@ -285,7 +285,7 @@ theorem S_single (n : ℕ) : S (n + 1) (Pi.single 0 1) = removeBox (sq (n + 1)) 
       · have : Fin.rev i ≠ 0 := fun h => hi ((hrev i).mp h)
         simp [hi, this]
     rw [this, card_erase_of_mem (mem_univ _), card_univ, Fintype.card_fin]
-  · rw [if_neg hj]
+  · rw [ite_eq_right hj]
     have hjn : (j : ℕ) < n := by
       have := j.isLt
       have : (j : ℕ) ≠ n := fun h => hj (Fin.ext (by simpa using h))
@@ -331,7 +331,7 @@ theorem corners_sq (n : ℕ) : univ.filter (fun i => IsCorner (sq (n + 1)) i) = 
     simp [this]
 
 theorem fSYT_succ_single (n : ℕ) : fSYT 1 (Pi.single 0 1 : Fin (n + 1) → ℕ) = 1 := by
-  rw [fSYT, if_neg (by simp), corners_single, sum_singleton]
+  rw [fSYT, ite_eq_right (by simp), corners_single, sum_singleton]
   have : removeBox (Pi.single 0 1 : Fin (n + 1) → ℕ) 0 = 0 := by
     funext j; by_cases hj : j = 0 <;> simp [removeBox, hj]
   simp [this, fSYT]
@@ -349,7 +349,7 @@ theorem skewDim_single (n : ℕ) : ∀ (f : ℕ) (μ : Fin (n + 1) → ℕ), Ant
     intro μ hμ hs
     have hne : μ ≠ Pi.single 0 1 := by
       rintro rfl; simp at hs
-    rw [skewDim, if_neg hne, fSYT, if_neg (by omega)]
+    rw [skewDim, ite_eq_right hne, fSYT, ite_eq_right (by omega)]
     have hfilt : (univ.filter fun i => IsCorner μ i ∧
         ∀ j, (Pi.single 0 1 : Fin (n + 1) → ℕ) j ≤ removeBox μ i j) =
         univ.filter fun i => IsCorner μ i := by
@@ -376,7 +376,7 @@ theorem fSYT_sq (n : ℕ) :
   obtain ⟨m, hm⟩ : ∃ m, (n + 1) * (n + 1) = m + 1 := ⟨(n + 1) * (n + 1) - 1, by
     have : 0 < (n + 1) * (n + 1) := by positivity
     omega⟩
-  rw [hm, fSYT, if_neg (by rw [sum_sq]; omega), corners_sq, sum_singleton, Nat.add_sub_cancel]
+  rw [hm, fSYT, ite_eq_right (by rw [sum_sq]; omega), corners_sq, sum_singleton, Nat.add_sub_cancel]
 
 /-! ### The exact side: `∏ (i + j − 1)` and `Σ (i + j − 1)` -/
 
@@ -461,7 +461,7 @@ theorem thm3Coeff_one (n : ℕ) : thm3Coeff (n + 1) 1 = ((n + 1 : ℕ) : ℚ) ^ 
     rw [← Nat.cast_mul, Nat.mul_factorial_pred (by positivity)]
   have : ((((n + 1) * (n + 1) - 1)! : ℕ) : ℚ) ≠ 0 := by positivity
   simp only [Pi.zero_apply, sum_const_zero, pow_zero, one_mul, Finset.sum_pi_single', mem_univ,
-    if_true, pow_one]
+    ite_true, pow_one]
   rw [hf]
   push_cast
   field_simp

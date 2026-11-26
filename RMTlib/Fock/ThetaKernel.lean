@@ -91,7 +91,7 @@ theorem factor_spec {V P : Type*} [AddCommGroup V] [Module ℂ V] [AddCommGroup 
     ∀ Ψ ∈ A, factor κ A pD (κ Ψ) = pD Ψ := by
   classical
   unfold factor
-  rw [dif_pos hq]
+  rw [dite_eq_left hq]
   exact hq.choose_spec
 
 /-- **Change of model.** If `τ` carries test functions of `K` to those of `K'`, intertwining the

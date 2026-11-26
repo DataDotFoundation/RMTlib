@@ -79,7 +79,7 @@ theorem binDet_succ {n : ℕ} (a : Fin (n + 1) → ℕ) :
     · intro i j hij
       have : (j : ℕ) < i := hij
       simp only [hLdef, of_apply]
-      rw [if_neg (by rintro rfl; exact lt_irrefl _ hij), if_neg (by omega)]
+      rw [ite_eq_right (by rintro rfl; exact lt_irrefl _ hij), ite_eq_right (by omega)]
   have hLM : ∀ i j, (L * M) i j =
       if h : (i : ℕ) < n then M i j - M ⟨i + 1, by omega⟩ j else M i j := by
     intro i j
@@ -87,15 +87,15 @@ theorem binDet_succ {n : ℕ} (a : Fin (n + 1) → ℕ) :
     split_ifs with h
     · rw [Fintype.sum_eq_add i ⟨i + 1, by omega⟩ (by simp [Fin.ext_iff]) (fun k hk => by
         simp only [hLdef, of_apply]
-        rw [if_neg hk.1, if_neg (by intro e; exact hk.2 (Fin.ext e))]
+        rw [ite_eq_right hk.1, ite_eq_right (by intro e; exact hk.2 (Fin.ext e))]
         ring)]
       have hne : (⟨i + 1, by omega⟩ : Fin (n + 1)) ≠ i := by simp [Fin.ext_iff]
-      simp only [hLdef, of_apply, if_neg hne]
+      simp only [hLdef, of_apply, ite_eq_right hne]
       simp
       ring
     · rw [Fintype.sum_eq_single i (fun k hk => by
         simp only [hLdef, of_apply]
-        rw [if_neg hk, if_neg (by have := k.isLt; omega)]
+        rw [ite_eq_right hk, ite_eq_right (by have := k.isLt; omega)]
         ring)]
       simp [hLdef]
   have hdet : binDet a = det (L * M) := by rw [det_mul, hL, one_mul]; rfl
@@ -104,15 +104,15 @@ theorem binDet_succ {n : ℕ} (a : Fin (n + 1) → ℕ) :
       have := i.isLt
       have : (i : ℕ) ≠ n := fun e => hi (Fin.ext e)
       omega
-    rw [hLM, dif_pos h]
+    rw [hLM, dite_eq_left h]
     simp [hM])]
-  rw [hLM, dif_neg (by simp)]
+  rw [hLM, dite_eq_right (by simp)]
   simp only [hM, of_apply, Fin.val_last, Fin.val_zero, add_zero, Nat.choose_zero_right,
     Nat.cast_one, mul_one, Fin.succAbove_last, Fin.succAbove_zero]
   congr 2
   ext i j
   simp only [submatrix_apply, of_apply]
-  rw [hLM, dif_pos (by simp)]
+  rw [hLM, dite_eq_left (by simp)]
   simp only [hM, of_apply, Fin.val_succ, Fin.val_castSucc]
   congr
 

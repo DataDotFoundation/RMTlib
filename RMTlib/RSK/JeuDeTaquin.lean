@@ -206,15 +206,15 @@ theorem rev_up {T : Fill} {i j u : Nat} (hu : upOf T i j = some u)
 
 theorem move_ne {T : Fill} {r c r' c' x y : Nat} (h : ¬(x = r ∧ y = c)) (h' : ¬(x = r' ∧ y = c')) :
     move T r c r' c' x y = T x y := by
-  simp only [move_apply]; rw [if_neg h, if_neg h']
+  simp only [move_apply]; rw [ite_eq_right h, ite_eq_right h']
 
 theorem moveR_far {T : Fill} {i j x y : Nat} (h : i < x ∨ j + 1 < y) :
     move T i (j + 1) i j x y = T x y := by
-  simp only [move_apply]; rw [if_neg (by omega), if_neg (by omega)]
+  simp only [move_apply]; rw [ite_eq_right (by omega), ite_eq_right (by omega)]
 
 theorem moveD_far {T : Fill} {i j x y : Nat} (h : i + 1 < x ∨ j < y) :
     move T (i + 1) j i j x y = T x y := by
-  simp only [move_apply]; rw [if_neg (by omega), if_neg (by omega)]
+  simp only [move_apply]; rw [ite_eq_right (by omega), ite_eq_right (by omega)]
 
 theorem Ahead.right {T : Fill} {i j : Nat} (hA : Ahead T i j) :
     Ahead (move T i (j + 1) i j) i (j + 1) := by
@@ -242,7 +242,7 @@ theorem undo_right {T : Fill} {i j a : Nat} (h0 : T i j = none) (ha : T i (j + 1
   · simp only [Nat.add_sub_cancel]; rw [move_move h0 (by omega)]
   · intro u hu
     have hi := ne_of_upOf hu
-    simp only [upOf, if_neg hi] at hu
+    simp only [upOf, ite_eq_right hi] at hu
     rw [move_ne (by omega) (by omega)] at hu
     exact (hA (i - 1) (j + 1) (by omega)).2 u a hu (by rw [Nat.sub_add_cancel (by omega)]; exact ha)
 
@@ -256,7 +256,7 @@ theorem undo_down {T : Fill} {i j b : Nat} (h0 : T i j = none) (hb : T (i + 1) j
   · simp only [Nat.add_sub_cancel]; rw [move_move h0 (by omega)]
   · intro l hl
     have hj := ne_of_leftOf hl
-    simp only [leftOf, if_neg hj] at hl
+    simp only [leftOf, ite_eq_right hj] at hl
     rw [move_ne (by omega) (by omega)] at hl
     exact (hA (i + 1) (j - 1) (by omega)).1 l b hl (by rw [Nat.sub_add_cancel (by omega)]; exact hb)
 
@@ -352,7 +352,7 @@ theorem Bounded.move {n : Nat} {T : Fill} (hB : Bounded n T) (r c : Nat) {r' c' 
   intro x y h
   rw [move_apply]; split
   · rfl
-  · rw [if_neg (by omega)]; exact hB x y h
+  · rw [ite_eq_right (by omega)]; exact hB x y h
 
 /-- A set of cells is order-convex: with two cells it contains every cell between them.
 Skew shapes `λ/μ` are exactly the finite order-convex sets. -/
@@ -405,7 +405,7 @@ theorem Inv.down {sh : Nat → Nat → Prop} {T : Fill} {i j b : Nat} (hC : Conv
     · obtain ⟨rfl, rfl⟩ := h1; simp [hb]
     · by_cases h2 : r = i ∧ c = j
       · obtain ⟨rfl, rfl⟩ := h2; simp [hb]
-      · rw [if_neg h1, if_neg h2]; simp only [h1, h2, or_false]
+      · rw [ite_eq_right h1, ite_eq_right h2]; simp only [h1, h2, or_false]
   row r c x y hx hy := by
     by_cases h1 : r = i + 1 ∧ c = j
     · obtain ⟨rfl, rfl⟩ := h1; simp [move_apply] at hx
@@ -473,7 +473,7 @@ theorem Inv.right {sh : Nat → Nat → Prop} {T : Fill} {i j a : Nat}
     · obtain ⟨rfl, rfl⟩ := h1; simp [ha]
     · by_cases h2 : r = i ∧ c = j
       · obtain ⟨rfl, rfl⟩ := h2; simp [ha]
-      · rw [if_neg h1, if_neg h2]; simp only [h1, h2, or_false]
+      · rw [ite_eq_right h1, ite_eq_right h2]; simp only [h1, h2, or_false]
   row r c x y hx hy := by
     by_cases h1 : r = i ∧ c = j + 1
     · obtain ⟨rfl, rfl⟩ := h1; simp [move_apply] at hx
@@ -606,11 +606,11 @@ theorem fwdFuel_eq (n : Nat) (T : Fill) (i j : Nat) :
   | case4 T i j a b hr hb hba ih =>
     intro k hk; have := lt_of_look hb
     obtain ⟨k, rfl⟩ : ∃ k', k = k' + 1 := ⟨k - 1, by omega⟩
-    simp only [fwdFuel, hr, hb, if_pos hba]; exact ih k (by omega)
+    simp only [fwdFuel, hr, hb, ite_eq_left hba]; exact ih k (by omega)
   | case5 T i j a b hr hb hba ih =>
     intro k hk; have := lt_of_look hr
     obtain ⟨k, rfl⟩ : ∃ k', k = k' + 1 := ⟨k - 1, by omega⟩
-    simp only [fwdFuel, hr, hb, if_neg hba]; exact ih k (by omega)
+    simp only [fwdFuel, hr, hb, ite_eq_right hba]; exact ih k (by omega)
 
 /-- The skew tableau `[[·, 1, 3], [2, 4]]` of shape `(3, 2)/(1)`. -/
 def ex₁ : Fill := ofRows [[none, some 1, some 3], [some 2, some 4]]

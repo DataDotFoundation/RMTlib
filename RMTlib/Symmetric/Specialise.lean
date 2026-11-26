@@ -357,9 +357,9 @@ theorem schurV_two_one (a : ℕ → R) (mu : Fin 2 → ℕ) :
       refine ⟨fun l j hj => ?_, fun t => Nat.zero_le _⟩
       fin_cases l <;> fin_cases j <;> simp_all
   by_cases h : mu 1 = 0
-  · rw [if_pos (this.mpr h), if_pos h, Fin.sum_univ_two, h]
+  · rw [ite_eq_left (this.mpr h), ite_eq_left h, Fin.sum_univ_two, h]
     simp
-  · rw [if_neg (fun h' => h (this.mp h')), if_neg h]
+  · rw [ite_eq_right (fun h' => h (this.mp h')), ite_eq_right h]
 
 /-- **Two-row Schur polynomials in two variables**:
 `s_{(p+j, j)}(x, y) = (x y)^j h_p(x, y)`, with `h_p(x, y) = Σ_{i ≤ p} x^i y^{p−i}`. -/
@@ -424,12 +424,12 @@ theorem mk_even_mul_one_sub (e : R) :
   · simp
   · have h2 : 2 ≤ k + 2 := by omega
     have hev : Even (k + 2) ↔ Even k := by simp [Nat.even_add]
-    simp only [if_pos h2, coeff_mk, show k + 2 - 2 = k by omega,
-      if_neg (show k + 2 ≠ 0 by omega)]
+    simp only [ite_eq_left h2, coeff_mk, show k + 2 - 2 = k by omega,
+      ite_eq_right (show k + 2 ≠ 0 by omega)]
     by_cases hk : Even k
-    · rw [if_pos (hev.mpr hk), if_pos hk, show (k + 2) / 2 = k / 2 + 1 by omega, pow_succ]
+    · rw [ite_eq_left (hev.mpr hk), ite_eq_left hk, show (k + 2) / 2 = k / 2 + 1 by omega, pow_succ]
       ring
-    · rw [if_neg (fun h => hk (hev.mp h)), if_neg hk]
+    · rw [ite_eq_right (fun h => hk (hev.mp h)), ite_eq_right hk]
       ring
 
 /-- **The local `GL₂ × GL₂` generating series from any proof of the Cauchy identity in two
@@ -459,14 +459,14 @@ theorem oneRow_cauchy_two_of
     rw [Finset.mul_sum]
     refine Finset.sum_congr rfl fun i hi => ?_
     have := Finset.mem_range.mp hi
-    simp only [hb, if_pos, mul_pow, one_ne_zero, if_false]
+    simp only [hb, ite_eq_left, mul_pow, one_ne_zero, ite_false]
     rw [show c ^ k = c ^ i * c ^ (k - i) by rw [← pow_add]; congr 1; omega]
     ring
   have hterm : ∀ l : Fin 2 → ℕ, l 1 ≤ l 0 →
       schurV a 2 2 l * schurV b 2 2 l = e ^ l 1 * g (l 0 - l 1) := by
     intro l hl
     rw [schurV_two_two' a l hl, schurV_two_two' b l hl, hhb]
-    simp only [ha, hb, he, hg, if_pos, one_ne_zero, if_false]
+    simp only [ha, hb, he, hg, ite_eq_left, one_ne_zero, ite_false]
     ring
   have hCgE : PowerSeries.mk (fun d => ∑ l ∈ antiParts 2 d, schurV a 2 2 l * schurV b 2 2 l)
       = PowerSeries.mk g * E := by
@@ -502,8 +502,8 @@ theorem oneRow_cauchy_two_of
   have hprod : ∏ i : Fin 2, ∏ j : Fin 2, (1 - C (a j * b i) * X)
       = (1 - C (x * x' * c) * X) * (1 - C (x * y' * c) * X)
         * (1 - C (y * x' * c) * X) * (1 - C (y * y' * c) * X) := by
-    simp only [Fin.prod_univ_two, ha, hb, Fin.val_zero, Fin.val_one, if_pos, one_ne_zero,
-      if_false, show x * (c * x') = x * x' * c by ring, show y * (c * x') = y * x' * c by ring,
+    simp only [Fin.prod_univ_two, ha, hb, Fin.val_zero, Fin.val_one, ite_eq_left, one_ne_zero,
+      ite_false, show x * (c * x') = x * x' * c by ring, show y * (c * x') = y * x' * c by ring,
       show x * (c * y') = x * y' * c by ring, show y * (c * y') = y * y' * c by ring]
     ring
   rw [hCgE, hprod] at hC

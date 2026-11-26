@@ -141,7 +141,7 @@ theorem eulerG_DD (a b : σ) :
     split_ifs <;> simp only [add_mul, mul_assoc, one_mul, mul_one, zero_mul, mul_zero, add_zero] <;>
       abel
   rw [Finset.sum_congr rfl fun v _ => this v, Finset.sum_neg_distrib, Finset.sum_add_distrib,
-    Finset.sum_ite_eq, Finset.sum_ite_eq, if_pos (mem_univ _), if_pos (mem_univ _), D_D_comm b a]
+    Finset.sum_ite_eq, Finset.sum_ite_eq, ite_eq_left (mem_univ _), ite_eq_left (mem_univ _), D_D_comm b a]
   module
 
 end Generic
@@ -185,7 +185,7 @@ theorem DD_normSq (i : Fin m) :
   rw [pderiv_normSq, show (2 : MvPolynomial (Fin m) ℚ) * X i = (2 : ℚ) • X i by
     rw [smul_eq_C_mul]; rfl, mul_smul'] at h1
   have h2 := D_X m i i
-  rw [if_pos rfl] at h2
+  rw [ite_eq_left rfl] at h2
   rw [mul_assoc, h1, mul_add, ← mul_assoc, h1, mul_smul_comm, h2]
   simp only [add_mul, smul_mul_assoc, smul_add, mul_assoc]
   module
@@ -311,7 +311,7 @@ theorem unit_FE : uF m * uE m - uE m * uF m = uH m := by
     have hx := D_X' (σ := Fin m ⊕ Fin m) (Sum.inl i) (Sum.inl i)
     rw [pderiv_inr_pairing] at hb
     rw [pderiv_inl_pairing] at ha
-    rw [if_pos rfl] at hx
+    rw [ite_eq_left rfl] at hx
     rw [mul_assoc, hb, mul_add, ← mul_assoc, ha, hx, add_mul, mul_assoc]
     abel
   rw [Finset.sum_congr rfl fun i _ => this i, Finset.sum_add_distrib, Finset.sum_add_distrib,
@@ -431,7 +431,7 @@ theorem ferm_FE : fF m * fE m - fE m * fF m = fH m := by
   intro S
   rw [LinearMap.sub_apply, Module.End.mul_apply, Module.End.mul_apply, fF_fE, fE_fF, fH_single,
     neg_sub_neg, ← Finset.sum_sub_distrib]
-  simp only [← Finset.sum_sub_distrib, ferm_key, Finset.sum_ite_eq, Finset.mem_univ, if_true,
+  simp only [← Finset.sum_sub_distrib, ferm_key, Finset.sum_ite_eq, Finset.mem_univ, ite_true,
     ← Finset.sum_smul]
   congr 1
   rw [Finset.sum_sub_distrib, card_filter_mem]

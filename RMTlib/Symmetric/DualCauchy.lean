@@ -60,7 +60,7 @@ theorem mem_boxParts {m B : ℕ} {l : Fin m → ℕ} : l ∈ boxParts m B ↔ An
 
 /-- **The empty shape has one tableau**: `s_∅ = 1`. -/
 theorem schurV_zero_shape (a : ℕ → R) {N : ℕ} : ∀ m : ℕ, schurV a N m 0 = 1
-  | 0 => by rw [schurV_zero, if_pos rfl]
+  | 0 => by rw [schurV_zero, ite_eq_left rfl]
   | m + 1 => by
     have h : interl (0 : Fin N → ℕ) = {0} := by
       ext mu
@@ -165,9 +165,9 @@ theorem dual_cauchy_eDet (α β : ℕ → R) (T : R) (m : ℕ) : ∀ n B : ℕ, 
       ∏ i ∈ range n, ∏ j : Fin m, (1 + α j * β i * T)
   | 0, B, _ => by
     rw [prod_range_zero, sum_eq_single (0 : Fin m → ℕ)]
-    · rw [eDet_zero_index β (fun _ _ _ => le_rfl), if_pos rfl, schurV_zero_shape]; simp
+    · rw [eDet_zero_index β (fun _ _ _ => le_rfl), ite_eq_left rfl, schurV_zero_shape]; simp
     · intro lam hl h0
-      rw [eDet_zero_index β (mem_boxParts.mp hl).1, if_neg h0, mul_zero]
+      rw [eDet_zero_index β (mem_boxParts.mp hl).1, ite_eq_right h0, mul_zero]
     · intro h; exact absurd (mem_boxParts.mpr ⟨fun _ _ _ => le_rfl, fun _ => Nat.zero_le _⟩) h
   | n + 1, B, hB => by
     classical

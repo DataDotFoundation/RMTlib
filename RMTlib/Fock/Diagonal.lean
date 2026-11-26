@@ -149,7 +149,7 @@ theorem fischer_sX_sX_of_casimir_aux {l : ℕ}
     intro ν μ _ _ _ _ hsν hsμ
     have h0 : ∀ κ : Fin (l + 1) → ℕ, ∑ i, κ i = 0 → κ = 0 := fun κ hs => funext fun i => by
       have := single_le_sum (fun j _ => Nat.zero_le (κ j)) (mem_univ i); simp at this ⊢; omega
-    rw [h0 ν hsν, h0 μ hsμ, if_pos rfl]
+    rw [h0 ν hsν, h0 μ hsμ, ite_eq_left rfl]
     simp only [Pi.zero_apply, Nat.cast_zero]
     rw [sX_zero, fischer_one_one]
     simp [wQ]
@@ -170,7 +170,7 @@ theorem fischer_sX_sX_of_casimir_aux {l : ℕ}
       · rfl
     by_cases he : casEig N lam = casEig N μ
     swap
-    · rw [fischer_sX_eq_zero_of_eig T hadj (heig lam hlam) (heig μ hμ) he, if_neg]
+    · rw [fischer_sX_eq_zero_of_eig T hadj (heig lam hlam) (heig μ hμ) he, ite_eq_right]
       rintro rfl
       exact he rfl
     -- the Pieri terms other than `λ` are orthogonal to `s_μ`
@@ -197,7 +197,7 @@ theorem fischer_sX_sX_of_casimir_aux {l : ℕ}
           = if 0 < μ j ∧ removeBox μ j = ν then wQ N ν else 0 := by
       intro j
       cases hc : IsCorner μ j
-      · rw [sX_removeBox_eq_zero hμ hc, fischer_zero_right, if_neg]
+      · rw [sX_removeBox_eq_zero hμ hc, fischer_zero_right, ite_eq_right]
         rintro ⟨hpos, hrm⟩
         have := corner_of_antitone_removeBox hpos (hrm ▸ hνa)
         rw [hc] at this
@@ -211,21 +211,21 @@ theorem fischer_sX_sX_of_casimir_aux {l : ℕ}
             · rfl) hsν
           (by have := sum_removeBox hjpos; omega)]
         by_cases hrm : removeBox μ j = ν
-        · rw [if_pos hrm.symm, if_pos ⟨hjpos, hrm⟩]
-        · rw [if_neg (Ne.symm hrm), if_neg fun h => hrm h.2]
+        · rw [ite_eq_left hrm.symm, ite_eq_left ⟨hjpos, hrm⟩]
+        · rw [ite_eq_right (Ne.symm hrm), ite_eq_right fun h => hrm h.2]
     simp_rw [hrem]
     rw [Fintype.sum_eq_single k]
     · by_cases hμlam : lam = μ
       · subst hμlam
-        rw [if_pos ⟨hkpos, rfl⟩, if_pos rfl, wQ_removeBox hkpos]
+        rw [ite_eq_left ⟨hkpos, rfl⟩, ite_eq_left rfl, wQ_removeBox hkpos]
         push_cast [Nat.cast_sub hkpos]
         ring
-      · rw [if_neg hμlam, if_neg, mul_zero]
+      · rw [ite_eq_right hμlam, ite_eq_right, mul_zero]
         rintro ⟨hpos, hrm⟩
         apply hμlam
         rw [hlamν, ← hrm, addBox_removeBox hpos]
     · intro j hjk
-      rw [if_neg, mul_zero]
+      rw [ite_eq_right, mul_zero]
       rintro ⟨hpos, hrm⟩
       apply hjk
       have hμν : μ = addBox ν j := by rw [← hrm, addBox_removeBox hpos]

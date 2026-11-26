@@ -199,7 +199,7 @@ theorem term_eq_zero {ν : Fin N → ℕ} (hν : Antitone ν) {k : Fin N} (hk : 
   by_cases h : k.val + 1 < N
   · have hle := hν (show k ≤ ⟨k.val + 1, h⟩ from Fin.le_def.mpr (Nat.le_succ _))
     have heq : ν ⟨k.val + 1, h⟩ = ν k := by
-      simp only [IsCorner, h, dif_pos, Bool.and_eq_false_iff, decide_eq_false_iff_not] at hk
+      simp only [IsCorner, h, dite_eq_left, Bool.and_eq_false_iff, decide_eq_false_iff_not] at hk
       omega
     refine mul_eq_zero_of_right _ (prod_eq_zero (i := ⟨k.val + 1, h⟩)
       (mem_erase.mpr ⟨fun e => by simp [Fin.ext_iff] at e, mem_univ _⟩) ?_)
@@ -208,7 +208,7 @@ theorem term_eq_zero {ν : Fin N → ℕ} (hν : Antitone ν) {k : Fin N} (hk : 
     push_cast
     ring
   · have hk0 : ν k = 0 := by
-      simp only [IsCorner, h, dif_neg, not_false_eq_true, Bool.and_true, decide_eq_false_iff_not] at hk
+      simp only [IsCorner, h, dite_eq_right, not_false_eq_true, Bool.and_true, decide_eq_false_iff_not] at hk
       omega
     refine mul_eq_zero_of_left ?_ _
     have : ell ν k = 0 := by simp only [ell]; omega
@@ -226,7 +226,7 @@ theorem removeBox_antitone {ν : Fin N → ℕ} (hν : Antitone ν) {k : Fin N}
   · subst ha
     have hab' : (a : ℕ) < b := Fin.lt_def.mp (lt_of_le_of_ne hab (Ne.symm hb))
     have hb' : a.val + 1 < N := by have := b.isLt; omega
-    rw [dif_pos hb'] at hk
+    rw [dite_eq_left hb'] at hk
     have := hν (show (⟨a.val + 1, hb'⟩ : Fin N) ≤ b from Fin.le_def.mpr (by simpa using hab'))
     simp only [decide_eq_true_eq] at hk
     omega
@@ -247,7 +247,7 @@ theorem fSYT_eq_G (n : ℕ) :
     simp [fSYT, hs, this]
   | succ n ih =>
     intro ν hν hs
-    rw [fSYT, if_neg (by omega), Nat.cast_sum]
+    rw [fSYT, ite_eq_right (by omega), Nat.cast_sum]
     have hL := RMT.Lagrange.lagrange_identity N (ellQ ν) (ellQ_injective hν)
     have hell : ∑ i, ellQ ν i = ((n + 1 : ℕ) : ℚ) + ((N * (N - 1) / 2 : ℕ) : ℚ) := by
       simp only [ellQ, ← Nat.cast_sum]

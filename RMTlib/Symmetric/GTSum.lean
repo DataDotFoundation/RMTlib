@@ -82,7 +82,7 @@ theorem mem_gtPatterns : ∀ (m : ℕ) (lam : Fin N → ℕ) (p : Fin (m + 1) �
     · rintro ⟨h0, hl, -⟩
       have hl' : p 0 = lam := hl
       have : lam = 0 := hl'.symm.trans h0
-      rw [if_pos this, Finset.mem_singleton]
+      rw [ite_eq_left this, Finset.mem_singleton]
       funext k
       have hk : k = 0 := Fin.ext (by have := k.2; omega)
       rw [hk, h0]

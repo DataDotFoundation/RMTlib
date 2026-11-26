@@ -77,8 +77,8 @@ theorem qBinom_zero_q : ∀ n k : ℕ, qBinom (0 : R) n k = if k ≤ n then 1 el
   | n + 1, k + 1 => by
     rw [qBinom_succ_succ, qBinom_zero_q n k, zero_pow (Nat.succ_ne_zero k), zero_mul, add_zero]
     by_cases h : k ≤ n
-    · rw [if_pos h, if_pos (by omega)]
-    · rw [if_neg h, if_neg (by omega)]
+    · rw [ite_eq_left h, ite_eq_left (by omega)]
+    · rw [ite_eq_right h, ite_eq_right (by omega)]
 
 /-- At `q = 1` the Gaussian binomial is the binomial coefficient. -/
 theorem qBinom_one_q : ∀ n k : ℕ, qBinom (1 : R) n k = n.choose k
@@ -181,7 +181,7 @@ theorem qBranch_zero_q {lam mu : Fin N → ℕ} (h : Weyl.GTStep lam mu) :
     split_ifs with h'
     · exact h.1 i ⟨i.val + 1, h'⟩ rfl
     · exact Nat.zero_le _
-  rw [qBinom_zero_q, if_pos (by omega)]
+  rw [qBinom_zero_q, ite_eq_left (by omega)]
 
 /-- **At `q = 0` the q-Whittaker polynomial is the Schur polynomial.** -/
 theorem qWhittV_zero_q (a : ℕ → R) : ∀ (m : ℕ) (lam : Fin N → ℕ),
@@ -222,9 +222,9 @@ theorem qWhittV_one_q_one_row (a : ℕ → R) : ∀ m n : ℕ,
     qWhittV (1 : R) a 1 m (fun _ => n) = (∑ k ∈ range m, a k) ^ n
   | 0, n => by
     cases n with
-    | zero => rw [qWhittV, if_pos (by funext i; rfl)]; simp
+    | zero => rw [qWhittV, ite_eq_left (by funext i; rfl)]; simp
     | succ n =>
-      rw [qWhittV, if_neg (fun h => by simpa using congrFun h 0)]
+      rw [qWhittV, ite_eq_right (fun h => by simpa using congrFun h 0)]
       simp
   | m + 1, n => by
     rw [qWhittV, sum_interl_one]
@@ -241,9 +241,9 @@ theorem schurV_principal_one_row (q : R) : ∀ m n : ℕ,
     schurV (fun i => q ^ i) 1 (m + 1) (fun _ => n) = qBinom q (m + n) m
   | 0, n => by
     rw [schurV_succ, sum_interl_one, Finset.sum_eq_single 0]
-    · rw [schurV_zero, if_pos (by funext i; rfl)]; simp
+    · rw [schurV_zero, ite_eq_left (by funext i; rfl)]; simp
     · intro j _ hj
-      rw [schurV_zero, if_neg (fun h => hj (by simpa using congrFun h 0))]; simp
+      rw [schurV_zero, ite_eq_right (fun h => hj (by simpa using congrFun h 0))]; simp
     · simp
   | m + 1, n => by
     rw [schurV_succ, sum_interl_one, show m + 1 + n = m + 1 + n from rfl,

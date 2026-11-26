@@ -85,7 +85,7 @@ theorem lagrange_identity (N : ℕ) (x : Fin N → ℚ) (hx : Function.Injective
     intro m hm
     obtain ⟨m, rfl⟩ : ∃ m', m = m' + 1 := ⟨m - 1, by omega⟩
     rw [ht, coeff_add, coeff_X_mul, coeff_natCast_mul, coeff_add, coeff_C_mul_X_pow, coeff_sub,
-      if_neg (by omega), coeff_eq_zero_of_degree_lt (hrQ.trans_le (by exact_mod_cast (by omega))),
+      ite_eq_right (by omega), coeff_eq_zero_of_degree_lt (hrQ.trans_le (by exact_mod_cast (by omega))),
       coeff_eq_zero_of_degree_lt (hrP.trans_le (by exact_mod_cast (by omega))),
       coeff_eq_zero_of_degree_lt (hrP.trans_le (by exact_mod_cast (by omega)))]
     simp
@@ -97,13 +97,13 @@ theorem lagrange_identity (N : ℕ) (x : Fin N → ℚ) (hx : Function.Injective
     rw [card_univ, Fintype.card_fin, degree_lt_iff_coeff_zero]
     intro k hk
     have := hcoeff k
-    rw [if_neg (by omega), coeff_eq_zero_of_degree_lt
+    rw [ite_eq_right (by omega), coeff_eq_zero_of_degree_lt
       (htdeg.trans_le (by exact_mod_cast (by omega : N + 1 ≤ k + 2))), add_zero] at this
     simpa using this
   have hsum := Lagrange.coeff_eq_sum (s := univ) (v := x) (hx.injOn) hRdeg
   rw [card_univ, Fintype.card_fin] at hsum
   have htop : R.coeff (N - 1) * 2 = (N : ℚ) ^ 2 - N - 2 * p := by
-    rw [hcoeff, if_pos (by omega), coeff_eq_zero_of_degree_lt
+    rw [hcoeff, ite_eq_left (by omega), coeff_eq_zero_of_degree_lt
       (htdeg.trans_le (by exact_mod_cast (by omega : N + 1 ≤ N - 1 + 2))), add_zero]
   have heval : ∀ i, R.eval (x i) = -(x i * ∏ j ∈ univ.erase i, (x i - x j - 1)) := by
     intro i

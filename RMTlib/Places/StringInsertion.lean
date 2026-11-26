@@ -48,7 +48,7 @@ theorem vd_insert {L : Finset ℕ} {a : ℕ} (ha : a ∉ L) :
   rw [prod_insert ha]
   -- the row of `a`
   have hrow : ∏ y ∈ (insert a L).filter (a < ·), (y - a) = ∏ y ∈ L.filter (a < ·), (y - a) := by
-    rw [filter_insert, if_neg (lt_irrefl a)]
+    rw [filter_insert, ite_eq_right (lt_irrefl a)]
   -- the other rows gain the factor `a − x` when `x < a`
   have hcol : ∀ x ∈ L, ∏ y ∈ (insert a L).filter (x < ·), (y - x) =
       (∏ y ∈ L.filter (x < ·), (y - x)) * (if x < a then a - x else 1) := by
@@ -65,10 +65,10 @@ theorem vd_insert {L : Finset ℕ} {a : ℕ} (ha : a ∉ L) :
     refine prod_congr rfl fun x hx => ?_
     have hxa : x ≠ a := fun h => ha (h ▸ hx)
     rcases lt_or_gt_of_ne hxa with h | h
-    · rw [if_neg (not_lt.mpr h.le), if_pos h, one_mul]
+    · rw [ite_eq_right (not_lt.mpr h.le), ite_eq_left h, one_mul]
       unfold Nat.dist
       omega
-    · rw [if_pos h, if_neg (not_lt.mpr h.le), mul_one]
+    · rw [ite_eq_left h, ite_eq_right (not_lt.mpr h.le), mul_one]
       unfold Nat.dist
       omega
   calc (∏ y ∈ L.filter (a < ·), (y - a)) *

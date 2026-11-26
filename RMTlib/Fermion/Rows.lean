@@ -206,7 +206,7 @@ theorem ofRows_injective (n : ℤ) {ν ν' : Fin N → ℕ} (hν : Antitone ν) 
   have hr : Set.range (fun i => maya ν i + n) = Set.range (fun i => maya ν' i + n) := by
     have := congrArg (fun s : Finset ℤ => (s : Set ℤ)) hS
     simpa [rowSites] using this
-  have hf := ((anti ν hν).range_inj (anti ν' hν')).mp hr
+  have hf := ((anti ν hν).range_inj_of_wellFoundedGT (anti ν' hν')).mp hr
   funext i
   have := congrFun hf i
   unfold maya at this; omega
@@ -405,8 +405,8 @@ theorem sum_filter_ne_zero (l : List ℕ) : (l.filter (· ≠ 0)).sum = l.sum :=
   | cons a l ih =>
     rw [List.filter_cons]
     by_cases ha : a = 0
-    · rw [if_neg (by simp [ha]), ih, List.sum_cons, ha, zero_add]
-    · rw [if_pos (by simp [ha]), List.sum_cons, List.sum_cons, ih]
+    · rw [ite_eq_right (by simp [ha]), ih, List.sum_cons, ha, zero_add]
+    · rw [ite_eq_left (by simp [ha]), List.sum_cons, List.sum_cons, ih]
 
 /-- The partition with given rows: the nonzero rows. -/
 def rowsPart {k : ℕ} (ν : Fin k → ℕ) (hν : ∑ i, ν i = k) : Nat.Partition k where

@@ -56,11 +56,11 @@ theorem fischer_monomial_monomial [DecidableEq σ] (s t : σ →₀ ℕ) (a b : 
   by_cases ha : a = 0
   · subst ha
     simp [fischer]
-  · rw [fischer_eq_sum_of_subset _ _ {s} (by rw [support_monomial, if_neg ha]), sum_singleton,
-      coeff_monomial, coeff_monomial, if_pos rfl]
+  · rw [fischer_eq_sum_of_subset _ _ {s} (by rw [support_monomial, ite_eq_right ha]), sum_singleton,
+      coeff_monomial, coeff_monomial, ite_eq_left rfl]
     by_cases hst : s = t
     · subst hst; simp
-    · rw [if_neg (Ne.symm hst), if_neg hst]; ring
+    · rw [ite_eq_right (Ne.symm hst), ite_eq_right hst]; ring
 
 theorem prod_factorial_single_add [DecidableEq σ] (s : σ →₀ ℕ) (v : σ) :
     (∏ k ∈ (Finsupp.single v 1 + s : σ →₀ ℕ).support, ((Finsupp.single v 1 + s : σ →₀ ℕ) k).factorial) =
@@ -90,16 +90,16 @@ theorem prod_factorial_single_add [DecidableEq σ] (s : σ →₀ ℕ) (v : σ) 
 
 theorem fischer_X_mul_monomial [DecidableEq σ] (v : σ) (s t : σ →₀ ℕ) (a b : ℚ) :
     fischer (X v * monomial s a) (monomial t b) = fischer (monomial s a) (pderiv v (monomial t b)) := by
-  rw [X, monomial_mul, one_mul, pderiv_monomial, fischer_monomial_monomial, fischer_monomial_monomial]
+  rw [X, monomial_mul_monomial, one_mul, pderiv_monomial, fischer_monomial_monomial, fischer_monomial_monomial]
   by_cases h : Finsupp.single v 1 + s = t
   · subst h
     have hs : Finsupp.single v 1 + s - Finsupp.single v 1 = s := add_tsub_cancel_left _ _
-    rw [if_pos rfl, if_pos hs.symm, prod_factorial_single_add, Finsupp.add_apply, Finsupp.single_eq_same]
+    rw [ite_eq_left rfl, ite_eq_left hs.symm, prod_factorial_single_add, Finsupp.add_apply, Finsupp.single_eq_same]
     push_cast
     ring
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     by_cases h' : s = t - Finsupp.single v 1
-    · rw [if_pos h']
+    · rw [ite_eq_left h']
       have htv : t v = 0 := by
         by_contra hne
         apply h
@@ -107,7 +107,7 @@ theorem fischer_X_mul_monomial [DecidableEq σ] (v : σ) (s t : σ →₀ ℕ) (
         exact tsub_add_cancel_of_le (Finsupp.single_le_iff.mpr (Nat.one_le_iff_ne_zero.mpr hne))
       rw [htv]
       simp
-    · rw [if_neg h']
+    · rw [ite_eq_right h']
 
 /-- **Adjointness**: multiplication by `x_v` is adjoint to `∂/∂x_v` for the Fischer pairing. -/
 theorem fischer_X_mul_left [DecidableEq σ] (v : σ) (P Q : MvPolynomial σ ℚ) :
@@ -134,7 +134,7 @@ noncomputable def trX (N : ℕ) : MvPolynomial (Fin N × Fin N) ℚ := ∑ a, X 
 theorem pderiv_trX (a : Fin N) : pderiv (a, a) (trX N) = 1 := by
   rw [trX, map_sum]
   rw [Fintype.sum_eq_single a fun b hb => by
-    rw [pderiv_X, Pi.single_apply, if_neg (by simpa using hb)]]
+    rw [pderiv_X, Pi.single_apply, ite_eq_right (by simpa using hb)]]
   rw [pderiv_X, Pi.single_eq_same]
 
 /-- **`‖(tr X)^m‖²_Fock = m! · N^m`.** -/
