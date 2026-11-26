@@ -30,7 +30,7 @@ theorem fischer_comm (f g : MvPolynomial σ ℚ) : fischer f g = fischer g f := 
 theorem fischer_add_right (f g₁ g₂ : MvPolynomial σ ℚ) :
     fischer f (g₁ + g₂) = fischer f g₁ + fischer f g₂ := by
   unfold fischer
-  simp only [coeff_add, mul_add, add_mul, sum_add_distrib]
+  simp [mul_add, add_mul, sum_add_distrib]
 
 theorem fischer_add_left (f₁ f₂ g : MvPolynomial σ ℚ) :
     fischer (f₁ + f₂) g = fischer f₁ g + fischer f₂ g := by

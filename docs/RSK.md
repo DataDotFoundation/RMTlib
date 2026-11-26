@@ -16,7 +16,7 @@ lake build RMTlibExamples.RSK                         # runs and cross-checks (a
 ```
 
 Ported from `RSK/` in [`pdehaye/MMT`](https://github.com/pdehaye/MMT) (up to commit
-`63551a5`); namespace `RMT.RSK`. It builds with RMTlib's toolchain (Lean 4.33.1). The build contains no `sorry`,
+`63551a5`); namespace `RMT.RSK`. It builds with RMTlib's toolchain (Lean 4.35.0). The build contains no `sorry`,
 and the main theorems use only Lean's standard axioms (`propext`, `Quot.sound`, and in
 some cases `Classical.choice`). See `main/RMTlibExamples/Axioms.lean`.
 

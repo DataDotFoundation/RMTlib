@@ -63,7 +63,7 @@ theorem sum_prod_multinomial (a b : Fin N → ℕ) (hab : ∑ i, b i = ∑ i, a 
     ∑ M ∈ (Fintype.piFinset fun i => Nat.antidiagonalTuple N (a i)).filter
         (fun M => ∀ j, ∑ i, M i j = b j), ∏ i, Nat.multinomial univ (M i)
       = Nat.multinomial univ b := by
-  have key := congrArg (coeff (Finsupp.equivFunOnFinite.symm b))
+  have key := congrArg (fun p : MvPolynomial (Fin N) ℕ => p.coeff (Finsupp.equivFunOnFinite.symm b))
     (prod_pow_eq_pow_sum univ a (∑ j, X j : MvPolynomial (Fin N) ℕ))
   simp_rw [sum_X_pow, prod_univ_sum, ← monomial_sum_prod, coeff_sum, coeff_monomial] at key
   rw [sum_ite, sum_const_zero, add_zero] at key

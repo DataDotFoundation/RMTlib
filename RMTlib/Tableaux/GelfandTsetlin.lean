@@ -48,12 +48,10 @@ theorem interlaced_iff_gt (m : Fin k × Fin n → ℕ) :
     simp only [prefixShape]
     convert this using 2
     · ext b; simp only [mem_filter, mem_univ, true_and, hle a b]
-    · ext b; simp only [mem_filter, mem_univ, true_and, hlt a b]
   · intro h l j hj a
     have := (h a).1 l j hj
     simp only [prefixShape] at this
     convert this using 2
     · ext b; simp only [mem_filter, mem_univ, true_and, hle a b]
-    · ext b; simp only [mem_filter, mem_univ, true_and, hlt a b]
 
 end RMT.Weyl
