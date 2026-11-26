@@ -407,3 +407,4 @@ import RMTlib
 #print axioms RMT.Places.Bertrand.qFact_two_mul
 #print axioms RMT.Places.Bertrand.log_choose_eq_sum_carry
 #print axioms RMT.Places.Bertrand.carry_eq
+#print axioms RMT.Places.Bertrand.log_factorial_eq_sum

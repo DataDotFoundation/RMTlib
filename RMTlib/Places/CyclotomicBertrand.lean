@@ -16,6 +16,8 @@ and whose value at `q = 1` is Chebyshev's identity.
 * `eval_one_qFact`, `choose_eq_prod_eval`: at `q = 1`, `C(2n, n) = ∏ Φ_d(1)^{e_d}`.
 * `eval_one_cyclotomic_eq`, `log_eval_one_cyclotomic`: `Φ_d(1)` is `p` for `d = p^k` and `1`
   otherwise, i.e. `log Φ_d(1) = Λ(d)`.
+* `factorial_eq_prod_eval`, `log_factorial_eq_sum`: the same for `m!`, with exponents `⌊m/d⌋`
+  (Legendre–Chebyshev).
 * `log_choose_eq_sum_carry`: **Chebyshev's identity** `log C(2n, n) = Σ_d e_d(n) Λ(d)`: the place
   `p` collects the carries at `d = p, p², …` (Kummer's `v_p`), and the sum over places is the size
   at `∞` (the product formula of row 7, `RMT.Places.deg_principal`, `RMT.Transfer.log_eq_sum`).
@@ -157,6 +159,27 @@ open ArithmeticFunction in
 theorem log_choose_eq_sum_carry (n : ℕ) :
     Real.log ((2 * n).choose n) = ∑ d ∈ Ioc 1 (2 * n), (carry n d : ℝ) * Λ d := by
   have h := congrArg (fun z : ℤ => (z : ℝ)) (choose_eq_prod_eval n)
+  simp only [Int.cast_natCast, Int.cast_prod, Int.cast_pow] at h
+  rw [h, Real.log_prod (fun d hd => pow_ne_zero _ (by
+    exact_mod_cast (eval_one_cyclotomic_pos (mem_Ioc.mp hd).1).ne'))]
+  refine sum_congr rfl fun d hd => ?_
+  rw [Real.log_pow, log_eval_one_cyclotomic (mem_Ioc.mp hd).1]
+
+/-- `m! = ∏_{1 < d ≤ m} Φ_d(1)^{⌊m/d⌋}`. -/
+theorem factorial_eq_prod_eval (m : ℕ) :
+    (m.factorial : ℤ) = ∏ d ∈ Ioc 1 m, (cyclotomic d ℤ).eval 1 ^ (m / d) := by
+  have h := congrArg (eval 1) (qFact_eq m)
+  rw [eval_one_qFact, eval_prod] at h
+  simp_rw [eval_pow] at h
+  exact h
+
+open ArithmeticFunction in
+/-- **Legendre–Chebyshev for factorials**: `log m! = Σ_{1 < d ≤ m} ⌊m/d⌋ Λ(d)`, the `q = 1` value of
+`[m]_q! = ∏ Φ_d^{⌊m/d⌋}`: here the cyclotomic exponents are the quotients `⌊m/d⌋`, not `0/1`
+carries. -/
+theorem log_factorial_eq_sum (m : ℕ) :
+    Real.log (m.factorial) = ∑ d ∈ Ioc 1 m, ((m / d : ℕ) : ℝ) * Λ d := by
+  have h := congrArg (fun z : ℤ => (z : ℝ)) (factorial_eq_prod_eval m)
   simp only [Int.cast_natCast, Int.cast_prod, Int.cast_pow] at h
   rw [h, Real.log_prod (fun d hd => pow_ne_zero _ (by
     exact_mod_cast (eval_one_cyclotomic_pos (mem_Ioc.mp hd).1).ne'))]
