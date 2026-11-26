@@ -83,6 +83,7 @@ import RMTlib.Symmetric.FominPaths
 import RMTlib.Symmetric.GTSum
 import RMTlib.Symmetric.Bialternant
 import RMTlib.Symmetric.DualJacobiTrudi
+import RMTlib.Symmetric.Giambelli
 import RMTlib.Symmetric.DualCauchy
 import RMTlib.Symmetric.Wall
 import RMTlib.BDTW.Potential

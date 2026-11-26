@@ -433,3 +433,11 @@ import RMTlib
 #print axioms RMT.ErdosChain.not_bandEmpty_of_Icc_subset
 #print axioms RMT.Fermion.Block.prod_one_sub_eq_sum_esymm
 #print axioms RMT.Fermion.Block.sum_block_sq
+#print axioms RMT.Symmetric.Giambelli.det_unitRows
+#print axioms RMT.Symmetric.Giambelli.det_submatrix_rev
+#print axioms RMT.Symmetric.Giambelli.frobB_ne
+#print axioms RMT.Symmetric.Giambelli.giambelli_jt
+#print axioms RMT.Symmetric.Giambelli.jt_hook
+#print axioms RMT.Symmetric.Giambelli.giambelli_jt'
+#print axioms RMT.Symmetric.Giambelli.hePair_hE_eZ
+#print axioms RMT.Symmetric.Giambelli.giambelli
