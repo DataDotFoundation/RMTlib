@@ -384,3 +384,6 @@ import RMTlib
 #print axioms RMT.MultisetHook.card_hooks_dvd
 #print axioms RMT.MultisetHook.padicValNat_prod_hooks
 #print axioms RMT.MultisetHook.core_transpose
+#print axioms RMT.Moments.OtherFamilies.sum_schurV_div_typeD
+#print axioms RMT.Moments.OtherFamilies.sum_schurV_div_typeC
+#print axioms RMT.Moments.OtherFamilies.sum_sgn_schurV_div_typeD
