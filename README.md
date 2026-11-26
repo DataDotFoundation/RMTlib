@@ -13,7 +13,7 @@ that random matrix computations reduce to. Everything is proved; there is no `so
 | Fock space: Fischer pairing, power sums, Casimir, Virasoro | `RMTlib.Fock` |
 | Fermions: Maya diagrams, charge | `RMTlib.Fermion` |
 | The Keating–Snaith constant | `RMTlib.KeatingSnaith` |
-| Moments: Dehaye's combinatorial form of the CFKRS recipe for `U(N)` (Theorem 3), proved for `M ≤ 1`, checked exactly beyond | `RMTlib.Moments` |
+| Moments: Dehaye's combinatorial form of the CFKRS recipe for `U(N)` (Theorem 3), proved for `M ≤ 1`, checked exactly beyond; for the symplectic and orthogonal families, the sums over sign choices against the type `C`/`D` Weyl denominators (`archives/lower_2`, `Moments/OtherFamilies/SignSums`) | `RMTlib.Moments` |
 
 `ω` (transposition `λ ↦ λ′`, `h ↔ e`, `N ↦ −N`) is tracked as data:
 `RMT.Symmetric.OmegaCovariant` records how a statistic of a shape changes under transposition
