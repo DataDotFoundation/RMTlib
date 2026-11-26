@@ -11,6 +11,7 @@ import RMTlib.Places.BandStep
 import RMTlib.Places.Tower
 import RMTlib.Places.TowerPlaces
 import RMTlib.Tableaux.MultisetHook.CoreCount
+import RMTlib.RSK.GrowthNull
 
 /-!
 # RMTlib's claims (RMTlib#56)
@@ -245,5 +246,31 @@ def pointChargeFactorisation : Claim where
   declared := .proved
   statements := [``RMT.Symmetric.contentProd_point_charge, ``RMT.Symmetric.contentProd_const]
   supports := [``places]
+
+/-! ## The null chart (RMTlib#154): squares and grids -/
+
+/-- **Fomin's local rule as a square** (RMTlib#154): inputs on the west and south edges (the
+neighbours `μ`, `ν` and the corner `ρ`), output on the east and north. It is a function of its
+inputs (`fwd`), and invertible on every square that occurs (`bwd_fwd`). -/
+def fominSquare : Claim where
+  text := "Fomin's local rule: the shape at the north-east corner is a function of the other three \
+    and the entry, and the backward rule recovers them"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.RSK.Growth.bwd_fwd]
+  square := some ("shape", "shape", "shape", "shape")
+  determined := true
+
+/-- **RSK's growth diagram as a discrete Goursat problem** (RMTlib#154 target 1): the grid of
+Fomin squares is determined by its two outer (null) edges, through the local rule. -/
+def growthGoursat : Claim where
+  text := "a growth diagram is determined by its two outer edges: the backward grid rebuilds every \
+    shape and every entry from them (RSK as a discrete Goursat problem)"
+  scope := .fox
+  declared := .proved
+  statements := [``RMT.RSK.Growth.back_grow]
+  square := some ("shape", "shape", "shape", "shape")
+  tiles := [[``fominSquare, ``fominSquare], [``fominSquare, ``fominSquare]]
+  determined := true
 
 end RMT.Claims
