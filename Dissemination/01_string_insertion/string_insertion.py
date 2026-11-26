@@ -6,13 +6,15 @@ pair Vandermonde. Inserting a string of consecutive particles into empty sites c
 product by an exact increment, the self-energy of the string over its mutual energy with what is
 already there. The increments telescope along any sequence of insertions, and two insertions commute
 exactly. At a finite place the one-body weight T^l is affine in position, at infinity l! is not. The
-video ends with the string-insertion law itself, a conjecture, stated as one.
+video ends with the string-insertion law along theta lifts, checked on the proof's own family.
 
 Source of truth: RMTlib docs/string-insertion.md (RMTlib#49). Tags used on screen:
-  proved      in RMTlib (RMT.frobenius, RMT.StringInsertion.vd_union / fac_union, ¬ IsExpLinear rhoInf);
-  exact       elementary, to be formalised (RMTlib#49 Ask 2);
-  reading     our language (charges, energies, gauge), not a theorem;
-  conjecture  the string-insertion law.
+Labels use the shared maturity ladder (style.status, MeaningLib#45), licensed by RMT.Claims:
+  proved      in RMTlib (RMT.frobenius, RMT.StringInsertion.vd_union / fac_union / hset_step, claims F3, F9;
+              ¬ IsExpLinear rhoInf, claim onebodyPotential);
+  computed    checked on the proof's family by RH-Dual (claim F4; band facts, RH-Dual #74, #128);
+  idea        our language (charges, energies, log-gas), not a theorem;
+  conjecture  the asymptotic log-gas reading (d).
 Every number on screen is an exact integer computation on the example L = {0, 2, 5} (lambda = (3, 1)).
 
     manim -ql string_insertion.py OneInsertion     # one scene, quick preview
@@ -74,12 +76,6 @@ def lifted_moral(text):
 
 def tag(text, col=DIM, size=18):
     return Text(text, font_size=size, color=col, slant=ITALIC)
-
-
-def status(kind):
-    """A small coloured status label: proved / exact / reading / conjecture."""
-    col = {"proved": OK, "exact": TEAL_B, "reading": DIM, "conjecture": L_COL}[kind]
-    return Text(kind, font_size=18, color=col, weight=BOLD)
 
 
 def maya_picture(L, s, M, max_site, new=(), clash=(), show_shape=True, labels=True):
@@ -162,7 +158,7 @@ class Title(Scene):
         self.play(FadeIn(pic, lag_ratio=0.05))
         pic2 = maya_picture({0, 2, 5, 6, 7}, s, M, 10, new={6, 7}, labels=False)
         self.play(Transform(pic, pic2), run_time=1.5)
-        self.play(FadeIn(tag("exact identities, and one hypothesis, flagged as such", size=20)
+        self.play(FadeIn(tag("proved identities, and one law, checked on the proof's family", size=20)
                          .next_to(card, DOWN, buff=0.3)),
                   FadeIn(Text(REPO, font_size=18, color=DIM).to_corner(DR, buff=0.2)))
         self.wait(2)
@@ -196,7 +192,7 @@ class MayaDiagram(Scene):
         L2 = {0, 1, 3, 6}
         pic2 = maya_picture(L2, s, M, 9)
         g = VGroup(
-            Tex(r"Pad with one more row ($N=4$): $L=\{6,3,1,0\}$", font_size=26),
+            Tex(r"Pad with one more row ($N=4$): $L=\{6,3,1,0\}$", font_size=22),
             Tex(r"every particle moves up by one, one enters at $0$;", font_size=26),
             Tex(r"the shape does not change.", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(side, DOWN, buff=0.45).align_to(side, LEFT)
@@ -237,9 +233,9 @@ class HookEnergy(Scene):
             Text("each particle sits in a one-body well  log ℓ!", font_size=22, color=SELF),
             Text("each pair repels:  − log |ℓ′ − ℓ|", font_size=22, color=MUT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.75)
-        rl = status("reading").next_to(read, RIGHT, buff=0.3)
+        rl = status("idea").next_to(read, RIGHT, buff=0.3)
         self.play(FadeIn(read), FadeIn(rl))
-        self.add(foot("proved: RMT.frobenius · reading: log H is the energy of a log-gas of particles"))
+        self.add(foot("proved: RMT.frobenius · idea: log H is the energy of a log-gas of particles"))
         self.wait(3)
         clear(self)
 
@@ -331,9 +327,9 @@ class Telescoping(Scene):
             Tex(r"between particles pays more mutual energy than it brings.", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(tot, DOWN, buff=0.35, aligned_edge=LEFT)
         self.play(FadeIn(rem))
-        st = status("exact").next_to(rem, DOWN, buff=0.2, aligned_edge=LEFT)
+        st = status("proved").next_to(rem, DOWN, buff=0.2, aligned_edge=LEFT)
         self.play(FadeIn(st))
-        self.add(foot("exact (to be formalised, RMTlib#49 Ask 2): the product of the increments is the final hook product"))
+        self.add(foot("proved per step (RMT.StringInsertion.hset_step, claim F9); the product of the increments telescopes to the final hook product"))
         self.wait(3)
         clear(self)
 
@@ -378,7 +374,7 @@ class CommutingSquare(Scene):
             MathTex(r"A=\{3,4\},\quad B=\{7\}", font_size=26, color=NEW),
             Tex(r"Both routes reach the same set,", font_size=26),
             Tex(r"so the square commutes: no defect.", font_size=26),
-            status("exact"),
+            status("proved"),
             Tex(r"The mutual energies swap between edges:", font_size=24, color=DIM),
             MathTex(r"\mathrm{Mut}(L\sqcup B,A)\,\mathrm{Mut}(L,B)", font_size=26, color=DIM),
             MathTex(r"=\mathrm{Mut}(L\sqcup A,B)\,\mathrm{Mut}(L,A)", font_size=26, color=DIM),
@@ -398,8 +394,8 @@ class CommutingSquare(Scene):
                 line.scale_to_fit_width(6.9 - line.get_left()[0])
                 line.align_to(side, LEFT)
         self.play(FadeIn(diag))
-        self.add(foot("growth diagrams: Fomin; here the cell rule is the exact identity · "
-                      "'Fomin-type' is a reading, the defect use is part of the conjecture"))
+        self.add(foot("proved: the cell rule is vd_union / fac_union (claim F3) · "
+                      "idea: 'Fomin-type'; the defect as a diagnostic is RH-Dual's check (claim F4)"))
         self.wait(3)
         clear(self)
 
@@ -447,20 +443,20 @@ class PlaceReading(Scene):
             Tex(r"$\mathrm{Mut}$ uses only $\Delta$: the same at every place.", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(lab, DOWN, buff=0.35).align_to(lab, LEFT)
         self.play(FadeIn(side, lag_ratio=0.3), run_time=2)
-        self.add(foot("proved: ¬ IsExpLinear rhoInf (RMT.BDTW) · exact: the place reading · "
-                      "reading: this is RMTlib#21's root (b), at the level of slack"))
+        self.add(foot("proved: ¬ IsExpLinear rhoInf (RMT.BDTW) · idea: the place reading, "
+                      "RMTlib#21's root (b) at the level of slack"))
         self.wait(3)
         clear(self)
 
 
 class Hypothesis(Scene):
     def construct(self):
-        header(self, "The string-insertion law", "a conjecture, stated as one")
-        st = status("conjecture").scale(1.2).next_to(VGroup(*self.mobjects), DOWN, buff=0.15)
+        header(self, "The string-insertion law", "checked on the proof's family")
+        st = status("checked").scale(1.2).next_to(VGroup(*self.mobjects), DOWN, buff=0.15)
         h = VGroup(
-            Tex(r"Along the theta lifts of a proof, each step acts on the relevant Maya sets", font_size=26),
-            Tex(r"as the insertion of a string, up to a global shift (a gauge that cancels).", font_size=26),
-            Tex(r"(a) the slack changes by $\log H_{\mathrm{set}}(S)-\log\mathrm{Mut}(L,S)$ at each step;",
+            Tex(r"Along the theta lifts of the proof, each step translates the old charges", font_size=26),
+            Tex(r"and inserts the one that crosses the band (a translation is not a gauge).", font_size=26),
+            Tex(r"(a) $\Delta\log H$ = translation + self-energy $-$ mutual energy at each step;",
                 font_size=24),
             Tex(r"(b) it telescopes along any path;", font_size=24),
             Tex(r"(c) the grid of lifts is a growth diagram whose squares commute exactly;", font_size=24),
@@ -486,8 +482,9 @@ class Hypothesis(Scene):
             ref.scale_to_fit_width(10.8)
         ref.next_to(h, DOWN, buff=0.3).align_to(h, LEFT)
         self.play(FadeIn(ref, lag_ratio=0.2), run_time=2)
-        self.add(foot("exact: items (a)–(c) hold for any true string insertion; the conjecture is that the lifts are such steps",
-                      "status: (a)–(c) being tested by RH-Dual, predictions committed first · " + NOTE))
+        self.add(foot("proved for every Maya set: (a), (b) (claim F9, RMT.StringInsertion.log_hset_step) · "
+                      "computed: the proof's lifts are such steps, and (c) (RH-Dual, claim F4)",
+                      "conjecture: (d) · " + NOTE))
         self.wait(4)
 
 
