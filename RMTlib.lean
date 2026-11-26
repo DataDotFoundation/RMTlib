@@ -90,6 +90,7 @@ import RMTlib.Places.Transfer
 import RMTlib.Places.StringInsertion
 import RMTlib.Places.BandStep
 import RMTlib.Places.Tower
+import RMTlib.Places.CyclotomicBertrand
 import RMTlib.Places.TowerPlaces
 import RMTlib.Places.Degree
 import RMTlib.Claims
