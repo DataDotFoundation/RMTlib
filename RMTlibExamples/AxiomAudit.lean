@@ -401,3 +401,6 @@ import RMTlib
 #print axioms RMT.Growth.localRule_two_maya
 #print axioms RMT.Growth.localRule_bump_maya
 #print axioms RMT.Growth.addable_bump
+#print axioms RMT.Growth.sum_plRule_eq
+#print axioms RMT.Growth.localRule_bump_eq_plRule
+#print axioms RMT.Growth.site_plRule_succ
