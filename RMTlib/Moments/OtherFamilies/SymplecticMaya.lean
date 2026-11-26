@@ -1,5 +1,6 @@
 import RMTlib.Moments.OtherFamilies.SignSums
 import RMTlib.Symmetric.FominMaya
+import RMTlib.Symmetric.FominSl2
 
 /-!
 # The symplectic flavour of boson–fermion
@@ -162,5 +163,39 @@ theorem mayaSet_sympShape_addBox {ν : Fin k → ℕ} (hν : Antitone ν) (i : F
   · rintro (rfl | ⟨hx, y, hy, rfl⟩)
     · exact ⟨maya ν i + 1, Or.inl rfl, by ring⟩
     · exact ⟨y, Or.inr ⟨fun h => hx (by rw [h]), hy⟩, rfl⟩
+
+/-! ### The mirror wall: `sl₂` in the symplectic shape -/
+
+/-- `|Δ(k)| = Σ_j (k − j) = k(k+1)/2`, without division. -/
+theorem two_mul_sum_stair_succ (k : ℕ) : 2 * ∑ j : Fin k, (stair k j + 1) = k * (k + 1) := by
+  have e1 : ∑ j : Fin k, (stair k j + 1) = ∑ j ∈ range k, (k - 1 - j + 1) :=
+    Fin.sum_univ_eq_sum_range (fun j => k - 1 - j + 1) k
+  have e2 : ∑ j ∈ range k, (k - 1 - j + 1) = ∑ j ∈ range k, (j + 1) :=
+    Finset.sum_range_reflect (fun j => j + 1) k
+  have e3 : ∑ j ∈ range (k + 1), j = ∑ j ∈ range k, (j + 1) := by
+    rw [Finset.sum_range_succ']; simp
+  have g := Finset.sum_range_id_mul_two (k + 1)
+  rw [e1, e2, ← e3, mul_comm, g]; simp [mul_comm]
+
+/-- **The symplectic shift**: `|2ν + Δ(k)| = 2|ν| + |Δ(k)|`. -/
+theorem sum_sympShape (ν : Fin k → ℕ) :
+    ∑ j, sympShape ν j = 2 * ∑ j, ν j + ∑ j : Fin k, (stair k j + 1) := by
+  rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+  exact Finset.sum_congr rfl fun j _ => by simp only [sympShape]; ring
+
+open RMT.Symmetric.Corners in
+/-- **`sl₂` at the mirror wall, read on the symplectic shape**: for `λ = 2ν + Δ(k)`, the `sl₂`
+commutator on `ν` (`U` weighted `z + c`, `D` weighted `z' + c`) has eigenvalue
+`|λ| − |Δ(k)| + z z'` off the full shapes: twice `L₀` is `|λ|` shifted by the staircase `|Δ(k)|`,
+the symplectic `ρ`-shift. -/
+theorem sl2_commutator_sympShape {R : Type*} [CommRing R] {ν : Fin k → ℕ} (hν : Antitone ν)
+    (z z' : R) :
+    down k (fun c => z' + c) (upW k (fun c => z + c) (Finsupp.single ν 1)) -
+        upW k (fun c => z + c) (down k (fun c => z' + c) (Finsupp.single ν 1)) =
+      (((∑ j, sympShape ν j : ℕ) : R) - ((∑ j : Fin k, (stair k j + 1) : ℕ) : R) + z * z' -
+        if Full ν then (z - k) * (z' - k) else 0) • Finsupp.single ν 1 := by
+  rw [sl2_commutator_all hν]
+  congr 1
+  rw [sum_sympShape]; push_cast; ring
 
 end RMT.Moments.OtherFamilies
