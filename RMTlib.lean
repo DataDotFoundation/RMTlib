@@ -72,6 +72,7 @@ import RMTlib.Symmetric.Corners
 import RMTlib.Symmetric.CornerMoments
 import RMTlib.Symmetric.FominMaya
 import RMTlib.Symmetric.FominSl2
+import RMTlib.Symmetric.GrassmannDuality
 import RMTlib.Symmetric.CornerWeighted
 import RMTlib.Symmetric.FominPaths
 import RMTlib.Symmetric.GTSum
