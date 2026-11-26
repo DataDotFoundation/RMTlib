@@ -106,4 +106,13 @@ theorem _root_.RMT.Tower.hset_above_succ_of_block (T : RMT.Tower) {i : ℕ} {z :
   congr 2
   rw [hB, hg, Int.toNat_natCast, hset_shift_block]
 
+/-- **A block can't straddle the band** (#171, P1): a configuration containing every integer from
+`a ≤ −c` to `b ≥ c` has a point in the band `(−c, c)` (namely `0`). So under StepOK, where the band
+is empty at every level, the points that cross one by one are never a consecutive block on both sides
+of the band. -/
+theorem not_bandEmpty_of_Icc_subset {Y : Finset ℤ} {a b c : ℤ} (hc : 0 < c) (ha : a ≤ -c)
+    (hb : c ≤ b) (hY : Icc a b ⊆ Y) : ¬ BandEmpty Y c := fun h => by
+  have := h 0 (hY (mem_Icc.mpr ⟨by omega, by omega⟩))
+  omega
+
 end RMT.ErdosChain
