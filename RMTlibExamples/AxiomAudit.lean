@@ -430,3 +430,5 @@ import RMTlib
 #print axioms RMT.Places.ChebyshevWeights.sum_weight_log_factorial_psi
 #print axioms RMT.ErdosChain.hset_shift_block
 #print axioms RMT.Tower.hset_above_succ_of_block
+#print axioms RMT.Fermion.Block.prod_one_sub_eq_sum_esymm
+#print axioms RMT.Fermion.Block.sum_block_sq
