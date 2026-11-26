@@ -57,18 +57,21 @@ def onebodyPotential : Claim where
   joins := [``places, ``bosonFermion]
   pin := some "RMTlibExamples/Frames.lean: bdtw_inf instance and witness; REFUTED potential row"
 
-/-- **J2**: ω is the same particle–hole swap at ∞ and at every prime. Proved at ∞ (the Maya diagram
-of `λ′` is the conjugate of that of `λ`); at a prime only checked (#53: core statistics). -/
+/-- **J2**: ω is the same particle–hole swap at ∞ and at every prime. At ∞ the Maya diagram of `λ′`
+is the conjugate of that of `λ`; on each `r`-abacus transposition reverses the runners, negates their
+charges and conjugates the quotient, so `core_r(λ′) = core_r(λ)′`; and the `p`-adic part of the hook
+product is a core statistic (#53 item 2). -/
 def omegaEveryPlace : Claim where
   text := "ω acts as the same particle–hole swap at ∞ (on Maya diagrams) and at every prime \
     (on each abacus, through cores)"
   scope := .junction
-  declared := .checked
-  statements := [``RMT.Fermion.ofRows_transpose, ``RMT.MultisetHook.card_hooks_dvd,
+  declared := .proved
+  statements := [``RMT.Fermion.ofRows_transpose, ``RMT.MultisetHook.quot_transpose,
+    ``RMT.MultisetHook.core_transpose, ``RMT.MultisetHook.card_hooks_dvd,
     ``RMT.MultisetHook.padicValNat_prod_hooks]
   joins := [``places, ``bosonFermion]
-  source := "RMTlib#53: 271 and 3,348 exact checks, and core(λ′) = core(λ)′ on the same 3,348 \
-    (scripts/hook_places_check.py); the ∞ half is RMT.Fermion.ofRows_transpose"
+  source := "RMTlib#53, #1 §3; the 271 and 3,348 exact checks that preceded the proofs \
+    (scripts/hook_places_check.py)"
   evidence := ["evidence/hook_places_check.evidence.json"]
 
 /-! ## Foxes -/

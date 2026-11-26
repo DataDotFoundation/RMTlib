@@ -1,4 +1,5 @@
 import RMTlib.Tableaux.MultisetHook.Generating
+import RMTlib.Symmetric.OmegaCovariant
 
 /-!
 # Hooks divisible by `r` count the size the `r`-core loses (RMTlib#53 item 2)
@@ -84,5 +85,46 @@ theorem padicValNat_prod_hooks {p : ℕ} [hp : Fact p.Prime] (μ : YoungDiagram)
   simp only [Function.comp_apply, Nat.cast_pow]
   rw [← Int.natCast_dvd_natCast, Int.toNat_of_nonneg h1.le]
   push_cast; rfl
+
+/-! ### ω on the abacus: the core of `λ′` is the conjugate of the core (#1 §3, #53) -/
+
+/-- **Transposing reverses and conjugates the quotient, and negates the charges**: runner `ρ` of
+`λ′` is runner `r − 1 − ρ` of `λ`, conjugated, with the opposite charge. -/
+theorem quot_transpose {r : ℕ} (hr : 0 < r) (μ : YoungDiagram) {ρ : ℕ} (hρ : ρ < r) :
+    qcharge r μ.transpose ρ = -qcharge r μ (r - 1 - ρ) ∧
+      quot r μ.transpose ρ = (quot r μ (r - 1 - ρ)).transpose := by
+  have hσ : ((r - 1 - ρ : ℕ) : ℤ) = r - 1 - ρ := by omega
+  refine maya_unique (M := fun y => Occ μ.transpose (r * y + ρ))
+    (fun x => quot_spec hr μ.transpose ρ x) (fun x => ?_)
+  rw [occ_transpose, quot_spec hr, occ_transpose, not_iff_not]
+  constructor <;> intro h <;> convert h using 2 <;> rw [hσ] <;> ring
+
+/-- **ω at every place on the abacus: `core_r(λ′) = core_r(λ)′`** (for every `r`; the `0`-core is
+empty). -/
+theorem core_transpose (r : ℕ) (μ : YoungDiagram) :
+    core r μ.transpose = (core r μ).transpose := by
+  rcases Nat.eq_zero_or_pos r with rfl | hr
+  · simp only [core, lt_irrefl, dite_false]
+    ext c; simp [YoungDiagram.mem_transpose]
+  apply eq_of_occ
+  intro x
+  rw [core_spec hr, occ_transpose, core_spec hr]
+  obtain ⟨hxd, hxr⟩ := runner_decomp hr x
+  set ρ := (x % r).toNat
+  set m := x / r
+  have hσ : r - 1 - ρ < r := by omega
+  have hx' : -1 - x = r * (-m - 1) + ((r - 1 - ρ : ℕ) : ℤ) := by
+    rw [show ((r - 1 - ρ : ℕ) : ℤ) = r - 1 - ρ by omega]; rw [hxd]; ring
+  rw [hx', coreSet_runner hr _ hσ, hxd, coreSet_runner hr _ hxr, occ_bot, occ_bot,
+    (quot_transpose hr μ hxr).1]
+  omega
+
+/-- **The `r`-core is `ω`-covariant**, with no change of parameter: `core_r(λ′) = core_r(λ)′`. -/
+def omegaCore : RMT.Symmetric.OmegaCovariant (fun (r : ℕ) (μ : YoungDiagram) => core r μ) where
+  twin := id
+  twin_involutive _ := rfl
+  out _ ν := ν.transpose
+  out_transpose_out _ ν := YoungDiagram.transpose_transpose ν
+  map_transpose r μ := core_transpose r μ
 
 end RMT.MultisetHook

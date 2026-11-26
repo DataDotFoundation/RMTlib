@@ -383,3 +383,4 @@ import RMTlib
 #print axioms RMT.Transfer.sum_log_mul_padicValInt_le
 #print axioms RMT.MultisetHook.card_hooks_dvd
 #print axioms RMT.MultisetHook.padicValNat_prod_hooks
+#print axioms RMT.MultisetHook.core_transpose
