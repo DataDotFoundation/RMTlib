@@ -121,3 +121,4 @@ import RMTlib.Moments.Theorem3UN
 import RMTlib.Moments.Theorem3UNLow
 import RMTlib.Moments.Places
 import RMTlib.Moments.OtherFamilies.SignSums
+import RMTlib.Moments.OtherFamilies.SymplecticMaya

@@ -393,3 +393,6 @@ import RMTlib
 #print axioms RMT.Symmetric.Corners.commutator_weighted_maya
 #print axioms RMT.Symmetric.Corners.sl2_commutator_all
 #print axioms RMT.Symmetric.Corners.sl2_commutator_wall
+#print axioms RMT.Moments.OtherFamilies.symplectic_boson_fermion
+#print axioms RMT.Moments.OtherFamilies.orthogonal_boson_fermion
+#print axioms RMT.Moments.OtherFamilies.mayaSet_sympShape_addBox
