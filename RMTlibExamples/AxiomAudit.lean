@@ -410,3 +410,9 @@ import RMTlib
 #print axioms RMT.Places.Bertrand.log_factorial_eq_sum
 #print axioms RMT.Symmetric.Corners.conjBox_subset_iff
 #print axioms RMT.Symmetric.Corners.conjBox_three
+#print axioms RMT.Places.Bertrand.natDegree_Q
+#print axioms RMT.Places.Bertrand.reverse_Q
+#print axioms RMT.Places.Bertrand.eval_neg_one_Q_eq_zero_iff
+#print axioms RMT.Places.Bertrand.root_of_unity_of_isRoot
+#print axioms RMT.Places.Bertrand.carry_eq_one_iff_window
+#print axioms RMT.Places.Bertrand.prod_content_one_row
