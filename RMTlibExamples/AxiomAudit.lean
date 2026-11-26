@@ -381,3 +381,5 @@ import RMTlib
 #print axioms RMT.Fock.Virasoro.evS_Lm2
 #print axioms RMT.Fock.Virasoro.evS_one_L2_s2
 #print axioms RMT.Transfer.sum_log_mul_padicValInt_le
+#print axioms RMT.MultisetHook.card_hooks_dvd
+#print axioms RMT.MultisetHook.padicValNat_prod_hooks
