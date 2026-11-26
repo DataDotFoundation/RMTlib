@@ -424,3 +424,5 @@ import RMTlib
 #print axioms RMT.Symmetric.MayaMolien.share_eq
 #print axioms RMT.Growth.det_site_strip
 #print axioms RMT.Growth.det_site_strip_iff
+#print axioms RMT.Symmetric.MayaMolien.sum_perm_pow_inv
+#print axioms RMT.Symmetric.MayaMolien.share_eq_inv
