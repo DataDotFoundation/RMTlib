@@ -442,3 +442,4 @@ import RMTlib
 #print axioms RMT.Symmetric.Giambelli.hePair_hE_eZ
 #print axioms RMT.Symmetric.Giambelli.giambelli
 #print axioms RMT.Symmetric.Giambelli.hePair_dualSymbol
+#print axioms RMT.Symmetric.Giambelli.giambelli_toeplitz
