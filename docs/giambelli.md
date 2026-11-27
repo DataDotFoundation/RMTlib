@@ -31,9 +31,10 @@ minor on the legs.
 
 ## Roadmap: ThetaLiftsAsOneGiambelliDeterminant (RoadmapLab #9)
 
-- **T3 (RMTlib).** Giambelli for the Toeplitz minors of the roadmap's symbol. It is done in general
-  (`giambelli_toeplitz`). Once RH-Dual's T2 names the explicit symbol `c`, the remaining work is to
-  instantiate `c` and check `c₀ = 1`.
+- **T3 (RMTlib): closed, 2026-11-27.** Giambelli for the Toeplitz minors of a normalised symbol, proved in
+  general (`giambelli_toeplitz`). The T1/T2 verdict was negative (RH-Dual#268): none of the proof's 82 determinant
+  bridges is a Jacobi–Trudi determinant, and the product of the moduli is a Schur function only at `m = 2`. So no
+  instantiation is needed, and the general theorem is the result. It is cited in RoadmapLab PR #10 (permalinks at c2c73a6).
 - **Source.** P.-O. Dehaye, *Combinatorics of lower order terms in the moment conjectures for the Riemann
   zeta function*, arXiv:1201.4478, §7.1.4, eq. (55). That paper uses Giambelli in the Frobenius–Schur form of
   Olshanski–Regev–Vershik; RMTlib proves the classical Schur form.
