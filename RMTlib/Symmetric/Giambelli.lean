@@ -520,6 +520,36 @@ theorem giambelli_jt' (hp : HEPair h e) {n : ℕ} {lam : Fin n → ℕ} (hl : An
   rw [giambelli_jt hp hl]
   simp only [jt_hook hp]
 
+/-! ## The `(h, e)` pair of a normalised symbol -/
+
+open PowerSeries in
+/-- The dual symbol of a normalised symbol `h` (`h₀ = 1`): `e_k = (−1)^k [X^k] H(X)⁻¹`, `0` for `k < 0`. -/
+noncomputable def dualSymbol (h : ℤ → R) (k : ℤ) : R :=
+  if 0 ≤ k then (-1) ^ k.toNat * coeff k.toNat (invOfUnit (mk fun n => h n) 1) else 0
+
+open PowerSeries in
+/-- **Every normalised symbol is half of an `(h, e)` pair**: if `h` vanishes below `0` and `h₀ = 1`,
+then `(h, dualSymbol h)` is an `HEPair`, so Giambelli (`giambelli_jt'`) applies to its Jacobi–Trudi
+(Toeplitz) minors. -/
+theorem hePair_dualSymbol (hneg : ∀ k < 0, h k = 0) (h0 : h 0 = 1) : HEPair h (dualSymbol h) where
+  h_neg := hneg
+  e_neg k hk := by simp [dualSymbol, not_le.mpr hk]
+  e_zero := by
+    simp [dualSymbol, coeff_zero_eq_constantCoeff_apply, constantCoeff_invOfUnit]
+  conv N := by
+    have hc : constantCoeff (mk fun n : ℕ => h n) = ((1 : Rˣ) : R) := by
+      simp [← coeff_zero_eq_constantCoeff_apply, h0]
+    have := congrArg (coeff N) (mul_invOfUnit _ 1 hc)
+    rw [coeff_mul, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, coeff_one] at this
+    rw [← this]
+    refine sum_congr rfl fun r hr => ?_
+    have hr' := mem_range.mp hr
+    rw [show (N : ℤ) - r = ((N - r : ℕ) : ℤ) by omega, sg_natCast, dualSymbol,
+      ite_eq_left (Nat.cast_nonneg _), Int.toNat_natCast, coeff_mk]
+    rw [show ((-1 : R) ^ (N - r)) * h r * ((-1) ^ (N - r) * coeff (N - r) (invOfUnit (mk fun n : ℕ => h n) 1))
+      = ((-1) ^ (N - r) * (-1) ^ (N - r)) * (h r * coeff (N - r) (invOfUnit (mk fun n : ℕ => h n) 1)) by ring,
+      ← pow_add, ← two_mul, pow_mul, neg_one_sq, one_pow, one_mul]
+
 /-! ## Giambelli for the Schur polynomials `schurV` -/
 
 open PowerSeries in
