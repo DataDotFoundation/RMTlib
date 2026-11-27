@@ -36,7 +36,27 @@ hence Giambelli (`giambelli_jt'`), and for the tableau Schur polynomials `schurV
 * `det_submatrix_rev`: reversing the columns costs `(−1)^{n(n−1)/2}`.
 * `giambelli_jt`, `jt_hook`, `giambelli_jt'`: Giambelli for Jacobi–Trudi determinants of any
   `(h, e)` pair.
+* `dualSymbol`, `hePair_dualSymbol`: every normalised symbol `h` (`h₀ = 1`) is half of an `(h, e)`
+  pair, with `E(X) = 1/H(−X)`.
+* `symbolOf`, `hePair_symbolOf`, `giambelli_toeplitz`: Giambelli for the Toeplitz minors
+  `det (c_{λ_i − i + j})` of a one-sided symbol `C(X) = Σ c_n Xⁿ` with `c₀ = 1`.
 * `giambelli`: **Giambelli's identity** for `schurV`.
+
+## Role in the ThetaLiftsAsOneGiambelliDeterminant roadmap
+
+That roadmap (RoadmapLab #9) reads a chain of theta lifts as **one** Giambelli determinant: a
+Jacobi–Trudi (Toeplitz) minor of one symbol, expanded into hooks. This file supplies the Lean side,
+for any symbol and with no hypothesis beyond normalisation:
+
+* task **T3**: once the explicit symbol `c` is known (RH-Dual, T2), `giambelli_toeplitz c hc hλ`
+  gives `det (c_{λ_i − i + j}) = det (jt (α_i | β_j))`, and `jt_hook` evaluates each hook as
+  `g(a, b) = Σ_{r ≤ a} (−1)^r c_{a−r} e_{b+1+r}`, with `e = dualSymbol (symbolOf c)`;
+* the identity is proved for an arbitrary `(h, e)` pair (`giambelli_jt`), so a symbol given only
+  through its Toeplitz minors needs only `HEPair`, which `hePair_dualSymbol` provides;
+* `giambelli` is the specialisation to tableau Schur polynomials. It is the classical form of the
+  identity used, in its Frobenius–Schur version, in Dehaye, arXiv:1201.4478, §7.1.4, eq. (55).
+
+The record of commits and declaration names is `docs/giambelli.md`.
 -/
 
 open Finset Matrix
@@ -523,7 +543,8 @@ theorem giambelli_jt' (hp : HEPair h e) {n : ℕ} {lam : Fin n → ℕ} (hl : An
 /-! ## The `(h, e)` pair of a normalised symbol -/
 
 open PowerSeries in
-/-- The dual symbol of a normalised symbol `h` (`h₀ = 1`): `e_k = (−1)^k [X^k] H(X)⁻¹`, `0` for `k < 0`. -/
+/-- The dual symbol of a normalised symbol (ThetaLiftsAsOneGiambelliDeterminant, T3: the `e` half
+of the pair built from the roadmap's symbol) `h` (`h₀ = 1`): `e_k = (−1)^k [X^k] H(X)⁻¹`, `0` for `k < 0`. -/
 noncomputable def dualSymbol (h : ℤ → R) (k : ℤ) : R :=
   if 0 ≤ k then (-1) ^ k.toNat * coeff k.toNat (invOfUnit (mk fun n => h n) 1) else 0
 
