@@ -550,6 +550,21 @@ theorem hePair_dualSymbol (hneg : ∀ k < 0, h k = 0) (h0 : h 0 = 1) : HEPair h 
       = ((-1) ^ (N - r) * (-1) ^ (N - r)) * (h r * coeff (N - r) (invOfUnit (mk fun n : ℕ => h n) 1)) by ring,
       ← pow_add, ← two_mul, pow_mul, neg_one_sq, one_pow, one_mul]
 
+/-- A one-sided symbol `C(X) = Σ c_n Xⁿ` as a symbol on `ℤ`, extended by `0` below `0`. -/
+def symbolOf (c : ℕ → R) (k : ℤ) : R := if 0 ≤ k then c k.toNat else 0
+
+/-- A normalised one-sided symbol (`c₀ = 1`) and its dual `E(X) = 1/C(−X)` form an `(h, e)` pair. -/
+theorem hePair_symbolOf (c : ℕ → R) (hc : c 0 = 1) : HEPair (symbolOf c) (dualSymbol (symbolOf c)) :=
+  hePair_dualSymbol (fun k hk => by simp [symbolOf, not_le.mpr hk]) (by simp [symbolOf, hc])
+
+/-- **Giambelli for the Toeplitz minors of a normalised symbol**: for `c₀ = 1` and a partition `λ`,
+`det (c_{λ_i − i + j}) = det (jt (α_i | β_j))_{i, j < d}`. -/
+theorem giambelli_toeplitz (c : ℕ → R) (hc : c 0 = 1) {n : ℕ} {lam : Fin n → ℕ} (hl : Antitone lam) :
+    det (of fun i j : Fin n => symbolOf c ((lam i : ℤ) - i + j)) =
+      det (of fun i j : Fin (durfee lam) =>
+        jt (symbolOf c) (hookShape (frobA lam i) (frobB lam j))) :=
+  giambelli_jt' (hePair_symbolOf c hc) hl
+
 /-! ## Giambelli for the Schur polynomials `schurV` -/
 
 open PowerSeries in
